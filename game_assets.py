@@ -6,23 +6,82 @@ class GameAssets:
     '''
     Objects such as images and sounds for the game.
     '''
-    ARROW = 'assets/img/arrow.png'
-    BATTLE_CITY = 'assets/img/battle_city.png'
-    HI_SCORE = 'assets/img/hi_score.png'
-    NUMBERS_BLACK_ORANGE = 'assets/img/numbers_black_orange.png'
-    NUMBERS_BLACK_WHITE = 'assets/img/numbers_black_white.png'
-    PLAYER_1 = 'assets/img/player_1.png'
-    PLAYER_2 = 'assets/img/player_2.png'
-    PTS = 'assets/img/pts.png'
-    SCORESHEET = 'assets/img/scoresheet.png'
-    STAGE = 'assets/img/stage.png'
-    START_SCREEN = 'assets/img/start_screen.png'
-    TOKEN = 'assets/img/token.png'
-    TOTAL = 'assets/img/total.png'
+    ARROW = 'arrow'
+    HI_SCORE = 'hi_score'
+    PLAYER_1 = 'player_1'
+    PLAYER_2 = 'player_2'
+    PTS = 'pts'
+    SCORESHEET = 'scoresheet'
+    STAGE = 'stage'
+    TOTAL = 'total'
 
     def __init__(self):
         '''
         Initializes all the game assets.
         '''
-        self.start_screen = pygame.image.load(self.START_SCREEN)
-    
+        # Start screen images
+        self.start_screen = self.load_image_assets(
+            'start_screen', 
+            True, 
+            (gc.SCREEN_WIDTH, gc.SCREEN_HEIGHT)
+        )
+        self.start_screen_token = self.load_image_assets(
+            'token',
+            True,
+            (gc.IMG_SIZE, gc.IMG_SIZE)
+        )
+
+        # Spritesheet images
+        spritesheet_filenames = [
+            'battle_city', 
+            'numbers_black_white', 
+            'numbers_black_orange'
+        ]
+        self.spritesheet_images = {}
+        for image in spritesheet_filenames:
+            self.spritesheet_images[image] = self.load_image_assets(image)
+
+        # TODO: Images related to the characters
+
+        # TODO: Game-related images
+
+        # TODO: Game HUD images
+
+        # TODO: Tile images
+
+        # TODO: Number images
+
+        # Scoresheet images
+        scoresheet_filenames = [
+            'hi-score', 
+            'arrow', 
+            'player_1', 
+            'player_2', 
+            'pts', 
+            'stage', 
+            'total'
+        ]
+        self.scoresheet_images = {}
+        for image in scoresheet_filenames:
+            self.scoresheet_images[image] = self.load_image_assets(image)
+        
+    def load_image_assets(
+            self, 
+            filename: str, 
+            scale: bool = False, 
+            size: tuple = (0, 0)
+        ):
+        '''
+        Loads (and transforms) the individual image as needed. 
+        NOTE: All images must be in the "assets/img/" folder and 
+        in PNG format in order to work!
+        '''
+        try:
+            image = pygame.image.load(f'./assets/img/{filename}.png').convert_alpha()
+        except FileNotFoundError as e:
+            print(f'File {filename}.png not found: {e}')
+
+        if scale:
+            image = pygame.transform.scale(image, size)
+
+        return image
