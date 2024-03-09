@@ -1,4 +1,5 @@
 import pygame
+import game_assets as ga
 import game_config as gc
 
 
@@ -25,6 +26,9 @@ class Main:
 
         # A simple check for the main game loop
         self.run = True
+
+        # It might great to import our game assets here
+        self.assets = ga.GameAssets()
 
     def run_game(self):
         '''
