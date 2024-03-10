@@ -42,6 +42,7 @@ class GameAssets:
             self.spritesheet_images[image] = self.load_image_assets(image)
 
         # TODO: Images related to the characters
+        self.tank_images = self.__load_all_tank_sprites()
 
         # TODO: Game-related images
 
@@ -65,6 +66,19 @@ class GameAssets:
         for image in scoresheet_filenames:
             self.scoresheet_images[image] = self.load_image_assets(image)
         
+    def __load_all_tank_sprites(self):
+        '''
+        Gets all the tank sprites from the spritesheet and 
+        sort them into a dictionary.
+        '''
+        tank_sprite_dict = {}
+        for tank in range(8):
+            tank_sprite_dict[f'Tank_{tank}'] = {}
+            for group in ['Gold', 'Silver', 'Green', 'Special']:
+                tank_sprite_dict[f'Tank_{tank}'][group] = {}
+                for direction in ['Up', 'Down', 'Left', 'Right']:
+                    tank_sprite_dict[f'Tank_{tank}'][group][direction] = []
+
     def load_image_assets(
             self, 
             filename: str, 
