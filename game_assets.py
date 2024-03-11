@@ -6,15 +6,6 @@ class GameAssets:
     '''
     Objects such as images and sounds for the game.
     '''
-    ARROW = 'arrow'
-    HI_SCORE = 'hi_score'
-    PLAYER_1 = 'player_1'
-    PLAYER_2 = 'player_2'
-    PTS = 'pts'
-    SCORESHEET = 'scoresheet'
-    STAGE = 'stage'
-    TOTAL = 'total'
-
     def __init__(self):
         '''
         Initializes all the game assets.
@@ -78,6 +69,82 @@ class GameAssets:
                 tank_sprite_dict[f'Tank_{tank}'][group] = {}
                 for direction in ['Up', 'Down', 'Left', 'Right']:
                     tank_sprite_dict[f'Tank_{tank}'][group][direction] = []
+        # TODO: Refactor things below!
+        # Creates a new image for each of the sprites in a given spritesheet
+        for row in range(16):
+            for col in range(16):
+                surface = pygame.Surface((gc.SPRITE_SIZE, gc.SPRITE_SIZE))
+                surface.fill(gc.BLACK)
+                surface.blit(
+                    self.spritesheet_images['battle_city'], 
+                    (0, 0), 
+                    (
+                        col * gc.SPRITE_SIZE, 
+                        row * gc.SPRITE_SIZE, 
+                        gc.SPRITE_SIZE, 
+                        gc.SPRITE_SIZE
+                    )
+                )
+                surface.set_colorkey(gc.BLACK)
+                # Resizes each of the sprites
+                surface = self.scale_sprite(surface, gc.IMG_SIZE)
+                # Sorts the tank sprite into its correct level
+                tank_level = self.__sort_tanks_into_levels(row)
+                # Sorts the tank into its correct group
+                tank_group = self.__sort_tanks_into_groups(row, col)
+                # Sorts the tank sprites into the correct directions
+                tank_direction = self.__sort_tanks_by_direction(col)
+                # Put surface into our tank sprite dictionary
+                tank_sprite_dict[tank_level][tank_group][tank_direction].append(surface)
+        
+        return tank_sprite_dict
+
+    def __sort_tanks_into_levels(self, row: int):
+        '''
+        Sorts the tanks according to their given row in the spritesheet.
+
+        If the row number being passed is higher than seven, 
+        the % operator converts it back down to within the 0 to 7 range 
+        and return the level from the tank's level dictionary.
+        '''
+        tank_levels = {}
+        for level in range(8):
+            tank_levels[level] = f'Tank_{level}'
+        return tank_levels[row % 8]
+    
+    def __sort_tanks_into_groups(self, row: int, col: int):
+        '''
+        Returns each tank sprite into its proper color group.
+        '''
+        if (0 <= row <= 7) and (0 <= col <= 7):
+            return 'Gold'
+        elif (8 <= row <= 15) and (0 <= col <= 7):
+            return 'Green'
+        elif (0 <= row <= 7) and (8 <= col <= 15):
+            return 'Silver'
+        else:
+            return 'Special'
+
+    def __sort_tanks_by_direction(self, col: int):
+        '''
+        Returns each tank sprite by direction.
+        '''
+        if (col % 7 <= 1):
+            return 'Up'
+        elif (col % 7 <= 3):
+            return 'Left'
+        elif (col % 7 <= 5):
+            return 'Down'
+        else:
+            return 'Right'
+
+    def scale_sprite(self, surface: pygame.Surface, scale: int):
+        '''
+        Scales any given sprite (a surface-type image) according to 
+        the scale passed in.
+        '''
+        surface = pygame.transform.scale(surface, (scale, scale))
+        return surface
 
     def load_image_assets(
             self, 
@@ -87,6 +154,7 @@ class GameAssets:
         ):
         '''
         Loads (and transforms) the individual image as needed. 
+        
         NOTE: All images must be in the "assets/img/" folder and 
         in PNG format in order to work!
         '''

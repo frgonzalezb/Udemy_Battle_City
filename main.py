@@ -60,6 +60,7 @@ class Main:
         the screen and ensuring the screen is refreshed with each cycle.
         '''
         self.screen.fill(gc.BLACK) # Overall background
+        # self.screen.blit(self.assets.tank_images['Tank_4']['Green']['Down'][0], (400, 400)) # dbg
         pygame.display.update()
 
 
