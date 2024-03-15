@@ -8,7 +8,7 @@ class GameAssets:
     '''
     def __init__(self):
         '''
-        Initializes all the game assets.
+        Initializes the game assets.
         '''
         # Start screen images
         self.start_screen = self.load_image_assets(
