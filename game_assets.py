@@ -62,42 +62,56 @@ class GameAssets:
         Gets all the tank sprites from the spritesheet and 
         sort them into a dictionary.
         '''
-        tank_sprite_dict = {}
-        for tank in range(8):
-            tank_sprite_dict[f'Tank_{tank}'] = {}
-            for group in ['Gold', 'Silver', 'Green', 'Special']:
-                tank_sprite_dict[f'Tank_{tank}'][group] = {}
-                for direction in ['Up', 'Down', 'Left', 'Right']:
-                    tank_sprite_dict[f'Tank_{tank}'][group][direction] = []
-        # TODO: Refactor things below!
-        # Creates a new image for each of the sprites in a given spritesheet
+        tank_dict = self.__create_tank_sprite_dict()
+
         for row in range(16):
             for col in range(16):
-                surface = pygame.Surface((gc.SPRITE_SIZE, gc.SPRITE_SIZE))
-                surface.fill(gc.BLACK)
-                surface.blit(
-                    self.spritesheet_images['battle_city'], 
-                    (0, 0), 
-                    (
-                        col * gc.SPRITE_SIZE, 
-                        row * gc.SPRITE_SIZE, 
-                        gc.SPRITE_SIZE, 
-                        gc.SPRITE_SIZE
-                    )
-                )
-                surface.set_colorkey(gc.BLACK)
-                # Resizes each of the sprites
-                surface = self.scale_sprite(surface, gc.IMG_SIZE)
-                # Sorts the tank sprite into its correct level
-                tank_level = self.__sort_tanks_into_levels(row)
-                # Sorts the tank into its correct group
-                tank_group = self.__sort_tanks_into_groups(row, col)
-                # Sorts the tank sprites into the correct directions
-                tank_direction = self.__sort_tanks_by_direction(col)
-                # Put surface into our tank sprite dictionary
-                tank_sprite_dict[tank_level][tank_group][tank_direction].append(surface)
+                surface = self.__create_tank_surfaces(row, col)
+                level = self.__sort_tanks_into_levels(row)
+                group = self.__sort_tanks_into_groups(row, col)
+                direction = self.__sort_tanks_by_direction(col)
+                tank_dict[level][group][direction].append(surface)
         
-        return tank_sprite_dict
+        return tank_dict
+    
+    def __create_tank_sprite_dict(self):
+        '''
+        Generates a dictionary as base for loading tank surfaces (sprites).
+        '''
+        dict = {}
+        
+        for tank in range(8):
+            tank_key = f'Tank_{tank}'
+            dict[tank_key] = {}
+            
+            for group in ['Gold', 'Silver', 'Green', 'Special']:
+                dict[tank_key][group] = {}
+                
+                for direction in ['Up', 'Down', 'Left', 'Right']:
+                    dict[tank_key][group][direction] = []
+
+        return dict
+    
+    def __create_tank_surfaces(self, row: int, col: int):
+        '''
+        Creates a new image for each of the sprites in a given spritesheet.
+        '''
+        surface = pygame.Surface((gc.SPRITE_SIZE, gc.SPRITE_SIZE))
+        surface.fill(gc.BLACK)
+        surface.blit(
+            self.spritesheet_images['battle_city'], 
+            (0, 0), 
+            (
+                col * gc.SPRITE_SIZE, 
+                row * gc.SPRITE_SIZE, 
+                gc.SPRITE_SIZE, 
+                gc.SPRITE_SIZE
+            )
+        )
+        surface.set_colorkey(gc.BLACK)
+        surface = self.scale_sprite(surface, gc.IMG_SIZE)
+
+        return surface
 
     def __sort_tanks_into_levels(self, row: int):
         '''
@@ -156,10 +170,11 @@ class GameAssets:
         Loads (and transforms) the individual image as needed. 
         
         NOTE: All images must be in the "assets/img/" folder and 
-        in PNG format in order to work!
+        be in PNG format in order to work!
         '''
         try:
-            image = pygame.image.load(f'./assets/img/{filename}.png').convert_alpha()
+            path = f'./assets/img/{filename}.png'
+            image = pygame.image.load(path).convert_alpha()
         except FileNotFoundError as e:
             print(f'File {filename}.png not found: {e}')
 

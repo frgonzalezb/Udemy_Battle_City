@@ -7,14 +7,13 @@ class Main:
     '''
     Everything starts here.
     '''
-
     def __init__(self):
         '''
         Initializes the main game object.
         '''
         pygame.init()
 
-        # Set the display settings
+        # A good game starts with some display settings
         self.screen = pygame.display.set_mode(
             (gc.SCREEN_WIDTH, gc.SCREEN_HEIGHT)
         )
@@ -60,7 +59,7 @@ class Main:
         the screen and ensuring the screen is refreshed with each cycle.
         '''
         self.screen.fill(gc.BLACK) # Overall background
-        # self.screen.blit(self.assets.tank_images['Tank_4']['Green']['Down'][0], (400, 400)) # dbg
+        self.screen.blit(self.assets.tank_images['Tank_4']['Green']['Down'][0], (400, 400)) # dbg
         pygame.display.update()
 
 
