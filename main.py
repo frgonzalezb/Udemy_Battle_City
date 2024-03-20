@@ -7,7 +7,7 @@ class Main:
     """
     Everything starts here.
     """
-    
+
     def __init__(self):
         pygame.init()
 
