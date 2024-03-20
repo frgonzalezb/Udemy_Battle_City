@@ -7,7 +7,7 @@ NOTE: This is my own stuff, not part of the course!
 
 def get_map_tile_by_type(type: str, sprite_size: int):
     '''
-    Delivers the coordinates and size for each map tile, according to 
+    Delivers the coordinates and size for each map tile, according to
     its type (bricks, water, etc.).
     '''
     if type == 'bricks':
@@ -35,4 +35,3 @@ def get_map_tile_by_type(type: str, sprite_size: int):
             'small_1': [(sprite_size * 16) + 8, (sprite_size * 5), 8, 8],
             'small_2': [(sprite_size * 17), (sprite_size * 5), 8, 8],
         }
-    
