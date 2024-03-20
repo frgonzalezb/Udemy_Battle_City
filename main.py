@@ -4,13 +4,11 @@ import game_config as gc
 
 
 class Main:
-    '''
+    """
     Everything starts here.
-    '''
+    """
+    
     def __init__(self):
-        '''
-        Initializes the main game object.
-        '''
         pygame.init()
 
         # A good game starts with some display settings
@@ -30,36 +28,39 @@ class Main:
         self.assets = ga.GameAssets()
 
     def run_game(self):
-        '''
+        """
         Runs the main game loop.
-        '''
+        """
         while self.run:
             self.input()
             self.update()
             self.draw()
 
     def input(self):
-        '''
+        """
         Handles input events for the game.
-        '''
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.run = False
 
     def update(self):
-        '''
-        Handles all the game updates, which in turn will update all of 
+        """
+        Handles all the game updates, which in turn will update all of
         the objects within.
-        '''
+        """
         self.clock.tick(gc.FPS)
 
     def draw(self):
-        '''
-        Handles all of the screen updates, drawing all of the images to 
+        """
+        Handles all of the screen updates, drawing all of the images to
         the screen and ensuring the screen is refreshed with each cycle.
-        '''
-        self.screen.fill(gc.BLACK) # Overall background
-        self.screen.blit(self.assets.tank_images['Tank_4']['Green']['Down'][0], (400, 400)) # dbg
+        """
+        self.screen.fill(gc.RGB_BLACK)  # Overall background
+        self.screen.blit(
+            self.assets.tank_images['Tank_4']['Green']['Down'][0],
+            (400, 400)
+        )  # dbg
         pygame.display.update()
 
 
