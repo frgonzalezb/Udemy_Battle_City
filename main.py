@@ -61,6 +61,9 @@ class Main:
             self.assets.tank_images['Tank_4']['Green']['Down'][0],
             (400, 400)
         )  # dbg
+        self.screen.blit(
+            self.assets.brick_tiles['small'], (200, 200)
+        )  # dbg
         pygame.display.update()
 
 
