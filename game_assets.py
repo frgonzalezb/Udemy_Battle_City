@@ -119,12 +119,12 @@ class GameAssets:
         # Number images
         self.numbers_black_white = self._get_specified_sprites(
             self.spritesheet_images['numbers_black_white'],
-            gc.NUMS,
+            gc.NUMBERS,
             gc.RGB_BLACK,
         )
         self.numbers_black_orange = self._get_specified_sprites(
             self.spritesheet_images['numbers_black_orange'],
-            gc.NUMS,
+            gc.NUMBERS,
             gc.RGB_BLACK,
         )
 
