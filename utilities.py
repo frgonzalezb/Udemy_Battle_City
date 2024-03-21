@@ -9,23 +9,14 @@ It's not part of the course!
 """
 
 
-class Sprite:
+def get_sprite_object(
+        pos_x: int,
+        pos_y: int,
+        width: int,
+        height: int
+        ) -> dict[str, int]:
     """
-    Represents a sprite object.
+    Returns a dictionary object which represents the position and size
+    of the sprite within the spritesheet.
     """
-
-    def __init__(self) -> None:
-        pass
-
-
-def get_sprite_from_spritesheet(
-        coord_x: int,
-        coord_y: int,
-        spr_width: int,
-        spr_height: int
-        ) -> list[int]:
-    """
-    Returns a list object which represents a unique sprite image
-    from the spritesheet, for given coordinates and size values.
-    """
-    return [coord_x, coord_y, spr_width, spr_height]
+    return {'pos_x': pos_x, 'pos_y': pos_y, 'width': width, 'height': height}
