@@ -6,25 +6,25 @@ Main game settings file.
 from utilities import get_sprite_object
 
 
-SPRITE_SIZE: int = 16
-SPRITE_SCALE: int = 4
+SPRITE_SIZE = 16
+SPRITE_SCALE = 4
 
-IMAGE_SIZE: int = SPRITE_SIZE * SPRITE_SCALE
+IMAGE_SIZE = SPRITE_SIZE * SPRITE_SCALE
 
 # Screen settings
 # SCREEN_WIDTH = 1024 # Original
 # SCREEN_HEIGHT = 896 # Original
 # SCREEN_WIDTH = 16 * IMAGE_SIZE # Original edited
 # SCREEN_HEIGHT = 14 * IMAGE_SIZE # Original edited
-SCREEN_WIDTH: int = 800      # Momentary
-SCREEN_HEIGHT: int = 600     # Momentary
+SCREEN_WIDTH = 800      # Momentary
+SCREEN_HEIGHT = 600     # Momentary
 
-FPS: int = 60
+FPS = 60
 
-RGB_BLACK: tuple[int, int, int] = (0, 0, 0)
+RGB_BLACK = (0, 0, 0)
 
 # Sprites
-SPAWN_STAR: dict[str, dict[str, int]] = {
+SPAWN_STAR = {
     f'star_{i}': get_sprite_object(
         pos_x=SPRITE_SIZE * (15 + i),
         pos_y=SPRITE_SIZE * 6,
@@ -34,7 +34,7 @@ SPAWN_STAR: dict[str, dict[str, int]] = {
     for i in range(1, 5)
 }
 
-SHIELD: dict[str, dict[str, int]] = {
+SHIELD = {
     f'shield_{i}': get_sprite_object(
         pos_x=SPRITE_SIZE * (15 + i),
         pos_y=SPRITE_SIZE * 9,
@@ -44,7 +44,7 @@ SHIELD: dict[str, dict[str, int]] = {
     for i in range(1, 3)
 }
 
-POWER_UP_LIST: list[str] = [
+POWER_UP_LIST = [
     'shield',
     'freeze',
     'fortify',
@@ -53,7 +53,7 @@ POWER_UP_LIST: list[str] = [
     'extra_life',
     'special'
 ]
-POWER_UPS: dict[str, dict[str, int]] = {
+POWER_UPS = {
     power_up: get_sprite_object(
         pos_x=(SPRITE_SIZE * (15 + i)),
         pos_y=(SPRITE_SIZE * 7),
@@ -63,7 +63,7 @@ POWER_UPS: dict[str, dict[str, int]] = {
     for i, power_up in enumerate(POWER_UP_LIST, 1)
 }
 
-SCORES: dict[str, dict[str, int]] = {
+SCORES = {
     score: get_sprite_object(
         pos_x=(SPRITE_SIZE * (17 + i)),
         pos_y=(SPRITE_SIZE * 10),
@@ -73,7 +73,7 @@ SCORES: dict[str, dict[str, int]] = {
     for i, score in enumerate(['100', '200', '300', '400', '500'], 1)
 }
 
-FLAGS: dict[str, dict[str, int]] = {
+FLAGS = {
     flag: get_sprite_object(
         pos_x=(SPRITE_SIZE * (18 + i)),
         pos_y=(SPRITE_SIZE * 2),
@@ -83,7 +83,7 @@ FLAGS: dict[str, dict[str, int]] = {
     for i, flag in enumerate(['Phoenix_Alive', 'Phoenix_Destroyed'], 1)
 }
 
-EXPLOSIONS: dict[str, dict[str, int]] = {
+EXPLOSIONS = {
     f'explode_{i}': get_sprite_object(
         pos_x=(SPRITE_SIZE * ((15 + i) if i < 5 else 21)),
         pos_y=SPRITE_SIZE * 8,
@@ -93,7 +93,7 @@ EXPLOSIONS: dict[str, dict[str, int]] = {
     for i in range(1, 6)
 }
 
-BULLETS: dict[str, dict[str, int]] = {
+BULLETS = {
     direction: get_sprite_object(
         pos_x=(SPRITE_SIZE * (20 if direction in ["Up", "Left"] else 21)),
         pos_y=(SPRITE_SIZE * 2),
@@ -103,7 +103,7 @@ BULLETS: dict[str, dict[str, int]] = {
     for direction in ['Up', 'Left', 'Down', 'Right']
 }
 
-MAP_TILES: dict[str, dict[str, dict[str, int]]] = {
+MAP_TILES = {
     'bricks': {
         'small': get_sprite_object(
             pos_x=(SPRITE_SIZE * 16),
@@ -176,7 +176,7 @@ MAP_TILES: dict[str, dict[str, dict[str, int]]] = {
     }
 }
 
-HUD_INFO: dict[str, dict[str, int]] = {
+HUD_INFO = {
     'stage': get_sprite_object(
         pos_x=(SPRITE_SIZE * 20) + 8,
         pos_y=(SPRITE_SIZE * 11),
@@ -263,7 +263,7 @@ HUD_INFO: dict[str, dict[str, int]] = {
     )
 }
 
-NUMBERS: dict[int, dict[str, int]] = {
+NUMBERS = {
     0: get_sprite_object(
         pos_x=0,
         pos_y=0,
@@ -326,7 +326,7 @@ NUMBERS: dict[int, dict[str, int]] = {
     )
 }
 
-CONTEXT: dict[str, dict[str, int]] = {
+CONTEXT = {
     'pause': get_sprite_object(
         pos_x=(SPRITE_SIZE * 18),
         pos_y=(SPRITE_SIZE * 11),
