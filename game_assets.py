@@ -35,16 +35,98 @@ class GameAssets:
             for image in spritesheet_filenames
         }
 
-        # TODO: Images related to the characters
+        # Images related to the characters
         self.tank_images = self._load_all_tank_sprites()
+        self.bullet_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.BULLETS,
+            gc.RGB_BLACK,
+        )
+        self.shield_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.SHIELD,
+            gc.RGB_BLACK,
+        )
+        self.spawn_star_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.SPAWN_STAR,
+            gc.RGB_BLACK,
+        )
 
-        # TODO: Game-related images
+        # Game-related images
+        self.power_up_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.POWER_UPS,
+            gc.RGB_BLACK,
+        )
+        self.flag_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.FLAGS,
+            gc.RGB_BLACK,
+        )
+        self.explosions_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.EXPLOSIONS,
+            gc.RGB_BLACK,
+        )
+        self.score_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.SCORES,
+            gc.RGB_BLACK,
+        )
 
-        # TODO: Game HUD images
+        # Game HUD images
+        self.hud_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.HUD_INFO,
+            gc.RGB_BLACK,
+            False
+        )
+        self.context_images = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.CONTEXT,
+            gc.RGB_BLACK,
+            False
+        )
 
-        # TODO: Tile images
+        # Tile images
+        self.brick_tiles = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.MAP_TILES['bricks'],
+            gc.RGB_BLACK,
+        )
+        self.steel_tiles = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.MAP_TILES['steel'],
+            gc.RGB_BLACK,
+        )
+        self.forest_tiles = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.MAP_TILES['forest'],
+            gc.RGB_BLACK,
+        )
+        self.ice_tiles = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.MAP_TILES['ice'],
+            gc.RGB_BLACK,
+        )
+        self.water_tiles = self._get_specified_sprites(
+            self.spritesheet_images['battle_city'],
+            gc.MAP_TILES['water'],
+            gc.RGB_BLACK,
+        )
 
-        # TODO: Number images
+        # Number images
+        self.numbers_black_white = self._get_specified_sprites(
+            self.spritesheet_images['numbers_black_white'],
+            gc.NUMS,
+            gc.RGB_BLACK,
+        )
+        self.numbers_black_orange = self._get_specified_sprites(
+            self.spritesheet_images['numbers_black_orange'],
+            gc.NUMS,
+            gc.RGB_BLACK,
+        )
 
         # Scoresheet images
         scoresheet_filenames = [
@@ -103,8 +185,8 @@ class GameAssets:
         into a Pygame Surface object, based on the given row and column
         values.
         """
-        surface = pygame.Surface(size=(gc.SPRITE_SIZE, gc.SPRITE_SIZE))
-        surface.fill(color=gc.RGB_BLACK)
+        surface = pygame.Surface((gc.SPRITE_SIZE, gc.SPRITE_SIZE))
+        surface.fill(gc.RGB_BLACK)
         surface.blit(
             source=self.spritesheet_images['battle_city'],
             dest=(0, 0),
@@ -208,3 +290,54 @@ class GameAssets:
             image = self._resize_sprite(image, size)
 
         return image
+
+    def _get_specified_sprites(
+            self,
+            spritesheet,
+            sprite_coord_dict: dict,
+            color,
+            transparent: bool = True
+            ) -> dict:
+        """
+        Adds the specified sprite from the spritesheet as per the
+        coordinates received from the sprite dictionary.
+        """
+        sprites = {}
+        for key, pos in sprite_coord_dict.items():
+            image = self._get_image(
+                spritesheet,
+                pos['pos_x'],
+                pos['pos_y'],
+                pos['width'],
+                pos['height'],
+                color,
+                transparent
+            )
+            sprites.setdefault(key, image)
+
+        return sprites
+
+    def _get_image(
+            self,
+            spritesheet,
+            pos_x: int,
+            pos_y: int,
+            width: int,
+            height: int,
+            color: tuple[int, int, int],
+            transparent: bool = True
+            ) -> pygame.Surface:
+        """
+        Gets a sprite from a given spritesheet.
+        """
+        surface = pygame.Surface((width, height))
+        surface.fill(color)
+        surface.blit(spritesheet, (0, 0), (pos_x, pos_y, width, height))
+
+        if not transparent:
+            return surface
+
+        surface.set_colorkey(color)
+        surface = self._resize_sprite(surface, (gc.IMAGE_SIZE, gc.IMAGE_SIZE))
+
+        return surface
