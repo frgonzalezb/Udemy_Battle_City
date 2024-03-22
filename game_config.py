@@ -40,15 +40,6 @@ SHIELD = {
     for i in range(1, 3)
 }
 
-POWER_UP_LIST = [
-    'shield',
-    'freeze',
-    'fortify',
-    'power',
-    'explosion',
-    'extra_life',
-    'special'
-]
 POWER_UPS = {
     power_up: get_sprite_object(
         pos_x=(SPRITE_SIZE * (15 + i)),
@@ -56,7 +47,15 @@ POWER_UPS = {
         width=SPRITE_SIZE,
         height=SPRITE_SIZE
     )
-    for i, power_up in enumerate(POWER_UP_LIST, 1)
+    for i, power_up in enumerate([
+        'shield',
+        'freeze',
+        'fortify',
+        'power',
+        'explosion',
+        'extra_life',
+        'special'
+    ], 1)
 }
 
 SCORES = {
