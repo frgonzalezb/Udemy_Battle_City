@@ -16,12 +16,14 @@ class GameAssets:
         self.start_screen = self._load_image(
             filename='start_screen',
             resize=True,
-            size=(gc.SCREEN_WIDTH, gc.SCREEN_HEIGHT)
+            width=gc.SCREEN_WIDTH,
+            height=gc.SCREEN_HEIGHT
         )
         self.start_screen_token = self._load_image(
             filename='token',
             resize=True,
-            size=(gc.IMAGE_SIZE, gc.IMAGE_SIZE)
+            width=gc.IMAGE_SIZE,
+            height=gc.IMAGE_SIZE
         )
 
         # Spritesheet images
@@ -200,7 +202,9 @@ class GameAssets:
         surface.set_colorkey(gc.RGB_BLACK)
         surface = self._resize_sprite(
             surface,
-            (gc.IMAGE_SIZE, gc.IMAGE_SIZE)
+            gc.SPRITE_SCALE,
+            gc.SPRITE_SCALE,
+            True
         )
 
         return surface
@@ -258,19 +262,26 @@ class GameAssets:
     def _resize_sprite(
             self,
             surface: pygame.Surface,
-            resize_values: tuple[int, int]
+            width: int,
+            height: int,
+            scale: bool = False
             ) -> pygame.Surface:
         """
         Resizes any given Pygame Surface object, according to the values
         passed in.
         """
-        return pygame.transform.scale(surface, resize_values)
+        if not scale:
+            return pygame.transform.scale(surface, (width, height))
+
+        w, h = surface.get_size()
+        return pygame.transform.scale(surface, (width * w, height * h))
 
     def _load_image(
             self,
             filename: str,
             resize: bool = False,
-            size: tuple[int, int] = (0, 0)
+            width: int = 0,
+            height: int = 0
             ) -> pygame.Surface:
         """
         Loads an image and returns it as a Pygame Surface object.
@@ -287,7 +298,7 @@ class GameAssets:
             print(f'File {filename}.png not found: {e}')
 
         if resize:
-            image = self._resize_sprite(image, size)
+            image = self._resize_sprite(image, width, height)
 
         return image
 
@@ -338,6 +349,11 @@ class GameAssets:
             return surface
 
         surface.set_colorkey(color)
-        surface = self._resize_sprite(surface, (gc.IMAGE_SIZE, gc.IMAGE_SIZE))
+        surface = self._resize_sprite(
+            surface,
+            gc.SPRITE_SCALE,
+            gc.SPRITE_SCALE,
+            True
+        )
 
         return surface

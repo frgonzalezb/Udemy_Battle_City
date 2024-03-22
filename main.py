@@ -1,4 +1,5 @@
 import pygame
+
 import game_assets as ga
 import game_config as gc
 

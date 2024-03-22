@@ -12,12 +12,8 @@ SPRITE_SCALE = 4
 IMAGE_SIZE = SPRITE_SIZE * SPRITE_SCALE
 
 # Screen settings
-# SCREEN_WIDTH = 1024 # Original
-# SCREEN_HEIGHT = 896 # Original
-# SCREEN_WIDTH = 16 * IMAGE_SIZE # Original edited
-# SCREEN_HEIGHT = 14 * IMAGE_SIZE # Original edited
-SCREEN_WIDTH = 800      # Momentary
-SCREEN_HEIGHT = 600     # Momentary
+SCREEN_WIDTH = 16 * IMAGE_SIZE
+SCREEN_HEIGHT = 14 * IMAGE_SIZE
 
 FPS = 60
 
