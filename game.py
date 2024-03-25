@@ -3,6 +3,7 @@ import pygame
 # import game_config as gc
 from main import Main
 from game_assets import GameAssets
+from characters import Tank
 
 
 class Game:
@@ -17,6 +18,26 @@ class Game:
     def __init__(self, main: Main, assets: GameAssets) -> None:
         self.main = main
         self.assets = assets
+
+        self.obj_groups = {'All_Tanks': pygame.sprite.Group()}
+
+        self.player_1 = Tank(
+            self,
+            self.assets,
+            self.obj_groups,
+            (200, 200),
+            'Up',
+            'Gold',
+        )
+        self.player_2 = Tank(
+            self,
+            self.assets,
+            self.obj_groups,
+            (400, 200),
+            'Up',
+            'Green',
+            1
+        )
 
     def input(self) -> None:
         """
@@ -35,10 +56,12 @@ class Game:
                     self.main.run = False
 
     def update(self) -> None:
-        pass
+        self.player_1.update()
+        self.player_2.update()
 
     def draw(self, window: pygame.Surface) -> None:
         """
         Draws the given window object on the screen.
         """
-        pass
+        self.player_1.draw(window)
+        self.player_2.draw(window)
