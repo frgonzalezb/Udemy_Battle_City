@@ -250,11 +250,11 @@ class GameAssets:
         Sorts each tank sprite by direction, according to its column
         position.
         """
-        if (col % 7 <= 1):
+        if (col % 8 <= 1):
             return 'Up'
-        elif (col % 7 <= 3):
+        elif (col % 8 <= 3):
             return 'Left'
-        elif (col % 7 <= 5):
+        elif (col % 8 <= 5):
             return 'Down'
         else:
             return 'Right'
