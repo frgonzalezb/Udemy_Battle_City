@@ -3,7 +3,7 @@ import pygame
 # import game_config as gc
 from main import Main
 from game_assets import GameAssets
-from characters import Tank, PlayerTank
+from characters import PlayerTank
 
 
 class Game:

@@ -23,8 +23,8 @@ class Tank(pygame.sprite.Sprite):
         been defined to an explicit type (but they should, IMO).
 
         Non-defined keyword arguments:
-        game -- the Game class object
-        assets -- the GameAssets class object
+            game -- the Game class object.
+            assets -- the GameAssets class object.
         """
 
         # Game object and assets
@@ -71,7 +71,7 @@ class Tank(pygame.sprite.Sprite):
     def draw(self, window) -> None:
         if self.active:
             window.blit(self.image, self.rect)
-            pygame.draw.rect(window, gc.RED, self.rect, 1)  # dbg
+            pygame.draw.rect(window, gc.RGB_RED, self.rect, 1)  # dbg
 
     def move(self, direction: str) -> None:
         """
@@ -79,14 +79,15 @@ class Tank(pygame.sprite.Sprite):
         """
         self.direction = direction
 
-        if direction == 'Up':
-            self.pos_y -= self.tank_speed
-        elif direction == 'Down':
-            self.pos_y += self.tank_speed
-        elif direction == 'Left':
-            self.pos_x -= self.tank_speed
-        elif direction == 'Right':
-            self.pos_x += self.tank_speed
+        match direction:
+            case 'Up':
+                self.pos_y -= self.tank_speed
+            case 'Down':
+                self.pos_y += self.tank_speed
+            case 'Left':
+                self.pos_x -= self.tank_speed
+            case 'Right':
+                self.pos_x += self.tank_speed
 
         # Update the tank rectangle position
         self.rect.topleft = (self.pos_x, self.pos_y)
@@ -94,9 +95,12 @@ class Tank(pygame.sprite.Sprite):
         # Update the tank animation
         self.update_tank_movement_animation()
 
+        # Check for tank collisions with other tanks
+        self.check_tank_on_tank_collisions()
+
     def update_tank_movement_animation(self) -> None:
         """
-        Update the animation images to simulate the tank moving.
+        Simulates the tank moving.
         """
         self.frame_index += 1
         image_list_length = len(
@@ -111,6 +115,60 @@ class Tank(pygame.sprite.Sprite):
             [self.direction]
             [self.frame_index]
         )
+
+    def check_tank_on_tank_collisions(self) -> None:
+        """
+        Checks if there is any overlapping between the current
+        tank sprite and one or more tanks sprites.
+
+        NOTE: The current tank object has also been included in the
+        tank group. Indeed, there will always be a collision detected in
+        the collision list and the current tank object will be colliding
+        with itself.
+
+        FIXME: This function seems to feature some long and nested
+        code, so a refactor will be nice.
+        """
+        tank_collision_list = pygame.sprite.spritecollide(
+            self,
+            self.tank_group,
+            False
+        )
+
+        if len(tank_collision_list) == 1:
+            # The current tank is just colliding with itself!
+            return
+
+        for tank in tank_collision_list:
+            # Skip the tank if it's the current one
+            if tank == self:
+                continue
+
+            # Figure out where is the collision
+            if self.direction == 'Right':
+                if (self.rect.right >= tank.rect.left
+                        and self.rect.bottom > tank.rect.top
+                        and self.rect.top < tank.rect.bottom):
+                    self.rect.right = tank.rect.left
+                    self.pos_x = self.rect.x
+            elif self.direction == 'Left':
+                if (self.rect.left <= tank.rect.right
+                        and self.rect.bottom > tank.rect.top
+                        and self.rect.top < tank.rect.bottom):
+                    self.rect.left = tank.rect.right
+                    self.pos_x = self.rect.x
+            elif self.direction == 'Up':
+                if (self.rect.top <= tank.rect.bottom
+                        and self.rect.left < tank.rect.right
+                        and self.rect.right > tank.rect.left):
+                    self.rect.top = tank.rect.bottom
+                    self.pos_y = self.rect.y
+            elif self.direction == 'Down':
+                if (self.rect.bottom >= tank.rect.top
+                        and self.rect.left < tank.rect.right
+                        and self.rect.right > tank.rect.left):
+                    self.rect.bottom = tank.rect.top
+                    self.pos_y = self.rect.y
 
 
 class PlayerTank(Tank):
@@ -146,11 +204,15 @@ class PlayerTank(Tank):
             tank_level
         )
 
-    def input(self, key_pressed) -> None:
+    def input(
+            self,
+            key_pressed: pygame.key.ScancodeWrapper
+            ) -> None:
         """
         Move the player tank according to the key pressed.
+
+        NOTE: Player 1 is Gold, Player 2 is Green.
         """
-        # FIXME: This could be refactored to use match-case
         if self.color == 'Gold':
             if key_pressed[pygame.K_w]:
                 self.move('Up')
