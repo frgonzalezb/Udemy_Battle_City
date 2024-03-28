@@ -71,6 +71,7 @@ class Tank(pygame.sprite.Sprite):
     def draw(self, window) -> None:
         if self.active:
             window.blit(self.image, self.rect)
+            pygame.draw.rect(window, gc.RED, self.rect, 1)  # dbg
 
     def move(self, direction: str) -> None:
         """
@@ -149,6 +150,7 @@ class PlayerTank(Tank):
         """
         Move the player tank according to the key pressed.
         """
+        # FIXME: This could be refactored to use match-case
         if self.color == 'Gold':
             if key_pressed[pygame.K_w]:
                 self.move('Up')
