@@ -42,10 +42,11 @@ class Game:
     def input(self) -> None:
         """
         Handles input events for the game when it's running.
+
+        FIXME: This function may need refactoring:
+        1. Some lines below are direct duplicates from Main.input()
+        2. Nested code
         """
-        # FIXME: This needs refactoring.
-        # 1. Some lines below are direct duplicates from Main.input()
-        # 2. Nested code
         key_pressed = pygame.key.get_pressed()
         self.player_1.input(key_pressed)
         self.player_2.input(key_pressed)
