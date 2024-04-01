@@ -1,8 +1,7 @@
 import pygame
 
 # import game_config as gc
-from main import Main
-from game_assets import GameAssets
+from game_hud import GameHUD
 from characters import PlayerTank
 
 
@@ -15,11 +14,18 @@ class Game:
     it can reach one of those assets and use them.
     """
 
-    def __init__(self, main: Main, assets: GameAssets) -> None:
+    def __init__(self, main, assets) -> None:
+        """
+        Non-defined-type params:
+            game -- The Game class object.
+            assets -- The GameAssets class object.
+        """
         self.main = main
         self.assets = assets
 
         self.obj_groups = {'All_Tanks': pygame.sprite.Group()}
+
+        self.hud = GameHUD(self, self.assets)
 
         self.player_1 = PlayerTank(
             self,
@@ -61,6 +67,7 @@ class Game:
                     self.main.run = False
 
     def update(self) -> None:
+        self.hud.update()
         self.player_1.update()
         self.player_2.update()
 
@@ -68,5 +75,6 @@ class Game:
         """
         Draws the given window object on the screen.
         """
+        self.hud.draw(window)
         self.player_1.draw(window)
         self.player_2.draw(window)
