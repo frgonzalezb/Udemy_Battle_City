@@ -49,10 +49,10 @@ class Main:
         """
         if self.game_on:
             self.game.input()
-        else:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.run = False
+        # else:
+        #     for event in pygame.event.get():
+        #         if event.type == pygame.QUIT:
+        #             self.run = False
 
     def update(self) -> None:
         """

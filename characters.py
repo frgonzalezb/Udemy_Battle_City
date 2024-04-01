@@ -4,7 +4,7 @@ import game_config as gc
 
 class Tank(pygame.sprite.Sprite):
     """
-    Represents Tank objects.
+    Blueprint for all the tank objects.
     """
 
     def __init__(
@@ -22,7 +22,7 @@ class Tank(pygame.sprite.Sprite):
         NOTE: In order to avoid circular imports, some params have not
         been defined to an explicit type (but they should, IMO).
 
-        Non-defined keyword arguments:
+        Non-defined-type params:
             game -- the Game class object.
             assets -- the GameAssets class object.
         """
@@ -40,14 +40,19 @@ class Tank(pygame.sprite.Sprite):
 
         # Tank images
         self.tank_images = self.assets.tank_images
+        self.spawn_images = self.assets.spawn_star_images
 
         # Tank position and direction
         self.spawn_pos = position
         self.pos_x, self.pos_y = self.spawn_pos
         self.direction = direction
 
+        # Tank spawning / active
+        self.spawning = True
+        self.active = False
+
         # Common tank attributes
-        self.active = True
+        # self.active = True
         self.tank_level = tank_level
         self.color = color
         self.tank_speed = gc.TANK_SPEED
@@ -62,21 +67,35 @@ class Tank(pygame.sprite.Sprite):
         )
         self.rect = self.image.get_rect(topleft=self.spawn_pos)
 
+        # Spawn images
+        self.spawn_image = self.spawn_images[f'star_{self.frame_index}']
+        self.spawn_timer = pygame.time.get_ticks()
+        self.spawn_anim_timer = pygame.time.get_ticks()
+
     def input(self) -> None:
         pass
 
     def update(self) -> None:
-        pass
+        if not self.spawning:
+            return
+
+        self.update_spawning_animation()
+        self.stop_spawning_animation()
 
     def draw(self, window) -> None:
-        if self.active:
-            window.blit(self.image, self.rect)
-            pygame.draw.rect(window, gc.RGB_RED, self.rect, 1)  # dbg
+        """
+        Draws the tank-related images on the screen.
+        """
+        self.draw_spawn_star(window)
+        self.draw_tank(window)
 
     def move(self, direction: str) -> None:
         """
-        Move the tank in the passed direction.
+        Moves the tank in the given direction.
         """
+        if not self.active:
+            return
+
         self.direction = direction
 
         match direction:
@@ -97,6 +116,54 @@ class Tank(pygame.sprite.Sprite):
 
         # Check for tank collisions with other tanks
         self.check_tank_on_tank_collisions()
+
+    def draw_spawn_star(self, window) -> None:
+        """
+        Draws the spawn star on the screen.
+        """
+        if not self.spawning:
+            return
+
+        window.blit(self.spawn_image, self.rect)
+
+    def draw_tank(self, window):
+        """
+        Draws the tank on the screen.
+        """
+        if not self.active:
+            return
+
+        window.blit(self.image, self.rect)
+        pygame.draw.rect(window, gc.RGB_RED, self.rect, 1)  # dbg
+
+    def update_spawning_animation(self) -> None:
+        """
+        Update the spawning star animation, if the required amount of
+        time for each image has passed.
+        """
+        animation_time = pygame.time.get_ticks() - self.spawn_anim_timer
+        if animation_time >= gc.SPAWN_ANIM_TIME:
+            self.animate_spawn_star()
+
+    def animate_spawn_star(self) -> None:
+        """
+        Cycles through the spawn star images to emulate a spawning icon.
+        """
+        self.frame_index += 1
+        self.frame_index = self.frame_index % len(self.spawn_images)
+        self.spawn_image = self.spawn_images[f'star_{self.frame_index}']
+        self.spawn_anim_timer = pygame.time.get_ticks()
+
+    def stop_spawning_animation(self) -> None:
+        """
+        If total spawn time has passed, defeats the spawning animation
+        and the tank sprite enters the game.
+        """
+        spawn_time = pygame.time.get_ticks() - self.spawn_timer
+        if spawn_time > gc.TOTAL_SPAWN_TIME:
+            self.frame_index = 0
+            self.spawning = False
+            self.active = True
 
     def update_tank_movement_animation(self) -> None:
         """
@@ -125,9 +192,6 @@ class Tank(pygame.sprite.Sprite):
         tank group. Indeed, there will always be a collision detected in
         the collision list and the current tank object will be colliding
         with itself.
-
-        FIXME: This function seems to feature some long and nested
-        code, so a refactor will be nice.
         """
         tank_collision_list = pygame.sprite.spritecollide(
             self,
@@ -136,44 +200,38 @@ class Tank(pygame.sprite.Sprite):
         )
 
         if len(tank_collision_list) == 1:
-            # The current tank is just colliding with itself!
-            return
+            return  # The current tank is just colliding with itself!
 
         for tank in tank_collision_list:
-            # Skip the tank if it's the current one
             if tank == self:
-                continue
+                continue  # Skip if it's the current tank
 
-            # Figure out where is the collision
-            if self.direction == 'Right':
-                if (self.rect.right >= tank.rect.left
-                        and self.rect.bottom > tank.rect.top
-                        and self.rect.top < tank.rect.bottom):
-                    self.rect.right = tank.rect.left
-                    self.pos_x = self.rect.x
-            elif self.direction == 'Left':
-                if (self.rect.left <= tank.rect.right
-                        and self.rect.bottom > tank.rect.top
-                        and self.rect.top < tank.rect.bottom):
-                    self.rect.left = tank.rect.right
-                    self.pos_x = self.rect.x
-            elif self.direction == 'Up':
-                if (self.rect.top <= tank.rect.bottom
-                        and self.rect.left < tank.rect.right
-                        and self.rect.right > tank.rect.left):
-                    self.rect.top = tank.rect.bottom
-                    self.pos_y = self.rect.y
-            elif self.direction == 'Down':
-                if (self.rect.bottom >= tank.rect.top
-                        and self.rect.left < tank.rect.right
-                        and self.rect.right > tank.rect.left):
-                    self.rect.bottom = tank.rect.top
-                    self.pos_y = self.rect.y
+            self.handle_tank_collisions(tank)
+
+    def handle_tank_collisions(self, tank) -> None:
+        """
+        Figures out where's the collision and handles it.
+
+        Params:
+            tank -- A PlayerTank class object
+        """
+        if self.direction == 'Right' and self.rect.right >= tank.rect.left:
+            self.rect.right = tank.rect.left
+            self.pos_x = self.rect.x
+        elif self.direction == 'Left' and self.rect.left <= tank.rect.right:
+            self.rect.left = tank.rect.right
+            self.pos_x = self.rect.x
+        elif self.direction == 'Up' and self.rect.top <= tank.rect.bottom:
+            self.rect.top = tank.rect.bottom
+            self.pos_y = self.rect.y
+        elif self.direction == 'Down' and self.rect.bottom >= tank.rect.top:
+            self.rect.bottom = tank.rect.top
+            self.pos_y = self.rect.y
 
 
 class PlayerTank(Tank):
     """
-    Represents the Player Tank object.
+    Blueprint specifically for Player 1 and Player 2 tanks.
 
     NOTE: We want the tank class to be the base object for all of the
     tanks in the game, with only slight differences between the player
@@ -209,26 +267,54 @@ class PlayerTank(Tank):
             key_pressed: pygame.key.ScancodeWrapper
             ) -> None:
         """
-        Move the player tank according to the key pressed.
+        Define the controls for a player tank object, depending on
+        its color.
 
-        NOTE: Player 1 is Gold, Player 2 is Green.
+        NOTE: Player 1 is Gold, and Player 2 is Green.
         """
         if self.color == 'Gold':
-            if key_pressed[pygame.K_w]:
-                self.move('Up')
-            elif key_pressed[pygame.K_s]:
-                self.move('Down')
-            elif key_pressed[pygame.K_a]:
-                self.move('Left')
-            elif key_pressed[pygame.K_d]:
-                self.move('Right')
+            self.set_control_keys(
+                key_pressed,
+                up_key=pygame.K_w,
+                down_key=pygame.K_s,
+                left_key=pygame.K_a,
+                right_key=pygame.K_d
+            )
 
         if self.color == 'Green':
-            if key_pressed[pygame.K_UP]:
-                self.move('Up')
-            elif key_pressed[pygame.K_DOWN]:
-                self.move('Down')
-            elif key_pressed[pygame.K_LEFT]:
-                self.move('Left')
-            elif key_pressed[pygame.K_RIGHT]:
-                self.move('Right')
+            self.set_control_keys(
+                key_pressed,
+                up_key=pygame.K_UP,
+                down_key=pygame.K_DOWN,
+                left_key=pygame.K_LEFT,
+                right_key=pygame.K_RIGHT
+            )
+
+    def set_control_keys(
+            self,
+            key_pressed: pygame.key.ScancodeWrapper,
+            up_key: int,
+            down_key: int,
+            left_key: int,
+            right_key: int
+            ) -> None:
+        """
+        Defines the keys for controlling a player.
+
+        NOTE 1: Key params are referred to indexes from Pygame's key
+        variables (e.g. `pygame.K_UP`). Although they can be passed in
+        directly as pure integer values, it's recommended to use the
+        `pygame.K_somekey` style for readability.
+
+        NOTE 2: Controls can't be defined by the cleaner `X if Y else Z`
+        style, because it allows diagonal movements, which are forbidden
+        in the original game.
+        """
+        if key_pressed[up_key]:
+            self.move('Up')
+        elif key_pressed[down_key]:
+            self.move('Down')
+        elif key_pressed[left_key]:
+            self.move('Left')
+        elif key_pressed[right_key]:
+            self.move('Right')

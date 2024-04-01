@@ -23,15 +23,18 @@ RGB_RED = (255, 0, 0)
 # Tank variables
 TANK_SPEED = IMAGE_SIZE // SPRITE_SIZE
 
+SPAWN_ANIM_TIME = 50     # milliseconds
+TOTAL_SPAWN_TIME = 2000  # milliseconds
+
 # Sprites
 SPAWN_STAR = {
     f'star_{i}': get_sprite_object(
-        pos_x=SPRITE_SIZE * (15 + i),
+        pos_x=SPRITE_SIZE * (16 + i),
         pos_y=SPRITE_SIZE * 6,
         width=SPRITE_SIZE,
         height=SPRITE_SIZE
     )
-    for i in range(1, 5)
+    for i in range(4)
 }
 
 SHIELD = {
