@@ -48,23 +48,12 @@ class Game:
     def input(self) -> None:
         """
         Handles input events for the game when it's running.
-
-        FIXME: This function may need refactoring:
-        1. Some lines below are direct duplicates from Main.input()
-        2. Nested code
         """
         key_pressed = pygame.key.get_pressed()
         self.player_1.input(key_pressed)
         self.player_2.input(key_pressed)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.main.run = False
-
-            # Keyboard shortcut for quit the game
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.main.run = False
+        self.close_game()
 
     def update(self) -> None:
         self.hud.update()
@@ -78,3 +67,16 @@ class Game:
         self.hud.draw(window)
         self.player_1.draw(window)
         self.player_2.draw(window)
+
+    def close_game(self) -> None:
+        """
+        Closes the game when needed.
+        """
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.main.run = False
+
+            # Keyboard shortcut for quit the game
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.main.run = False
