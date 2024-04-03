@@ -262,6 +262,9 @@ class PlayerTank(Tank):
             tank_level
         )
 
+        # Player lives
+        self.lives = 3
+
     def input(
             self,
             key_pressed: pygame.key.ScancodeWrapper

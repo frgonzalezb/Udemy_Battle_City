@@ -29,7 +29,12 @@ class Main:
         self.assets = ga.GameAssets()
 
         self.game_on = True
-        self.game = game.Game(self, self.assets)  # The actual game!!
+        self.game = game.Game(
+            self,
+            self.assets,
+            is_player_1_active=True,
+            is_player_2_active=False
+        )  # The actual game!!
 
     def run_game(self) -> None:
         """

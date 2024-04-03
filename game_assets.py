@@ -304,9 +304,9 @@ class GameAssets:
 
     def _get_specified_sprites(
             self,
-            spritesheet,
+            spritesheet: dict[str, pygame.Surface],
             sprite_coord_dict: dict,
-            color,
+            color: tuple[int, int, int],
             transparent: bool = True
             ) -> dict:
         """
@@ -346,9 +346,8 @@ class GameAssets:
         surface.blit(spritesheet, (0, 0), (pos_x, pos_y, width, height))
 
         if not transparent:
-            return surface
+            surface.set_colorkey(color)
 
-        surface.set_colorkey(color)
         surface = self._resize_sprite(
             surface,
             gc.SPRITE_SCALE,

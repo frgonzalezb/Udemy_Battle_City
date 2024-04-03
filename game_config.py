@@ -186,74 +186,74 @@ HUD_INFO = {
     'stage': get_sprite_object(
         pos_x=(SPRITE_SIZE * 20) + 8,
         pos_y=(SPRITE_SIZE * 11),
-        width=round((SPRITE_SIZE / 2) * 5),
-        height=round(SPRITE_SIZE / 2)
+        width=(SPRITE_SIZE // 2) * 5,
+        height=SPRITE_SIZE // 2
     ),
     'num_0': get_sprite_object(
         pos_x=(SPRITE_SIZE * 20) + 8,
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_1': get_sprite_object(
         pos_x=(SPRITE_SIZE * 21),
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_2': get_sprite_object(
         pos_x=(SPRITE_SIZE * 21) + 8,
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_3': get_sprite_object(
         pos_x=(SPRITE_SIZE * 22),
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_4': get_sprite_object(
         pos_x=(SPRITE_SIZE * 22) + 8,
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_5': get_sprite_object(
         pos_x=(SPRITE_SIZE * 20) + 8,
         pos_y=(SPRITE_SIZE * 12),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_6': get_sprite_object(
         pos_x=(SPRITE_SIZE * 21),
         pos_y=(SPRITE_SIZE * 12),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_7': get_sprite_object(
         pos_x=(SPRITE_SIZE * 21) + 8,
         pos_y=(SPRITE_SIZE * 12),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_8': get_sprite_object(
         pos_x=(SPRITE_SIZE * 22),
         pos_y=(SPRITE_SIZE * 12),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'num_9': get_sprite_object(
         pos_x=(SPRITE_SIZE * 22) + 8,
         pos_y=(SPRITE_SIZE * 12),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'life': get_sprite_object(
         pos_x=(SPRITE_SIZE * 20),
         pos_y=(SPRITE_SIZE * 12),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     'info_panel': get_sprite_object(
         pos_x=(SPRITE_SIZE * 23),
@@ -264,8 +264,8 @@ HUD_INFO = {
     'grey_square': get_sprite_object(
         pos_x=(SPRITE_SIZE * 23),
         pos_y=(SPRITE_SIZE * 0),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     )
 }
 
@@ -273,62 +273,62 @@ NUMBERS = {
     0: get_sprite_object(
         pos_x=0,
         pos_y=0,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     1: get_sprite_object(
         pos_x=8,
         pos_y=0,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     2: get_sprite_object(
         pos_x=16,
         pos_y=0,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     3: get_sprite_object(
         pos_x=24,
         pos_y=0,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     4: get_sprite_object(
         pos_x=32,
         pos_y=0,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     5: get_sprite_object(
         pos_x=0,
         pos_y=8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     6: get_sprite_object(
         pos_x=8,
         pos_y=8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     7: get_sprite_object(
         pos_x=16,
         pos_y=8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     8: get_sprite_object(
         pos_x=24,
         pos_y=8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     ),
     9: get_sprite_object(
         pos_x=32,
         pos_y=8,
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        width=SPRITE_SIZE // 2,
+        height=SPRITE_SIZE // 2
     )
 }
 

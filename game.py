@@ -14,7 +14,13 @@ class Game:
     it can reach one of those assets and use them.
     """
 
-    def __init__(self, main, assets) -> None:
+    def __init__(
+            self,
+            main,
+            assets,
+            is_player_1_active: bool = True,
+            is_player_2_active: bool = False
+            ) -> None:
         """
         Non-defined-type params:
             game -- The Game class object.
@@ -25,48 +31,64 @@ class Game:
 
         self.obj_groups = {'All_Tanks': pygame.sprite.Group()}
 
+        self.is_player_1_active = is_player_1_active
+        self.is_player_2_active = is_player_2_active
+
         self.hud = GameHUD(self, self.assets)
 
-        self.player_1 = PlayerTank(
-            self,
-            self.assets,
-            self.obj_groups,
-            (200, 200),
-            'Up',
-            'Gold',
-        )
-        self.player_2 = PlayerTank(
-            self,
-            self.assets,
-            self.obj_groups,
-            (400, 200),
-            'Up',
-            'Green',
-            1
-        )
+        if self.is_player_1_active:
+            self.player_1 = PlayerTank(
+                self,
+                self.assets,
+                self.obj_groups,
+                position=(200, 200),
+                direction='Up',
+                color='Gold',
+            )
+
+        if self.is_player_2_active:
+            self.player_2 = PlayerTank(
+                self,
+                self.assets,
+                self.obj_groups,
+                position=(400, 200),
+                direction='Up',
+                color='Green',
+                tank_level=1
+            )
 
     def input(self) -> None:
         """
         Handles input events for the game when it's running.
         """
         key_pressed = pygame.key.get_pressed()
-        self.player_1.input(key_pressed)
-        self.player_2.input(key_pressed)
+
+        if self.is_player_1_active:
+            self.player_1.input(key_pressed)
+
+        if self.is_player_2_active:
+            self.player_2.input(key_pressed)
 
         self.close_game()
 
     def update(self) -> None:
         self.hud.update()
-        self.player_1.update()
-        self.player_2.update()
+        if self.is_player_1_active:
+            self.player_1.update()
+
+        if self.is_player_2_active:
+            self.player_2.update()
 
     def draw(self, window: pygame.Surface) -> None:
         """
         Draws the given window object on the screen.
         """
         self.hud.draw(window)
-        self.player_1.draw(window)
-        self.player_2.draw(window)
+        if self.is_player_1_active:
+            self.player_1.draw(window)
+
+        if self.is_player_2_active:
+            self.player_2.draw(window)
 
     def close_game(self) -> None:
         """
