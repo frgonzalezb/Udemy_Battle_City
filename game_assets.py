@@ -13,13 +13,13 @@ class GameAssets:
 
     def __init__(self) -> None:
         # Start screen images
-        self.start_screen: pygame.Surface = self._load_image(
+        self.start_screen = self._load_image(
             filename='start_screen',
             resize=True,
             width=gc.SCREEN_WIDTH,
             height=gc.SCREEN_HEIGHT
         )
-        self.start_screen_token: pygame.Surface = self._load_image(
+        self.start_screen_token = self._load_image(
             filename='token',
             resize=True,
             width=gc.IMAGE_SIZE,
@@ -305,10 +305,11 @@ class GameAssets:
     def _get_specified_sprites(
             self,
             spritesheet: dict[str, pygame.Surface],
-            sprite_coord_dict: dict,
+            sprite_coord_dict: (dict[str, dict[str, int]] |
+                                dict[str, dict[str, dict[str, int]]]),
             color: tuple[int, int, int],
             transparent: bool = True
-            ) -> dict:
+            ) -> dict[str, pygame.Surface]:
         """
         Adds the specified sprite from the spritesheet as per the
         coordinates received from the sprite dictionary.
@@ -330,7 +331,7 @@ class GameAssets:
 
     def _get_image(
             self,
-            spritesheet,
+            spritesheet: dict[str, pygame.Surface],
             pos_x: int,
             pos_y: int,
             width: int,

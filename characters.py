@@ -1,4 +1,6 @@
 import pygame
+
+from custom_types import Game, Assets
 import game_config as gc
 
 
@@ -9,23 +11,16 @@ class Tank(pygame.sprite.Sprite):
 
     def __init__(
             self,
-            game,
-            assets,
+            game: Game,
+            assets: Assets,
             groups: dict[str, pygame.sprite.Group],
             position: tuple,
             direction: str,
             color: str = 'Silver',
             tank_level: int = 0
             ) -> None:
-        super().__init__()
-        """
-        NOTE: In order to avoid circular imports, some params have not
-        been defined to an explicit type (but they should, IMO).
 
-        Non-defined-type params:
-            game -- the Game class object.
-            assets -- the GameAssets class object.
-        """
+        super().__init__()
 
         # Game object and assets
         self.game = game
@@ -244,14 +239,15 @@ class PlayerTank(Tank):
 
     def __init__(
             self,
-            game,
-            assets,
+            game: Game,
+            assets: Assets,
             groups: dict[str, pygame.sprite.Group],
             position: tuple,
             direction: str,
             color: str = 'Silver',
             tank_level: int = 0
             ) -> None:
+
         super().__init__(
             game,
             assets,

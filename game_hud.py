@@ -1,6 +1,6 @@
 import pygame
 
-from custom_types import Main, Assets
+from custom_types import Game, Assets
 import game_config as gc
 
 
@@ -9,12 +9,7 @@ class GameHUD:
     Blueprint for the game HUD object.
     """
 
-    def __init__(self, game: Main, assets: Assets) -> None:
-        """
-        Non-defined-type params:
-            game -- The Game class object.
-            assets -- The GameAssets class object.
-        """
+    def __init__(self, game: Game, assets: Assets) -> None:
         self.game = game
         self.assets = assets
         self.images = self.assets.hud_images
@@ -30,7 +25,7 @@ class GameHUD:
         self.player_2_lives: int = 0
         self.player_2_lives_image: pygame.Surface | None = None
 
-    def update(self):
+    def update(self) -> None:
         # Update the number of player lives available
         self.is_player_1_active = self.game.is_player_1_active
 
@@ -56,7 +51,7 @@ class GameHUD:
                 self.is_player_2_active
             )
 
-    def draw(self, window: pygame.Surface):
+    def draw(self, window: pygame.Surface) -> None:
         """
         Draws the HUD elements on the screen.
         """
