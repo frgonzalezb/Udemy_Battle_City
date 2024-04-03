@@ -1,6 +1,4 @@
 import pygame
-
-from custom_types import Game, Assets
 import game_config as gc
 
 
@@ -11,8 +9,8 @@ class Tank(pygame.sprite.Sprite):
 
     def __init__(
             self,
-            game: Game,
-            assets: Assets,
+            game,
+            assets,
             groups: dict[str, pygame.sprite.Group],
             position: tuple,
             direction: str,
@@ -206,9 +204,6 @@ class Tank(pygame.sprite.Sprite):
     def handle_tank_collisions(self, tank) -> None:
         """
         Figures out where's the collision and handles it.
-
-        Params:
-            tank -- A PlayerTank class object
         """
         if self.direction == 'Right' and self.rect.right >= tank.rect.left:
             self.rect.right = tank.rect.left
@@ -239,8 +234,8 @@ class PlayerTank(Tank):
 
     def __init__(
             self,
-            game: Game,
-            assets: Assets,
+            game,
+            assets,
             groups: dict[str, pygame.sprite.Group],
             position: tuple,
             direction: str,

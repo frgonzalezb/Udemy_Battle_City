@@ -10,14 +10,12 @@ the course!
 from typing import Type
 
 import main
-import game
 import game_assets
 import game_hud
 import characters
 
 
 Main = Type[main.Main]
-Game = Type[game.Game]
 Assets = Type[game_assets.GameAssets]
 GameHUD = Type[game_hud.GameHUD]
 Tank = Type[characters.Tank]

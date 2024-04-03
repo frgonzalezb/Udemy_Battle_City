@@ -1,6 +1,4 @@
 import pygame
-
-from custom_types import Game, Assets
 import game_config as gc
 
 
@@ -9,7 +7,7 @@ class GameHUD:
     Blueprint for the game HUD object.
     """
 
-    def __init__(self, game: Game, assets: Assets) -> None:
+    def __init__(self, game, assets) -> None:
         self.game = game
         self.assets = assets
         self.images = self.assets.hud_images
