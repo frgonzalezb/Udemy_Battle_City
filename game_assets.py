@@ -13,13 +13,13 @@ class GameAssets:
 
     def __init__(self) -> None:
         # Start screen images
-        self.start_screen = self._load_image(
+        self.start_screen: pygame.Surface = self._load_image(
             filename='start_screen',
             resize=True,
             width=gc.SCREEN_WIDTH,
             height=gc.SCREEN_HEIGHT
         )
-        self.start_screen_token = self._load_image(
+        self.start_screen_token: pygame.Surface = self._load_image(
             filename='token',
             resize=True,
             width=gc.IMAGE_SIZE,
@@ -32,7 +32,7 @@ class GameAssets:
             'numbers_black_white',
             'numbers_black_orange'
         ]
-        self.spritesheet_images = {
+        self.spritesheet_images: dict[str, pygame.Surface] = {
             image: self._load_image(image)
             for image in spritesheet_filenames
         }

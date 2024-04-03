@@ -1,5 +1,6 @@
 import pygame
 
+from custom_types import Main, Assets
 # import game_config as gc
 from game_hud import GameHUD
 from characters import PlayerTank
@@ -16,16 +17,12 @@ class Game:
 
     def __init__(
             self,
-            main,
-            assets,
+            main: Main,
+            assets: Assets,
             is_player_1_active: bool = True,
             is_player_2_active: bool = False
             ) -> None:
-        """
-        Non-defined-type params:
-            game -- The Game class object.
-            assets -- The GameAssets class object.
-        """
+
         self.main = main
         self.assets = assets
 
