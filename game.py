@@ -1,6 +1,5 @@
 import pygame
 
-from custom_types import Main, Assets
 # import game_config as gc
 from game_hud import GameHUD
 from characters import PlayerTank
@@ -17,22 +16,30 @@ class Game:
 
     def __init__(
             self,
-            main: Main,
-            assets: Assets,
+            main,
+            assets,
             is_player_1_active: bool = True,
             is_player_2_active: bool = False
             ) -> None:
 
+        # Important files
         self.main = main
         self.assets = assets
 
+        # Object groups
         self.obj_groups = {'All_Tanks': pygame.sprite.Group()}
 
+        # Player attributes
         self.is_player_1_active = is_player_1_active
         self.is_player_2_active = is_player_2_active
 
+        # Game HUD
         self.hud = GameHUD(self, self.assets)
 
+        # Level information
+        self.level_num = 1
+
+        # Player objects
         if self.is_player_1_active:
             self.player_1 = PlayerTank(
                 self,
@@ -66,10 +73,19 @@ class Game:
         if self.is_player_2_active:
             self.player_2.input(key_pressed)
 
-        self.close_game()
+        # Pygame event handler
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.main.run = False
+
+            # Keyboard shortcut for quit the game
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.main.run = False
 
     def update(self) -> None:
         self.hud.update()
+
         if self.is_player_1_active:
             self.player_1.update()
 
@@ -86,16 +102,3 @@ class Game:
 
         if self.is_player_2_active:
             self.player_2.draw(window)
-
-    def close_game(self) -> None:
-        """
-        Closes the game when needed.
-        """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.main.run = False
-
-            # Keyboard shortcut for quit the game
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.main.run = False
