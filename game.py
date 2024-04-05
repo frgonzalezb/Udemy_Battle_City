@@ -61,6 +61,9 @@ class Game:
                 tank_level=1
             )
 
+        # Number of enemy tanks
+        self.enemies = 20
+
     def input(self) -> None:
         """
         Handles input events for the game when it's running.
@@ -82,6 +85,10 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.main.run = False
+
+                # dbg
+                if event.key == pygame.K_RETURN:
+                    self.enemies -= 1
 
     def update(self) -> None:
         self.hud.update()

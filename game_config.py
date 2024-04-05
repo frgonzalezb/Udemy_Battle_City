@@ -1,9 +1,12 @@
 """
 Main game settings file.
+
+Some useful notes:
+    GAME_SCREEN = (pos_x, pos_y, width, height)
 """
 
 
-from utilities import get_sprite_object
+from utilities import get_object_position_and_size
 
 
 # Game screen settings
@@ -15,8 +18,19 @@ IMAGE_SIZE = SPRITE_SIZE * SPRITE_SCALE  # 64 px
 SCREEN_WIDTH = 16 * IMAGE_SIZE   # px
 SCREEN_HEIGHT = 14 * IMAGE_SIZE  # px
 
-GAME_SCREEN = (IMAGE_SIZE, IMAGE_SIZE // 2, IMAGE_SIZE * 13, IMAGE_SIZE * 13)
+GAME_SCREEN = get_object_position_and_size(
+    pos_x=IMAGE_SIZE,
+    pos_y=IMAGE_SIZE // 2,
+    width=IMAGE_SIZE * 13,
+    height=IMAGE_SIZE * 13
+)
 INFO_PANEL_X, INFO_PANEL_Y = SCREEN_WIDTH - (IMAGE_SIZE * 2), IMAGE_SIZE // 2
+STD_ENEMIES = 20
+
+SCREEN_BORDER_LEFT = GAME_SCREEN['pos_x']
+SCREEN_BORDER_TOP = GAME_SCREEN['pos_y']
+SCREEN_BORDER_RIGHT = GAME_SCREEN['width'] + SCREEN_BORDER_LEFT
+SCREEN_BORDER_BOTTOM = GAME_SCREEN['height'] + SCREEN_BORDER_TOP
 
 FPS = 60
 
@@ -32,7 +46,7 @@ TOTAL_SPAWN_TIME = 2000  # milliseconds
 
 # Sprites
 SPAWN_STAR = {
-    f'star_{i}': get_sprite_object(
+    f'star_{i}': get_object_position_and_size(
         pos_x=SPRITE_SIZE * (16 + i),
         pos_y=SPRITE_SIZE * 6,
         width=SPRITE_SIZE,
@@ -42,7 +56,7 @@ SPAWN_STAR = {
 }
 
 SHIELD = {
-    f'shield_{i}': get_sprite_object(
+    f'shield_{i}': get_object_position_and_size(
         pos_x=SPRITE_SIZE * (15 + i),
         pos_y=SPRITE_SIZE * 9,
         width=SPRITE_SIZE,
@@ -52,7 +66,7 @@ SHIELD = {
 }
 
 POWER_UPS = {
-    power_up: get_sprite_object(
+    power_up: get_object_position_and_size(
         pos_x=(SPRITE_SIZE * (15 + i)),
         pos_y=(SPRITE_SIZE * 7),
         width=SPRITE_SIZE,
@@ -70,7 +84,7 @@ POWER_UPS = {
 }
 
 SCORES = {
-    score: get_sprite_object(
+    score: get_object_position_and_size(
         pos_x=(SPRITE_SIZE * (17 + i)),
         pos_y=(SPRITE_SIZE * 10),
         width=SPRITE_SIZE,
@@ -80,7 +94,7 @@ SCORES = {
 }
 
 FLAGS = {
-    flag: get_sprite_object(
+    flag: get_object_position_and_size(
         pos_x=(SPRITE_SIZE * (18 + i)),
         pos_y=(SPRITE_SIZE * 2),
         width=SPRITE_SIZE,
@@ -90,7 +104,7 @@ FLAGS = {
 }
 
 EXPLOSIONS = {
-    f'explode_{i}': get_sprite_object(
+    f'explode_{i}': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * ((15 + i) if i < 5 else 21)),
         pos_y=SPRITE_SIZE * 8,
         width=SPRITE_SIZE if i < 4 else (SPRITE_SIZE * 2),
@@ -100,7 +114,7 @@ EXPLOSIONS = {
 }
 
 BULLETS = {
-    direction: get_sprite_object(
+    direction: get_object_position_and_size(
         pos_x=(SPRITE_SIZE * (20 if direction in ["Up", "Left"] else 21)),
         pos_y=(SPRITE_SIZE * 2),
         width=round(SPRITE_SIZE / 2),
@@ -111,31 +125,31 @@ BULLETS = {
 
 MAP_TILES = {
     'bricks': {
-        'small': get_sprite_object(
+        'small': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 16),
             pos_y=(SPRITE_SIZE * 4),
             width=round(SPRITE_SIZE / 2),
             height=round(SPRITE_SIZE / 2)
         ),
-        'small_right': get_sprite_object(
+        'small_right': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 16) + 12,
             pos_y=(SPRITE_SIZE * 4),
             width=round(SPRITE_SIZE / 4),
             height=round(SPRITE_SIZE / 2)
         ),
-        'small_bottom': get_sprite_object(
+        'small_bottom': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 17),
             pos_y=(SPRITE_SIZE * 4) + 4,
             width=round(SPRITE_SIZE / 2),
             height=round(SPRITE_SIZE / 4)
         ),
-        'small_left': get_sprite_object(
+        'small_left': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 17) + 8,
             pos_y=(SPRITE_SIZE * 4),
             width=round(SPRITE_SIZE / 4),
             height=round(SPRITE_SIZE / 2)
         ),
-        'small_top': get_sprite_object(
+        'small_top': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 18),
             pos_y=(SPRITE_SIZE * 4),
             width=round(SPRITE_SIZE / 2),
@@ -143,7 +157,7 @@ MAP_TILES = {
         )
     },
     'steel': {
-        'small': get_sprite_object(
+        'small': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 16),
             pos_y=(SPRITE_SIZE * 4) + 8,
             width=round(SPRITE_SIZE / 2),
@@ -151,7 +165,7 @@ MAP_TILES = {
         )
     },
     'forest': {
-        'small': get_sprite_object(
+        'small': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 16) + 8,
             pos_y=(SPRITE_SIZE * 4) + 8,
             width=round(SPRITE_SIZE / 2),
@@ -159,7 +173,7 @@ MAP_TILES = {
         )
     },
     'ice': {
-        'small': get_sprite_object(
+        'small': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 17),
             pos_y=(SPRITE_SIZE * 4) + 8,
             width=round(SPRITE_SIZE / 2),
@@ -167,13 +181,13 @@ MAP_TILES = {
         )
     },
     'water': {
-        'small_1': get_sprite_object(
+        'small_1': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 16) + 8,
             pos_y=(SPRITE_SIZE * 5),
             width=round(SPRITE_SIZE / 2),
             height=round(SPRITE_SIZE / 2)
         ),
-        'small_2': get_sprite_object(
+        'small_2': get_object_position_and_size(
             pos_x=(SPRITE_SIZE * 17),
             pos_y=(SPRITE_SIZE * 5),
             width=round(SPRITE_SIZE / 2),
@@ -183,148 +197,148 @@ MAP_TILES = {
 }
 
 HUD_INFO = {
-    'stage': get_sprite_object(
+    'stage': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 20) + 8,
         pos_y=(SPRITE_SIZE * 11),
         width=(SPRITE_SIZE // 2) * 5,
-        height=SPRITE_SIZE // 2
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_0': get_sprite_object(
+    'num_0': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 20) + 8,
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_1': get_sprite_object(
+    'num_1': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 21),
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_2': get_sprite_object(
+    'num_2': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 21) + 8,
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_3': get_sprite_object(
+    'num_3': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 22),
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_4': get_sprite_object(
+    'num_4': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 22) + 8,
         pos_y=(SPRITE_SIZE * 11) + 8,
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_5': get_sprite_object(
+    'num_5': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 20) + 8,
         pos_y=(SPRITE_SIZE * 12),
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_6': get_sprite_object(
+    'num_6': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 21),
         pos_y=(SPRITE_SIZE * 12),
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_7': get_sprite_object(
+    'num_7': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 21) + 8,
         pos_y=(SPRITE_SIZE * 12),
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_8': get_sprite_object(
+    'num_8': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 22),
         pos_y=(SPRITE_SIZE * 12),
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'num_9': get_sprite_object(
+    'num_9': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 22) + 8,
         pos_y=(SPRITE_SIZE * 12),
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'life': get_sprite_object(
+    'life': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 20),
         pos_y=(SPRITE_SIZE * 12),
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     ),
-    'info_panel': get_sprite_object(
+    'info_panel': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 23),
         pos_y=(SPRITE_SIZE * 0),
         width=(SPRITE_SIZE * 2),
         height=(SPRITE_SIZE * 15)
     ),
-    'grey_square': get_sprite_object(
+    'grey_square': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 23),
         pos_y=(SPRITE_SIZE * 0),
-        width=SPRITE_SIZE // 2,
-        height=SPRITE_SIZE // 2
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     )
 }
 
 NUMBERS = {
-    0: get_sprite_object(
+    0: get_object_position_and_size(
         pos_x=0,
         pos_y=0,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    1: get_sprite_object(
+    1: get_object_position_and_size(
         pos_x=8,
         pos_y=0,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    2: get_sprite_object(
+    2: get_object_position_and_size(
         pos_x=16,
         pos_y=0,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    3: get_sprite_object(
+    3: get_object_position_and_size(
         pos_x=24,
         pos_y=0,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    4: get_sprite_object(
+    4: get_object_position_and_size(
         pos_x=32,
         pos_y=0,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    5: get_sprite_object(
+    5: get_object_position_and_size(
         pos_x=0,
         pos_y=8,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    6: get_sprite_object(
+    6: get_object_position_and_size(
         pos_x=8,
         pos_y=8,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    7: get_sprite_object(
+    7: get_object_position_and_size(
         pos_x=16,
         pos_y=8,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    8: get_sprite_object(
+    8: get_object_position_and_size(
         pos_x=24,
         pos_y=8,
         width=SPRITE_SIZE // 2,
         height=SPRITE_SIZE // 2
     ),
-    9: get_sprite_object(
+    9: get_object_position_and_size(
         pos_x=32,
         pos_y=8,
         width=SPRITE_SIZE // 2,
@@ -333,13 +347,13 @@ NUMBERS = {
 }
 
 CONTEXT = {
-    'pause': get_sprite_object(
+    'pause': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 18),
         pos_y=(SPRITE_SIZE * 11),
         width=round((SPRITE_SIZE / 2) * 5),
         height=round(SPRITE_SIZE / 2)
     ),
-    'game_over': get_sprite_object(
+    'game_over': get_object_position_and_size(
         pos_x=(SPRITE_SIZE * 18),
         pos_y=(SPRITE_SIZE * 11) + 8,
         width=(SPRITE_SIZE * 2),

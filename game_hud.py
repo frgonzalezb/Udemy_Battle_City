@@ -31,6 +31,9 @@ class GameHUD:
         )
 
     def update(self) -> None:
+        # Update the number of enemies still remaining to spawn
+        self.enemies = self.game.enemies
+
         # Update the stage number image
         if self.level != self.game.level_num:
             self.level = self.game.level_num
@@ -70,6 +73,8 @@ class GameHUD:
             (0, 0)
         )
 
+        self.draw_enemy_tanks_remaining(window)
+
         if self.is_player_1_active:
             window.blit(
                 self.player_1_lives_image,
@@ -86,6 +91,27 @@ class GameHUD:
             self.level_image,
             self.level_image_rect
         )
+
+    def draw_enemy_tanks_remaining(self, window: pygame.Surface) -> None:
+        """
+        Draws the little tank images on the HUD screen to represent the
+        number of enemies still remaining to spawn in the game area.
+        """
+        row = 0
+        offset_x_1, offset_x_2 = (14.5 * gc.IMAGE_SIZE), (15 * gc.IMAGE_SIZE)
+
+        for num in range(gc.STD_ENEMIES):
+
+            if num % 2 == 0:
+                x, y = offset_x_1, (4 + row) * (gc.IMAGE_SIZE // 2)
+            else:
+                x, y = offset_x_2, (4 + row) * (gc.IMAGE_SIZE // 2)
+                row += 1
+
+            if num < self.enemies:
+                window.blit(self.images['life'], (x, y))
+            else:
+                window.blit(self.images['grey_square'], (x, y))
 
     def display_stage_number(self, level: int) -> pygame.Surface:
         """
@@ -117,7 +143,14 @@ class GameHUD:
             (gc.SCREEN_WIDTH, gc.SCREEN_HEIGHT)
         )
         overlay_screen.fill(gc.RGB_GREY)
-        pygame.draw.rect(overlay_screen, gc.RGB_BLACK, (gc.GAME_SCREEN))
+        game_screen_tuple = tuple(value for value in gc.GAME_SCREEN.values())
+
+        pygame.draw.rect(
+            overlay_screen,
+            gc.RGB_BLACK,
+            game_screen_tuple
+        )
+
         overlay_screen.blit(
             self.images['info_panel'],
             (gc.INFO_PANEL_X, gc.INFO_PANEL_Y)

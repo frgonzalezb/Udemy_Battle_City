@@ -59,6 +59,7 @@ class Tank(pygame.sprite.Sprite):
             [self.frame_index]
         )
         self.rect = self.image.get_rect(topleft=self.spawn_pos)
+        self.width, self.height = self.image.get_size()
 
         # Spawn images
         self.spawn_image = self.spawn_images[f'star_{self.frame_index}']
@@ -94,12 +95,20 @@ class Tank(pygame.sprite.Sprite):
         match direction:
             case 'Up':
                 self.pos_y -= self.tank_speed
+                if self.pos_y < gc.SCREEN_BORDER_TOP:
+                    self.pos_y = gc.SCREEN_BORDER_TOP
             case 'Down':
                 self.pos_y += self.tank_speed
+                if self.pos_y + self.height > gc.SCREEN_BORDER_BOTTOM:
+                    self.pos_y = gc.SCREEN_BORDER_BOTTOM - self.height
             case 'Left':
                 self.pos_x -= self.tank_speed
+                if self.pos_x < gc.SCREEN_BORDER_LEFT:
+                    self.pos_x = gc.SCREEN_BORDER_LEFT
             case 'Right':
                 self.pos_x += self.tank_speed
+                if self.pos_x + self.width > gc.SCREEN_BORDER_RIGHT:
+                    self.pos_x = gc.SCREEN_BORDER_RIGHT - self.width
 
         # Update the tank rectangle position
         self.rect.topleft = (self.pos_x, self.pos_y)

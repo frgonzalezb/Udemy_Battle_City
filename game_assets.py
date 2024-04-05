@@ -88,7 +88,6 @@ class GameAssets:
             self.spritesheet_images['battle_city'],
             gc.CONTEXT,
             gc.RGB_BLACK,
-            False
         )
 
         # Tile images
@@ -346,7 +345,7 @@ class GameAssets:
         surface.fill(color)
         surface.blit(spritesheet, (0, 0), (pos_x, pos_y, width, height))
 
-        if not transparent:
+        if transparent:
             surface.set_colorkey(color)
 
         surface = self._resize_sprite(
