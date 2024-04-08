@@ -236,8 +236,8 @@ class Tank(pygame.sprite.Sprite):
     def shoot(self):
         if self.bullet_sum >= self.bullet_limit:
             return
-        
-        bullet = Bullet(
+
+        Bullet(
             self.assets,
             self.groups,
             self,
