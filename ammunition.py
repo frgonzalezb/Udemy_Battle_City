@@ -47,7 +47,7 @@ class Bullet(pygame.sprite.Sprite):
         window.blit(self.image, self.rect)
         pygame.draw.rect(window, gc.RGB_GREEN, self.rect, 1)
 
-    def move(self):
+    def move(self) -> None:
         """
         Moves the bullet in the direction indicated in the init method.
         """
@@ -64,7 +64,7 @@ class Bullet(pygame.sprite.Sprite):
 
         self.rect.center = (self.pos_x, self.pos_y)
 
-    def collide_edge_of_screen(self):
+    def collide_edge_of_screen(self) -> None:
         """
         Check for collision with screen edge.
         """
@@ -77,6 +77,6 @@ class Bullet(pygame.sprite.Sprite):
             self.update_owner()
             self.kill()
 
-    def update_owner(self):
+    def update_owner(self) -> None:
         if self.owner.bullet_sum > 0:
             self.owner.bullet_sum -= 1
