@@ -95,6 +95,11 @@ class Game:
                         self.player_1.shoot()
 
                 # dbg
+                if event.key == pygame.K_RCTRL:
+                    if self.player_2.active:
+                        self.player_2.shoot()
+
+                # dbg
                 if event.key == pygame.K_RETURN:
                     self.enemies -= 1
 

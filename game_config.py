@@ -39,6 +39,8 @@ RGB_GREEN = (0, 255, 0)
 # Tank variables
 TANK_SPEED = IMAGE_SIZE // SPRITE_SIZE
 
+TANK_PARALYSIS = 2000    # milliseconds
+
 SPAWN_ANIM_TIME = 50     # milliseconds
 TOTAL_SPAWN_TIME = 2000  # milliseconds
 

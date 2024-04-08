@@ -33,7 +33,7 @@ class Main:
             self,
             self.assets,
             is_player_1_active=True,
-            is_player_2_active=False
+            is_player_2_active=True
         )  # The actual game!!
 
     def run_game(self) -> None:

@@ -17,7 +17,8 @@ class Tank(pygame.sprite.Sprite):
             position: tuple,
             direction: str,
             color: str = 'Silver',
-            tank_level: int = 0
+            tank_level: int = 0,
+            enemy: bool = True
             ) -> None:
 
         super().__init__()
@@ -51,6 +52,7 @@ class Tank(pygame.sprite.Sprite):
         self.tank_level = tank_level
         self.color = color
         self.tank_speed = gc.TANK_SPEED
+        self.enemy = enemy
 
         # Tank image, rectangle, and frame index
         self.frame_index = 0
@@ -67,6 +69,11 @@ class Tank(pygame.sprite.Sprite):
         self.bullet_limit = 1
         self.bullet_sum = 0
 
+        # Tank paralysis
+        self.paralyzed = False
+        self.paralysis = gc.TANK_PARALYSIS
+        self.paralysis_timer = pygame.time.get_ticks()
+
         # Spawn images
         self.spawn_image = self.spawn_images[f'star_{self.frame_index}']
         self.spawn_timer = pygame.time.get_ticks()
@@ -76,11 +83,16 @@ class Tank(pygame.sprite.Sprite):
         pass
 
     def update(self) -> None:
-        if not self.spawning:
+        if self.spawning:
+            self.update_spawning_animation()
+            self.stop_spawning_animation()
             return
 
-        self.update_spawning_animation()
-        self.stop_spawning_animation()
+        if (
+            self.paralyzed and
+            pygame.time.get_ticks() - self.paralysis_timer >= self.paralysis
+        ):
+            self.paralyzed = False
 
     def draw(self, window) -> None:
         """
@@ -97,6 +109,15 @@ class Tank(pygame.sprite.Sprite):
             return
 
         self.direction = direction
+
+        if self.paralyzed:
+            self.image = (
+                self.tank_images[f'Tank_{self.tank_level}']
+                [self.color]
+                [self.direction]
+                [self.frame_index]
+            )
+            return
 
         match direction:
             case 'Up':
@@ -246,6 +267,15 @@ class Tank(pygame.sprite.Sprite):
         )
         self.bullet_sum += 1
 
+    def paralyze_tank(self, paralysis_time):
+        """
+        If player tank is hit by player tank, or if the freeze power up
+        is used.
+        """
+        self.paralysis = paralysis_time
+        self.paralyzed = True
+        self.paralysis_timer = pygame.time.get_ticks()
+
 
 class PlayerTank(Tank):
     """
@@ -268,7 +298,7 @@ class PlayerTank(Tank):
             position: tuple,
             direction: str,
             color: str = 'Silver',
-            tank_level: int = 0
+            tank_level: int = 0,
             ) -> None:
 
         super().__init__(
@@ -278,7 +308,8 @@ class PlayerTank(Tank):
             position,
             direction,
             color,
-            tank_level
+            tank_level,
+            enemy=False
         )
 
         # Player lives
