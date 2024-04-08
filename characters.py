@@ -1,5 +1,7 @@
 import pygame
+
 import game_config as gc
+from ammunition import Bullet
 
 
 class Tank(pygame.sprite.Sprite):
@@ -11,7 +13,7 @@ class Tank(pygame.sprite.Sprite):
             self,
             game,
             assets,
-            groups: dict[str, pygame.sprite.Group],
+            groups,
             position: tuple,
             direction: str,
             color: str = 'Silver',
@@ -227,6 +229,15 @@ class Tank(pygame.sprite.Sprite):
             self.rect.bottom = tank.rect.top
             self.pos_y = self.rect.y
 
+    def shoot(self):
+        bullet = Bullet(
+            self.assets,
+            self.groups,
+            self,
+            self.rect.center,
+            self.direction,
+        )
+
 
 class PlayerTank(Tank):
     """
@@ -245,7 +256,7 @@ class PlayerTank(Tank):
             self,
             game,
             assets,
-            groups: dict[str, pygame.sprite.Group],
+            groups,
             position: tuple,
             direction: str,
             color: str = 'Silver',

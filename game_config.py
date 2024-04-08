@@ -1,8 +1,5 @@
 """
 Main game settings file.
-
-Some useful notes:
-    GAME_SCREEN = (pos_x, pos_y, width, height)
 """
 
 
@@ -37,6 +34,7 @@ FPS = 60
 RGB_BLACK = (0, 0, 0)
 RGB_RED = (255, 0, 0)
 RGB_GREY = (99, 99, 99)
+RGB_GREEN = (0, 255, 0)
 
 # Tank variables
 TANK_SPEED = IMAGE_SIZE // SPRITE_SIZE
@@ -115,10 +113,22 @@ EXPLOSIONS = {
 
 BULLETS = {
     direction: get_object_position_and_size(
-        pos_x=(SPRITE_SIZE * (20 if direction in ["Up", "Left"] else 21)),
-        pos_y=(SPRITE_SIZE * 2),
-        width=round(SPRITE_SIZE / 2),
-        height=round(SPRITE_SIZE / 2)
+        pos_x=(
+            (
+                (SPRITE_SIZE * 20)
+                if direction == 'Up'
+                else (SPRITE_SIZE * 21)
+            )
+            if direction in ['Up', 'Down']
+            else (
+                (SPRITE_SIZE * 20) + 8
+                if direction == 'Left'
+                else (SPRITE_SIZE * 21) + 8
+            )
+        ),
+        pos_y=(SPRITE_SIZE * 6) + 4,
+        width=(SPRITE_SIZE // 2),
+        height=(SPRITE_SIZE // 2)
     )
     for direction in ['Up', 'Left', 'Down', 'Right']
 }

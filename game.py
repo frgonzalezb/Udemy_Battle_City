@@ -27,7 +27,10 @@ class Game:
         self.assets = assets
 
         # Object groups
-        self.obj_groups = {'All_Tanks': pygame.sprite.Group()}
+        self.groups = {
+            'All_Tanks': pygame.sprite.Group(),
+            'Bullets': pygame.sprite.Group()
+        }
 
         # Player attributes
         self.is_player_1_active = is_player_1_active
@@ -44,7 +47,7 @@ class Game:
             self.player_1 = PlayerTank(
                 self,
                 self.assets,
-                self.obj_groups,
+                self.groups,
                 position=(200, 200),
                 direction='Up',
                 color='Gold',
@@ -54,7 +57,7 @@ class Game:
             self.player_2 = PlayerTank(
                 self,
                 self.assets,
-                self.obj_groups,
+                self.groups,
                 position=(400, 200),
                 direction='Up',
                 color='Green',
@@ -87,25 +90,38 @@ class Game:
                     self.main.run = False
 
                 # dbg
+                if event.key == pygame.K_SPACE:
+                    if self.player_1.active:
+                        self.player_1.shoot()
+
+                # dbg
                 if event.key == pygame.K_RETURN:
                     self.enemies -= 1
 
     def update(self) -> None:
         self.hud.update()
 
-        if self.is_player_1_active:
-            self.player_1.update()
+        # if self.is_player_1_active:
+        #     self.player_1.update()
 
-        if self.is_player_2_active:
-            self.player_2.update()
+        # if self.is_player_2_active:
+        #     self.player_2.update()
+
+        for dict_key in self.groups.keys():
+            self.groups[dict_key].update()
 
     def draw(self, window: pygame.Surface) -> None:
         """
         Draws the given window object on the screen.
         """
         self.hud.draw(window)
-        if self.is_player_1_active:
-            self.player_1.draw(window)
 
-        if self.is_player_2_active:
-            self.player_2.draw(window)
+        # if self.is_player_1_active:
+        #     self.player_1.draw(window)
+
+        # if self.is_player_2_active:
+        #     self.player_2.draw(window)
+
+        # No DRY!! update and draw method share this same snippet
+        for dict_key in self.groups.keys():
+            self.groups[dict_key].draw(window)
