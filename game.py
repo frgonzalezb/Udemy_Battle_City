@@ -108,7 +108,8 @@ class Game:
         #     self.player_2.update()
 
         for dict_key in self.groups.keys():
-            self.groups[dict_key].update()
+            for item in self.groups[dict_key]:
+                item.update()
 
     def draw(self, window: pygame.Surface) -> None:
         """
@@ -124,4 +125,5 @@ class Game:
 
         # No DRY!! update and draw method share this same snippet
         for dict_key in self.groups.keys():
-            self.groups[dict_key].draw(window)
+            for item in self.groups[dict_key]:
+                item.draw(window)
