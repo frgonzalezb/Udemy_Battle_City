@@ -41,9 +41,11 @@ class Bullet(pygame.sprite.Sprite):
         # Bullet movement
         self.move()
         # Check if bullet has reached the edge of the screen
-        self.collide_edge_of_screen()
+        self.check_collision_with_screen_border()
         # Check for bullet collision with tank
-        self.collide_with_tank()
+        self.check_collision_with_tank()
+        # Chec for bullet collisions between bullets
+        self.check_collision_with_bullet
 
     def draw(self, window) -> None:
         window.blit(self.image, self.rect)
@@ -66,7 +68,7 @@ class Bullet(pygame.sprite.Sprite):
 
         self.rect.center = (self.pos_x, self.pos_y)
 
-    def collide_edge_of_screen(self) -> None:
+    def check_collision_with_screen_border(self) -> None:
         """
         Checks for collision with screen edge.
         """
@@ -79,20 +81,58 @@ class Bullet(pygame.sprite.Sprite):
             self.update_owner()
             self.kill()
 
-    def collide_with_tank(self):
+    def check_collision_with_tank(self) -> None:
         """
         Checks if the bullet collides with a tank.
         """
         tank_collisions = pygame.sprite.spritecollide(self, self.tanks, False)
+
         for tank in tank_collisions:
-            if self.owner == tank:
+            if self.owner == tank or tank.spawning:
                 continue
+            # Player tank bullet has collided with another player tank
             if not self.owner.enemy and not tank.enemy:
                 self.update_owner()
                 tank.paralyze_tank(gc.TANK_PARALYSIS)
                 self.kill()
                 break
+            # Player bullet has collided with enemy tank
+            if (
+                (not self.owner.enemy and tank.enemy) or
+                (self.owner.enemy and not tank.enemy)
+            ):
+                self.update_owner()
+                tank.destroy_tank()
+                self.kill()
+                break
+
+    def check_collision_with_bullet(self) -> None:
+        """
+        Check for collisions with other bullets and destroy self once
+        detected.
+        """
+        bullet_hit = pygame.sprite.spritecollide(
+            self,
+            self.bullet_group,
+            False
+        )
+
+        if len(bullet_hit) == 1:
+            return
+
+        for bullet in bullet_hit:
+            if bullet == self:
+                continue
+            bullet.update_owner()
+            bullet.kill()
+            self.update_owner()
+            self.kill()
+            break
 
     def update_owner(self) -> None:
+        """
+        Checks and updates the fire rate for tanks. As in the original
+        game, each tank should shoot just one bullet at a time.
+        """
         if self.owner.bullet_sum > 0:
             self.owner.bullet_sum -= 1

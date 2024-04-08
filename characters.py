@@ -53,6 +53,7 @@ class Tank(pygame.sprite.Sprite):
         self.color = color
         self.tank_speed = gc.TANK_SPEED
         self.enemy = enemy
+        self.tank_health = 1
 
         # Tank image, rectangle, and frame index
         self.frame_index = 0
@@ -254,7 +255,7 @@ class Tank(pygame.sprite.Sprite):
             self.rect.bottom = tank.rect.top
             self.pos_y = self.rect.y
 
-    def shoot(self):
+    def shoot(self) -> None:
         if self.bullet_sum >= self.bullet_limit:
             return
 
@@ -267,7 +268,7 @@ class Tank(pygame.sprite.Sprite):
         )
         self.bullet_sum += 1
 
-    def paralyze_tank(self, paralysis_time):
+    def paralyze_tank(self, paralysis_time) -> None:
         """
         If player tank is hit by player tank, or if the freeze power up
         is used.
@@ -275,6 +276,15 @@ class Tank(pygame.sprite.Sprite):
         self.paralysis = paralysis_time
         self.paralyzed = True
         self.paralysis_timer = pygame.time.get_ticks()
+
+    def destroy_tank(self) -> None:
+        """
+        Damages tank's health, and if health at zero, destroys the tank.
+        """
+        self.tank_health -= 1
+
+        if self.tank_health <= 0:
+            self.kill()
 
 
 class PlayerTank(Tank):

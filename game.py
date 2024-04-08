@@ -2,7 +2,7 @@ import pygame
 
 # import game_config as gc
 from game_hud import GameHUD
-from characters import PlayerTank
+from characters import Tank, PlayerTank
 
 
 class Game:
@@ -101,7 +101,14 @@ class Game:
 
                 # dbg
                 if event.key == pygame.K_RETURN:
-                    self.enemies -= 1
+                    Tank(
+                        self,
+                        self.assets,
+                        self.groups,
+                        (400, 400),
+                        'Down',
+                    )
+                    # self.enemies -= 1
 
     def update(self) -> None:
         self.hud.update()
