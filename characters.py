@@ -80,6 +80,12 @@ class Tank(pygame.sprite.Sprite):
         self.spawn_timer = pygame.time.get_ticks()
         self.spawn_anim_timer = pygame.time.get_ticks()
 
+        # Tank image masks
+        self.mask_dict = self.get_tank_masks()
+        self.mask = self.mask_dict[self.direction]
+        # self.mask_image = self.mask.to_surface()
+        self.mask_direction = self.direction
+
     def input(self) -> None:
         pass
 
@@ -164,6 +170,7 @@ class Tank(pygame.sprite.Sprite):
             return
 
         window.blit(self.image, self.rect)
+        # window.blit(self.mask_image, self.rect)
         pygame.draw.rect(window, gc.RGB_RED, self.rect, 1)  # dbg
 
     def update_spawning_animation(self) -> None:
@@ -212,6 +219,10 @@ class Tank(pygame.sprite.Sprite):
             [self.direction]
             [self.frame_index]
         )
+        if self.mask_direction != self.direction:
+            self.mask_direction = self.direction
+            self.mask = self.mask_dict[self.mask_direction]
+            # self.mask_image = self.mask.to_surface()
 
     def check_tank_on_tank_collisions(self) -> None:
         """
@@ -285,6 +296,20 @@ class Tank(pygame.sprite.Sprite):
 
         if self.tank_health <= 0:
             self.kill()
+
+    def get_tank_masks(self) -> dict[str, pygame.Mask]:
+        """
+        Creates and returns a dictionary of tank masks for all
+        directions.
+        """
+        images = {
+            direction: pygame.mask.from_surface(
+                self.tank_images[f'Tank_{self.tank_level}'][self.color]
+                [direction][0]
+            )
+            for direction in ['Up', 'Down', 'Left', 'Right']
+        }
+        return images
 
 
 class PlayerTank(Tank):

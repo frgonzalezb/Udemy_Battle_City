@@ -34,6 +34,10 @@ class Bullet(pygame.sprite.Sprite):
         self.image = self.images[self.direction]
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
+        # Get bullet mask
+        self.mask = pygame.mask.from_surface(self.image)
+        # self.mask_image = self.mask.to_surface()
+
         # Add bullet to bullets group
         self.bullet_group.add(self)
 
@@ -49,6 +53,7 @@ class Bullet(pygame.sprite.Sprite):
 
     def draw(self, window) -> None:
         window.blit(self.image, self.rect)
+        # window.blit(self.mask_image, self.rect)
         pygame.draw.rect(window, gc.RGB_GREEN, self.rect, 1)
 
     def move(self) -> None:
@@ -90,21 +95,22 @@ class Bullet(pygame.sprite.Sprite):
         for tank in tank_collisions:
             if self.owner == tank or tank.spawning:
                 continue
-            # Player tank bullet has collided with another player tank
-            if not self.owner.enemy and not tank.enemy:
-                self.update_owner()
-                tank.paralyze_tank(gc.TANK_PARALYSIS)
-                self.kill()
-                break
-            # Player bullet has collided with enemy tank
-            if (
-                (not self.owner.enemy and tank.enemy) or
-                (self.owner.enemy and not tank.enemy)
-            ):
-                self.update_owner()
-                tank.destroy_tank()
-                self.kill()
-                break
+            if pygame.sprite.collide_mask(self, tank):
+                # Player tank bullet has collided with another player tank
+                if not self.owner.enemy and not tank.enemy:
+                    self.update_owner()
+                    tank.paralyze_tank(gc.TANK_PARALYSIS)
+                    self.kill()
+                    break
+                # Player bullet has collided with enemy tank
+                if (
+                    (not self.owner.enemy and tank.enemy) or
+                    (self.owner.enemy and not tank.enemy)
+                ):
+                    self.update_owner()
+                    tank.destroy_tank()
+                    self.kill()
+                    break
 
     def check_collision_with_bullet(self) -> None:
         """
@@ -123,11 +129,12 @@ class Bullet(pygame.sprite.Sprite):
         for bullet in bullet_hit:
             if bullet == self:
                 continue
-            bullet.update_owner()
-            bullet.kill()
-            self.update_owner()
-            self.kill()
-            break
+            if pygame.sprite.collide_mask(self, bullet):
+                bullet.update_owner()
+                bullet.kill()
+                self.update_owner()
+                self.kill()
+                break
 
     def update_owner(self) -> None:
         """
