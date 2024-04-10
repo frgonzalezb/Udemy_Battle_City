@@ -1,8 +1,9 @@
 import pygame
 
-import game
-import game_assets as ga
 import game_config as gc
+from game import Game
+from game_assets import GameAssets
+from level_editor import LevelEditor
 
 
 class Main:
@@ -26,15 +27,21 @@ class Main:
         # A simple check for the main game loop
         self.run = True
 
-        self.assets = ga.GameAssets()
+        # All the assets for the game
+        self.assets = GameAssets()
 
-        self.game_on = True
-        self.game = game.Game(
+        # Game object check and loading
+        self.game_on = False
+        self.game = Game(
             self,
             self.assets,
             is_player_1_active=True,
             is_player_2_active=True
         )  # The actual game!!
+
+        # Level editor check and loading
+        self.level_editor_on = True
+        self.level_creator = LevelEditor(self, self.assets)
 
     def run_game(self) -> None:
         """
@@ -49,15 +56,23 @@ class Main:
         """
         Handles input events for the game.
 
-        If the game is running, all keyboard and mouse events will be
-        handled through the actual game object.
+        If the actual game is running, all keyboard and mouse events
+        will be handled through the actual game object. Otherwise,
+        events will be handled throught the level editor object.
+
+        If something goes wrong (e.g. neither the actual game nor the
+        level editor run), the QUIT option is available here.
         """
         if self.game_on:
             self.game.input()
-        # else:
-        #     for event in pygame.event.get():
-        #         if event.type == pygame.QUIT:
-        #             self.run = False
+
+        if self.level_editor_on:
+            self.level_creator.input()
+
+        if not self.game_on and not self.level_editor_on:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.run = False
 
     def update(self) -> None:
         """
@@ -69,6 +84,9 @@ class Main:
         if self.game_on:
             self.game.update()
 
+        if self.level_editor_on:
+            self.level_creator.update()
+
     def draw(self) -> None:
         """
         Handles all of the screen updates, drawing all of the images to
@@ -78,6 +96,9 @@ class Main:
 
         if self.game_on:
             self.game.draw(self.screen)
+
+        if self.level_editor_on:
+            self.level_creator.draw(self.screen)
 
         pygame.display.update()
 
