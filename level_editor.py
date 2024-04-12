@@ -3,17 +3,23 @@ from typing import KeysView
 import pygame
 
 import game_config as gc
+from levels import LevelData
 
 
 class LevelEditor:
+    """
+    Represents the level editor and all its closely-related objects.
+    """
 
     def __init__(self, main, assets) -> None:
         self.main = main
         self.assets = assets
         self.active = True
 
-        self.level_data = None
+        self.level_data = LevelData()
         self.all_levels = []
+        for stage in self.level_data.level_data:
+            self.all_levels.append(stage)
 
         self.overlay_screen = self.draw_screen()
         self.matrix = self.create_level_matrix()
@@ -25,7 +31,7 @@ class LevelEditor:
             22: self.assets.forest_tiles['small'],
             23: self.assets.ice_tiles['small'],
             24: self.assets.water_tiles['small_1'],
-            25: self.assets.flag_images['Phoenix_Alive']
+            99: self.assets.flag_images['Phoenix_Alive']
         }
         self.inserts = self._get_insert_pieces(self.tile_type.keys())
         self.index = 0
@@ -190,6 +196,12 @@ class LevelEditor:
             if self.index >= len(self.inserts):
                 self.index = self.index % len(self.inserts)
             self.insert_tile = self.inserts[self.index]
+        # Save level
+        if key == pygame.K_RETURN:
+            self.validate_level()
+            self.all_levels.append(self.matrix)
+            self.level_data.save(self.all_levels)
+            self.active = False
 
     def _define_insert_pattern(self, tile: int) -> list[list[int]]:
         """
@@ -202,6 +214,8 @@ class LevelEditor:
         four quadrants, where the gamer can fill two of them as pieces
         of a tile texture (represented here as numbers for convenience)
         in a predefined cycling pattern.
+
+        NOTE: The value of -1 simply means empty space.
         """
         return [
             [-1, tile, -1, tile],       # vertical right
@@ -228,3 +242,15 @@ class LevelEditor:
                 inserts.append(pattern)
 
         return inserts
+
+    def validate_level(self):
+        for cell in gc.ENEMY_TANK_SPAWNS:
+            self.matrix[cell[1]][cell[0]] = -1
+        for cell in gc.PLAYER_TANK_SPAWNS:
+            self.matrix[cell[1]][cell[0]] = -1
+        for cell in gc.BASE:
+            self.matrix[cell[1]][cell[0]] = -1
+        self.matrix[24][12] = 99
+        for cell in gc.FORT:
+            if self.matrix[cell[1]][cell[0]] == -1:
+                self.matrix[cell[1]][cell[0]] = 20  # bricks

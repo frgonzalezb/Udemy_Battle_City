@@ -44,6 +44,29 @@ TANK_PARALYSIS = 2000    # milliseconds
 SPAWN_ANIM_TIME = 50     # milliseconds
 TOTAL_SPAWN_TIME = 2000  # milliseconds
 
+ENEMY_TANK_SPAWNS = [
+    (0, 0), (0, 1), (1, 0), (1, 1),      # enemy spawn 1
+    (12, 0), (12, 1), (13, 0), (13, 1),  # enemy spawn 2
+    (24, 0), (24, 1), (25, 0), (25, 1)   # enemy spawn 3
+]
+
+PLAYER_TANK_SPAWNS = [
+    (8, 24), (8, 25), (9, 24), (9, 25),     # player 1 spawn
+    (16, 24), (16, 25), (17, 24), (17, 25)  # player 2 spawn
+]
+
+BASE = [(12, 24), (12, 25), (13, 24), (13, 25)]
+FORT = [
+    (11, 25),
+    (11, 24),
+    (11, 23),
+    (12, 23),
+    (13, 23),
+    (14, 23),
+    (14, 24),
+    (14, 25)
+]
+
 # Sprites
 SPAWN_STAR = {
     f'star_{i}': get_object_position_and_size(
