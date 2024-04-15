@@ -75,3 +75,5 @@ class StartScreen:
                 print('Start new two players game')  # dbg
             case 2:
                 print('Start the level editor')  # dbg
+            case _:
+                raise ValueError
