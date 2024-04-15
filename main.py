@@ -4,6 +4,8 @@ import game_config as gc
 from game import Game
 from game_assets import GameAssets
 from level_editor import LevelEditor
+from levels import LevelData
+from start_screen import StartScreen
 
 
 class Main:
@@ -27,8 +29,13 @@ class Main:
         # A simple check for the main game loop
         self.run = True
 
-        # All the assets for the game
+        # All the assets and data for the game
         self.assets = GameAssets()
+        self.levels = LevelData()
+
+        # Game start screen object and check
+        self.start_screen = StartScreen(self, self.assets)
+        self.start_screen_active = True
 
         # Game object check and loading
         self.game_on = False
@@ -40,7 +47,7 @@ class Main:
         )  # The actual game!!
 
         # Level editor check and loading
-        self.level_editor_on = True
+        self.level_editor_on = False
         self.level_creator = LevelEditor(self, self.assets)
 
     def run_game(self) -> None:
@@ -66,10 +73,17 @@ class Main:
         if self.game_on:
             self.game.input()
 
+        if self.start_screen_active:
+            self.start_screen.input()
+
         if self.level_editor_on:
             self.level_creator.input()
 
-        if not self.game_on and not self.level_editor_on:
+        if (
+            not self.game_on and
+            not self.level_editor_on and
+            not self.start_screen_active
+        ):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
@@ -80,6 +94,9 @@ class Main:
         the objects within.
         """
         self.clock.tick(gc.FPS)
+
+        if self.start_screen_active:
+            self.start_screen.update()
 
         if self.game_on:
             self.game.update()
@@ -93,6 +110,9 @@ class Main:
         the screen and ensuring the screen is refreshed with each cycle.
         """
         self.screen.fill(gc.RGB_BLACK)  # Overall background
+
+        if self.start_screen_active:
+            self.start_screen.draw(self.screen)
 
         if self.game_on:
             self.game.draw(self.screen)

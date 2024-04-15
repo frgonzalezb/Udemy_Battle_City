@@ -201,6 +201,7 @@ class LevelEditor:
             self.validate_level()
             self.all_levels.append(self.matrix)
             self.level_data.save(self.all_levels)
+            self.main.levels.level_data = self.all_levels
             self.active = False
 
     def _define_insert_pattern(self, tile: int) -> list[list[int]]:
