@@ -17,7 +17,7 @@ class StartScreen:
         self.rect = self.image.get_rect(topleft=(0, 0))
 
         # Option positions
-        self.option_position = [
+        self.option_positions = [
             (4 * gc.IMAGE_SIZE, 7.75 * gc.IMAGE_SIZE),
             (4 * gc.IMAGE_SIZE, 8.75 * gc.IMAGE_SIZE),
             (4 * gc.IMAGE_SIZE, 9.75 * gc.IMAGE_SIZE)
@@ -25,7 +25,7 @@ class StartScreen:
         self.token_index = 0
         self.token_image = self.assets.start_screen_token
         self.token_rect = self.token_image.get_rect(
-            topleft=self.option_position[self.token_index]
+            topleft=self.option_positions[self.token_index]
         )
 
         self.start_screen_active = True
@@ -38,6 +38,7 @@ class StartScreen:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.main.run = False
+                self._handle_start_screen_events(event.key)
 
     def update(self) -> None:
         pass
@@ -47,3 +48,18 @@ class StartScreen:
 
         if self.start_screen_active:
             window.blit(self.token_image, self.token_rect)
+
+    def _handle_start_screen_events(self, key: int) -> None:
+        """
+        Utility method that handles the key input events for the start
+        screen, in order to clean up a little bit the original input()
+        method here.
+        """
+        if key == pygame.K_UP or key == pygame.K_w:
+            self.token_index -= 1
+            self.token_index = self.token_index % len(self.option_positions)
+            self.token_rect.topleft = self.option_positions[self.token_index]
+        if key == pygame.K_DOWN or key == pygame.K_s:
+            self.token_index += 1
+            self.token_index = self.token_index % len(self.option_positions)
+            self.token_rect.topleft = self.option_positions[self.token_index]
