@@ -43,7 +43,7 @@ class StartScreen:
 
                 # This prevents to enter an option automatically when
                 # the RETURN key is pressed during the start screen
-                # scrolling
+                # scrolling!
                 if not self.is_start_screen_active:
                     self._defeat_screen_animation()
                 else:
@@ -82,13 +82,10 @@ class StartScreen:
     def _do_selected_option(self) -> None:
         match self.token_index:
             case 0:
-                print('Start new one player game')  # dbg
                 self.main.start_new_game(player_1=True, player_2=False)
             case 1:
-                print('Start new two players game')  # dbg
                 self.main.start_new_game(player_1=True, player_2=True)
             case 2:
-                print('Start the level editor')  # dbg
                 self.main.start_level_editor()
             case _:
                 raise ValueError

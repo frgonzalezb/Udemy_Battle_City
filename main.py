@@ -1,4 +1,6 @@
 import pygame
+from pygame import Surface
+from pygame.time import Clock
 
 import game_config as gc
 from game import Game
@@ -17,38 +19,33 @@ class Main:
         pygame.init()
 
         # A good game starts with some display settings
-        self.screen = pygame.display.set_mode(
+        self.screen: Surface = pygame.display.set_mode(
             (gc.SCREEN_WIDTH, gc.SCREEN_HEIGHT)
         )
         pygame.display.set_caption('Battle City Clone')
 
         # A clock is needed to regulate the speed of the game...
         # ...in order to standarize the game performance.
-        self.clock = pygame.time.Clock()
+        self.clock: Clock = Clock()
 
         # A simple check for the main game loop
-        self.run = True
+        self.run: bool = True
 
         # All the assets and data for the game
-        self.assets = GameAssets()
-        self.levels = LevelData()
+        self.assets: GameAssets = GameAssets()
+        self.levels: LevelData = LevelData()
 
         # Game start screen object and check
-        self.start_screen = StartScreen(self, self.assets)
-        self.start_screen_active = True
+        self.start_screen: StartScreen = StartScreen(self, self.assets)
+        self.is_start_screen_active: bool = True
 
         # Game object check and loading
-        self.game_on = False
-        self.game = Game(
-            self,
-            self.assets,
-            is_player_1_active=True,
-            is_player_2_active=True
-        )  # The actual game!!
+        self.is_game_on: bool = False
+        self.game: Game | None = None
 
         # Level editor check and loading
-        self.level_editor_on = False
-        self.level_creator = LevelEditor(self, self.assets)
+        self.is_level_editor_on: bool = False
+        self.level_creator: LevelEditor | None = None
 
     def run_game(self) -> None:
         """
@@ -70,19 +67,19 @@ class Main:
         If something goes wrong (e.g. neither the actual game nor the
         level editor run), the QUIT option is available here.
         """
-        if self.game_on:
+        if self.is_game_on:
             self.game.input()
 
-        if self.start_screen_active:
+        if self.is_start_screen_active:
             self.start_screen.input()
 
-        if self.level_editor_on:
+        if self.is_level_editor_on:
             self.level_creator.input()
 
         if (
-            not self.game_on and
-            not self.level_editor_on and
-            not self.start_screen_active
+            not self.is_game_on and
+            not self.is_level_editor_on and
+            not self.is_start_screen_active
         ):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -95,14 +92,26 @@ class Main:
         """
         self.clock.tick(gc.FPS)
 
-        if self.start_screen_active:
+        if self.is_start_screen_active:
             self.start_screen.update()
 
-        if self.game_on:
+        if self.is_game_on:
             self.game.update()
 
-        if self.level_editor_on:
+        if self.game and not self.game.is_active:
+            self.start_screen = StartScreen(self, self.assets)
+            self.is_start_screen_active = True
+            self.is_game_on = False
+            self.game = None
+
+        if self.is_level_editor_on:
             self.level_creator.update()
+
+        if self.level_creator and not self.level_creator.is_active:
+            self.start_screen = StartScreen(self, self.assets)
+            self.is_start_screen_active = True
+            self.is_level_editor_on = False
+            self.level_creator = None
 
     def draw(self) -> None:
         """
@@ -111,26 +120,43 @@ class Main:
         """
         self.screen.fill(gc.RGB_BLACK)  # Overall background
 
-        if self.start_screen_active:
+        if self.is_start_screen_active:
             self.start_screen.draw(self.screen)
 
-        if self.game_on:
+        if self.is_game_on:
             self.game.draw(self.screen)
 
-        if self.level_editor_on:
+        if self.is_level_editor_on:
             self.level_creator.draw(self.screen)
 
         pygame.display.update()
 
-    def start_new_game(self, player_1: bool, player_2: bool):
-        pass
+    def start_new_game(self, player_1: bool, player_2: bool) -> None:
+        """
+        This method is called from the start screen, and then starts
+        the game.
+        """
+        self.is_game_on = True
+        self.game = Game(
+            self,
+            self.assets,
+            is_player_1_active=player_1,
+            is_player_2_active=player_2
+        )  # The actual game!!
+        self.is_start_screen_active = False
 
-    def start_level_editor(self):
-        pass
+    def start_level_editor(self) -> None:
+        """
+        This method is called from the start screen, and then starts
+        the level editor.
+        """
+        self.is_level_editor_on = True
+        self.level_creator = LevelEditor(self, self.assets)
+        self.is_start_screen_active = False
 
 
 if __name__ == '__main__':
     # Start the game already!!
-    battle_city = Main()
+    battle_city: Main = Main()
     battle_city.run_game()
     pygame.quit()

@@ -8,13 +8,13 @@ from levels import LevelData
 
 class LevelEditor:
     """
-    Represents the level editor and all its closely-related objects.
+    Represents the level editor object.
     """
 
     def __init__(self, main, assets) -> None:
         self.main = main
         self.assets = assets
-        self.active = True
+        self.is_active = True
 
         self.level_data = LevelData()
         self.all_levels = []
@@ -44,19 +44,11 @@ class LevelEditor:
         )
 
     def input(self) -> None:
-        # TODO: This seems too similar to Game's input class code
-        # AND... too many nested conditional blocks!
-        # So, a refactor may be done for the sake of cleanliness!
-
-        # Pygame event handler
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.main.run = False
-            # Keyboard shortcut for quit the game
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.main.run = False
-                self._handle_level_editor_events(event.key)
+                self._handle_level_editor_keys(event.key)
 
     def update(self) -> None:
         icon_grid_pos_row: int = (
@@ -164,12 +156,15 @@ class LevelEditor:
 
         return matrix
 
-    def _handle_level_editor_events(self, key: int) -> None:
+    def _handle_level_editor_keys(self, key: int) -> None:
         """
         Utility method that handles the key input events for the level
         editor, in order to clean up a little bit the original input()
         method here.
         """
+        if key == pygame.K_ESCAPE:
+            self.is_active = False
+
         if key == pygame.K_d or key == pygame.K_RIGHT:
             self.icon_rect.x += gc.IMAGE_SIZE
             # Preventing the icon to escape
@@ -202,7 +197,7 @@ class LevelEditor:
             self.all_levels.append(self.matrix)
             self.level_data.save(self.all_levels)
             self.main.levels.level_data = self.all_levels
-            self.active = False
+            self.is_active = False
 
     def _define_insert_pattern(self, tile: int) -> list[list[int]]:
         """

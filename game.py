@@ -40,7 +40,7 @@ class Game:
         self.hud = GameHUD(self, self.assets)
 
         # Level information
-        self.level_num = 1
+        self.level_num: int = 1
 
         # Player objects
         if self.is_player_1_active:
@@ -65,7 +65,10 @@ class Game:
             )
 
         # Number of enemy tanks
-        self.enemies = 20
+        self.enemies: int = 20
+
+        # Game active or game over
+        self.is_active: bool = True
 
     def input(self) -> None:
         """
@@ -87,7 +90,7 @@ class Game:
             # Keyboard shortcut for quit the game
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.main.run = False
+                    self.is_active = False
 
                 # dbg
                 if event.key == pygame.K_SPACE:
