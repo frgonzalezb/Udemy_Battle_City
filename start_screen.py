@@ -14,7 +14,9 @@ class StartScreen:
 
         # Start screen images and rect
         self.image = self.assets.start_screen
-        self.rect = self.image.get_rect(topleft=(0, 0))
+        self.rect = self.image.get_rect(topleft=(0, self.start_y))
+        self.x, self.y = self.rect.topleft
+        self.speed = gc.SCREEN_SCROLL_SPEED
 
         # Option positions
         self.option_positions = [
@@ -28,7 +30,7 @@ class StartScreen:
             topleft=self.option_positions[self.token_index]
         )
 
-        self.start_screen_active = True
+        self.is_start_screen_active = False
 
     def input(self) -> None:
         for event in pygame.event.get():
@@ -38,15 +40,25 @@ class StartScreen:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.main.run = False
-                self._handle_start_screen_events(event.key)
+
+                # This prevents to enter an option automatically when
+                # the RETURN key is pressed during the start screen
+                # scrolling
+                if not self.is_start_screen_active:
+                    self._defeat_screen_animation()
+                else:
+                    self._handle_start_screen_events(event.key)
 
     def update(self) -> None:
-        pass
+        # Check to see if screen is in position
+        if not self._animate_screen_into_position():
+            return
+        self.is_start_screen_active = True
 
     def draw(self, window: pygame.Surface) -> None:
         window.blit(self.image, self.rect)
 
-        if self.start_screen_active:
+        if self.is_start_screen_active:
             window.blit(self.token_image, self.token_rect)
 
     def _handle_start_screen_events(self, key: int) -> None:
@@ -67,13 +79,38 @@ class StartScreen:
         if key == pygame.K_RETURN:
             self._do_selected_option()
 
-    def _do_selected_option(self):
+    def _do_selected_option(self) -> None:
         match self.token_index:
             case 0:
                 print('Start new one player game')  # dbg
+                self.main.start_new_game(player_1=True, player_2=False)
             case 1:
                 print('Start new two players game')  # dbg
+                self.main.start_new_game(player_1=True, player_2=True)
             case 2:
                 print('Start the level editor')  # dbg
+                self.main.start_level_editor()
             case _:
                 raise ValueError
+
+    def _animate_screen_into_position(self) -> bool:
+        """
+        Slides the start screen form the bottom up to the top.
+        """
+        if self.y == self.end_y:
+            return True
+
+        self.y -= self.speed
+        if self.y < self.end_y:
+            self.y = self.end_y
+        self.rect.topleft = (0, self.y)
+
+        return False
+
+    def _defeat_screen_animation(self):
+        """
+        Complete the screen scrolling animation immediately by pressing
+        any key, just as in the original game.
+        """
+        self.y = self.end_y
+        self.rect.topleft = (0, self.y)

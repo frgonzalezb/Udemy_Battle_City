@@ -122,6 +122,12 @@ class Main:
 
         pygame.display.update()
 
+    def start_new_game(self, player_1: bool, player_2: bool):
+        pass
+
+    def start_level_editor(self):
+        pass
+
 
 if __name__ == '__main__':
     # Start the game already!!
