@@ -143,6 +143,8 @@ class Tank(pygame.sprite.Sprite):
                 self.pos_x += self.tank_speed
                 if self.pos_x + self.width > gc.SCREEN_BORDER_RIGHT:
                     self.pos_x = gc.SCREEN_BORDER_RIGHT - self.width
+            case _:
+                raise ValueError
 
         # Update the tank rectangle position
         self.rect.topleft = (self.pos_x, self.pos_y)
