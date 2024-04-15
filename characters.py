@@ -408,3 +408,10 @@ class PlayerTank(Tank):
             self.move('Left')
         elif key_pressed[right_key]:
             self.move('Right')
+
+    def spawn_on_new_stage(self, position: tuple[int, int]):
+        """
+        Spawns the player tank on the new stage screen, according to the
+        position values passed in.
+        """
+        self.rect.topleft = position

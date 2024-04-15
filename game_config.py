@@ -57,6 +57,17 @@ PLAYER_TANK_SPAWNS = [
     (16, 24), (16, 25), (17, 24), (17, 25)  # player 2 spawn
 ]
 
+# Player 1 and 2 initial positions
+PLAYER_1_POS = (
+    SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 8,
+    SCREEN_BORDER_TOP + IMAGE_SIZE // 2 * 24
+)
+
+PLAYER_2_POS = (
+    SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 16,
+    SCREEN_BORDER_TOP + IMAGE_SIZE // 2 * 24
+)
+
 BASE = [(12, 24), (12, 25), (13, 24), (13, 25)]
 FORT = [
     (11, 25),
@@ -68,6 +79,31 @@ FORT = [
     (14, 24),
     (14, 25)
 ]
+
+# Tile numeric identificators (defined by Harry, not me!) for encoding
+# and decoding CSV files for levels
+ID_BRICK = 432
+ID_STEEL = 482
+ID_FOREST = 483
+ID_ICE = 484
+ID_WATER = 533
+ID_FLAG = 999
+
+# Tank spawn queue ratios (calculated by Harry)
+TANK_SPAWN_QUEUE = {
+    'queue_0': [90, 10, 0, 0],
+    'queue_1': [80, 20, 0, 0],
+    'queue_2': [70, 30, 0, 0],
+    'queue_3': [60, 30, 10, 0],
+    'queue_4': [50, 30, 20, 0],
+    'queue_5': [40, 30, 30, 0],
+    'queue_6': [30, 30, 30, 10],
+    'queue_7': [20, 30, 30, 20],
+    'queue_8': [10, 30, 30, 30],
+    'queue_9': [10, 20, 40, 30],
+    'queue_10': [10, 10, 50, 30],
+    'queue_11': [0, 10, 50, 40],
+}
 
 # Sprites
 SPAWN_STAR = {

@@ -26,12 +26,12 @@ class LevelEditor:
 
         # NOTE: Tiles as numbers for matricial-like operations below!
         self.tile_type = {
-            20: self.assets.brick_tiles['small'],
-            21: self.assets.steel_tiles['small'],
-            22: self.assets.forest_tiles['small'],
-            23: self.assets.ice_tiles['small'],
-            24: self.assets.water_tiles['small_1'],
-            99: self.assets.flag_images['Phoenix_Alive']
+            gc.ID_BRICK: self.assets.brick_tiles['small'],
+            gc.ID_STEEL: self.assets.steel_tiles['small'],
+            gc.ID_FOREST: self.assets.forest_tiles['small'],
+            gc.ID_ICE: self.assets.ice_tiles['small'],
+            gc.ID_WATER: self.assets.water_tiles['small_1'],
+            gc.ID_FLAG: self.assets.flag_images['Phoenix_Alive']
         }
         self.inserts = self._get_insert_pieces(self.tile_type.keys())
         self.index = 0
@@ -246,7 +246,7 @@ class LevelEditor:
             self.matrix[cell[1]][cell[0]] = -1
         for cell in gc.BASE:
             self.matrix[cell[1]][cell[0]] = -1
-        self.matrix[24][12] = 99
+        self.matrix[24][12] = gc.ID_FLAG
         for cell in gc.FORT:
             if self.matrix[cell[1]][cell[0]] == -1:
-                self.matrix[cell[1]][cell[0]] = 20  # bricks
+                self.matrix[cell[1]][cell[0]] = gc.ID_BRICK

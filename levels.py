@@ -16,6 +16,9 @@ class LevelData:
     def load(self) -> list:
         game_stages = []
         for stage in os.listdir('levels'):
+            # Check if stage file is a CSV one
+            if not stage.endswith('csv'):
+                continue
             level_data = [[] for i in range(27)]
             with open(f'levels/{stage}', newline='') as f:
                 reader = csv.reader(f, delimiter=',')
