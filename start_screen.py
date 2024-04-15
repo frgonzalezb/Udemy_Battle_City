@@ -65,4 +65,13 @@ class StartScreen:
             self.token_rect.topleft = self.option_positions[self.token_index]
 
         if key == pygame.K_RETURN:
-            print(self.token_index)  # dbg
+            self._do_selected_option()
+
+    def _do_selected_option(self):
+        match self.token_index:
+            case 0:
+                print('Start new one player game')  # dbg
+            case 1:
+                print('Start new two players game')  # dbg
+            case 2:
+                print('Start the level editor')  # dbg
