@@ -63,3 +63,6 @@ class StartScreen:
             self.token_index += 1
             self.token_index = self.token_index % len(self.option_positions)
             self.token_rect.topleft = self.option_positions[self.token_index]
+
+        if key == pygame.K_RETURN:
+            print(self.token_index)  # dbg
