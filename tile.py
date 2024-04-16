@@ -33,6 +33,9 @@ class TileType(Sprite):
         self.rect = self.image.get_rect(topleft=position)
         self.width, self.height = self.image.get_size()
 
+    def handle_bullet_hit(self, bullet):
+        pass
+
 
 class BrickTile(TileType):
 
@@ -44,3 +47,38 @@ class BrickTile(TileType):
 
         self.image: Surface = self.images['small']
         self._get_rect_and_size(position=(self.pos_x, self.pos_y))
+
+    def handle_bullet_hit(self, bullet):
+        bullet.update_owner()
+        bullet.kill()
+
+        self.health -= 1
+        if self.health <= 0:
+            self.kill()
+        self._reshape_tile(bullet)
+
+    def _reshape_tile(self, bullet):
+        """
+        Utility method for the handle_bullet_hit() one, in order to
+        make the code a little more readable.
+        """
+        if bullet.direction == 'Left':
+            self.image = self.images['small_left']
+            self._get_rect_and_size(
+                (self.pos_x, self.pos_y)
+            )
+        elif bullet.direction == 'Right':
+            self.image = self.images['small_right']
+            self._get_rect_and_size(
+                (self.pos_x + self.width // 2, self.pos_y)
+            )
+        elif bullet.direction == 'Up':
+            self.image = self.images['small_top']
+            self._get_rect_and_size(
+                (self.pos_x, self.pos_y)
+            )
+        elif bullet.direction == 'Down':
+            self.image = self.images['small_bottom']
+            self._get_rect_and_size(
+                (self.pos_x, self.pos_y + self.height // 2)
+            )

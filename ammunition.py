@@ -150,7 +150,6 @@ class Bullet(pygame.sprite.Sprite):
         )
         for obstacle in obstacle_collision:
             obstacle.handle_bullet_hit(self)
-        self.kill()
 
     def update_owner(self) -> None:
         """
