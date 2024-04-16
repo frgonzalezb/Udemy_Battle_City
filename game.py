@@ -1,6 +1,8 @@
 import random
 
 import pygame
+from pygame import Surface
+from pygame.sprite import Group
 
 import game_config as gc
 from game_hud import GameHUD
@@ -31,10 +33,11 @@ class Game:
 
         # Object groups
         self.groups = {
-            'all_tanks': pygame.sprite.Group(),
-            'player_tanks': pygame.sprite.Group(),
-            'bullets': pygame.sprite.Group(),
-            'destructable_tiles': pygame.sprite.Group()
+            'all_tanks': Group(),
+            'player_tanks': Group(),
+            'bullets': Group(),
+            'destructable_tiles': Group(),
+            'impassable_tiles': Group()
         }
 
         # Player attributes
@@ -143,7 +146,7 @@ class Game:
 
         self.spawn_enemy_tanks()
 
-    def draw(self, window: pygame.Surface) -> None:
+    def draw(self, window: Surface) -> None:
         """
         Draws the given window object on the screen.
         """
@@ -206,11 +209,12 @@ class Game:
 
                 elif tile_id == gc.ID_BRICK:
                     line.append(f'{tile}')
-                    BrickTile(
+                    map_tile = BrickTile(
                         pos,
                         self.groups['destructable_tiles'],
                         self.assets.brick_tiles
                     )
+                    self.groups['impassable_tiles'].add(map_tile)
                 elif tile_id == gc.ID_STEEL:
                     line.append(f'{tile}')
                 elif tile_id == gc.ID_FOREST:

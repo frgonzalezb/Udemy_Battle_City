@@ -1,8 +1,8 @@
-import pygame
+# import pygame
 from pygame import Surface
 from pygame.sprite import Sprite, Group
 
-import game_config as gc
+# import game_config as gc
 
 
 class TileType(Sprite):

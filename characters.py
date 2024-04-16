@@ -14,7 +14,7 @@ class Tank(pygame.sprite.Sprite):
             game,
             assets,
             groups,
-            position: tuple,
+            position: tuple[int, int],
             direction: str,
             color: str = 'Silver',
             tank_level: int = 0,
@@ -40,7 +40,7 @@ class Tank(pygame.sprite.Sprite):
         self.spawn_images = self.assets.spawn_star_images
 
         # Tank position and direction
-        self.spawn_pos = position
+        self.spawn_pos: tuple[int, int] = position
         self.pos_x, self.pos_y = self.spawn_pos
         self.direction = direction
 
@@ -130,18 +130,22 @@ class Tank(pygame.sprite.Sprite):
         match direction:
             case 'Up':
                 self.pos_y -= self.tank_speed
+                self.pos_x = self.align_tank_movement_to_grid(self.pos_x)
                 if self.pos_y < gc.SCREEN_BORDER_TOP:
                     self.pos_y = gc.SCREEN_BORDER_TOP
             case 'Down':
                 self.pos_y += self.tank_speed
+                self.pos_x = self.align_tank_movement_to_grid(self.pos_x)
                 if self.pos_y + self.height > gc.SCREEN_BORDER_BOTTOM:
                     self.pos_y = gc.SCREEN_BORDER_BOTTOM - self.height
             case 'Left':
                 self.pos_x -= self.tank_speed
+                self.pos_y = self.align_tank_movement_to_grid(self.pos_y)
                 if self.pos_x < gc.SCREEN_BORDER_LEFT:
                     self.pos_x = gc.SCREEN_BORDER_LEFT
             case 'Right':
                 self.pos_x += self.tank_speed
+                self.pos_y = self.align_tank_movement_to_grid(self.pos_y)
                 if self.pos_x + self.width > gc.SCREEN_BORDER_RIGHT:
                     self.pos_x = gc.SCREEN_BORDER_RIGHT - self.width
             case _:
@@ -154,7 +158,25 @@ class Tank(pygame.sprite.Sprite):
         self.update_tank_movement_animation()
 
         # Check for tank collisions with other tanks
-        self.check_tank_on_tank_collisions()
+        self.check_tank_on_tank_collision()
+
+        # Check for tank collisions with obstacles
+        self.check_tank_on_obstacle_collision()
+
+    def align_tank_movement_to_grid(self, pos: int) -> int:
+        """
+        Resolves that awkward imposibility to movement when some tank
+        rect pixel collides with the corner of an obstacle.
+        """
+        is_aligned_to_grid: bool = pos % (gc.IMAGE_SIZE // 2) == 0
+
+        if not is_aligned_to_grid:
+            if pos % (gc.IMAGE_SIZE // 2) < gc.SPRITE_SIZE:
+                pos -= (pos % (gc.SPRITE_SIZE))
+            elif pos % (gc.IMAGE_SIZE // 2) > gc.SPRITE_SIZE:
+                pos += (gc.SPRITE_SIZE) - (pos % (gc.SPRITE_SIZE))
+
+        return pos
 
     def draw_spawn_star(self, window) -> None:
         """
@@ -227,7 +249,7 @@ class Tank(pygame.sprite.Sprite):
             self.mask = self.mask_dict[self.mask_direction]
             # self.mask_image = self.mask.to_surface()
 
-    def check_tank_on_tank_collisions(self) -> None:
+    def check_tank_on_tank_collision(self) -> None:
         """
         Checks if there is any overlapping between the current
         tank sprite and one or more tanks sprites.
@@ -250,23 +272,36 @@ class Tank(pygame.sprite.Sprite):
             if tank == self:
                 continue  # Skip if it's the current tank
 
-            self.handle_tank_collisions(tank)
+            self._handle_tank_collisions(tank)
 
-    def handle_tank_collisions(self, tank) -> None:
+    def check_tank_on_obstacle_collision(self) -> None:
+        wall_collision = pygame.sprite.spritecollide(
+            self,
+            self.groups['impassable_tiles'],
+            False
+        )
+        for obstacle in wall_collision:
+            self._handle_tank_collisions(obstacle)
+
+    def _handle_tank_collisions(self, obj) -> None:
         """
-        Figures out where's the collision and handles it.
+        Utility method that abstracts both tank-on-tank and
+        tank-on-obstacle collision logic (which are separated into
+        their respective functions in the original code).
+
+        In any case, figures out where's the collision and handles it.
         """
-        if self.direction == 'Right' and self.rect.right >= tank.rect.left:
-            self.rect.right = tank.rect.left
+        if self.direction == 'Right' and self.rect.right >= obj.rect.left:
+            self.rect.right = obj.rect.left
             self.pos_x = self.rect.x
-        elif self.direction == 'Left' and self.rect.left <= tank.rect.right:
-            self.rect.left = tank.rect.right
+        elif self.direction == 'Left' and self.rect.left <= obj.rect.right:
+            self.rect.left = obj.rect.right
             self.pos_x = self.rect.x
-        elif self.direction == 'Up' and self.rect.top <= tank.rect.bottom:
-            self.rect.top = tank.rect.bottom
+        elif self.direction == 'Up' and self.rect.top <= obj.rect.bottom:
+            self.rect.top = obj.rect.bottom
             self.pos_y = self.rect.y
-        elif self.direction == 'Down' and self.rect.bottom >= tank.rect.top:
-            self.rect.bottom = tank.rect.top
+        elif self.direction == 'Down' and self.rect.bottom >= obj.rect.top:
+            self.rect.bottom = obj.rect.top
             self.pos_y = self.rect.y
 
     def shoot(self) -> None:
