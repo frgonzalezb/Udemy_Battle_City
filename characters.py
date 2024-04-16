@@ -168,13 +168,13 @@ class Tank(pygame.sprite.Sprite):
         Resolves that awkward imposibility to movement when some tank
         rect pixel collides with the corner of an obstacle.
         """
-        is_aligned_to_grid: bool = pos % (gc.IMAGE_SIZE // 2) == 0
+        offset: int = pos % (gc.IMAGE_SIZE // 2)
 
-        if not is_aligned_to_grid:
-            if pos % (gc.IMAGE_SIZE // 2) < gc.SPRITE_SIZE:
-                pos -= (pos % (gc.SPRITE_SIZE))
-            elif pos % (gc.IMAGE_SIZE // 2) > gc.SPRITE_SIZE:
-                pos += (gc.SPRITE_SIZE) - (pos % (gc.SPRITE_SIZE))
+        if offset != 0:
+            if offset < gc.SPRITE_SIZE:
+                pos -= pos % gc.SPRITE_SIZE
+            elif offset > gc.SPRITE_SIZE:
+                pos += (gc.SPRITE_SIZE) - (pos % gc.SPRITE_SIZE)
 
         return pos
 
