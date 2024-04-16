@@ -51,7 +51,7 @@ class Game:
         self.hud = GameHUD(self, self.assets)
 
         # Level information
-        self.level_num: int = 4  # dbg, remember to reset to 1
+        self.level_num: int = 1
         self.data = self.main.levels
 
         # Player objects
@@ -165,7 +165,6 @@ class Game:
         self.generate_spawn_queue()
         self.spawn_pos_index = 0
         self.spawn_queue_index = 0
-        print(self.spawn_queue)  # dbg
 
         if self.is_player_1_active:
             self.player_1.spawn_on_new_stage(gc.PLAYER_1_POS)
@@ -230,9 +229,6 @@ class Game:
                     line.append(f'{tile}')
 
             self.grid.append(line)
-
-        # for row in self.grid:
-        #     print(row)  # dbg
 
     def generate_spawn_queue(self) -> None:
         """
