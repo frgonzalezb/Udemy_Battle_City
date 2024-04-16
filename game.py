@@ -7,7 +7,7 @@ from pygame.sprite import Group
 import game_config as gc
 from game_hud import GameHUD
 from characters import Tank, PlayerTank
-from tile import BrickTile, SteelTile
+from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
 
 
 class Game:
@@ -33,11 +33,14 @@ class Game:
 
         # Object groups
         self.groups = {
+            'ice_tiles': Group(),
+            'water_tiles': Group(),
             'all_tanks': Group(),
             'player_tanks': Group(),
             'bullets': Group(),
             'destructable_tiles': Group(),
-            'impassable_tiles': Group()
+            'impassable_tiles': Group(),
+            'forest_tiles': Group()
         }
 
         # Player attributes
@@ -48,7 +51,7 @@ class Game:
         self.hud = GameHUD(self, self.assets)
 
         # Level information
-        self.level_num: int = 1
+        self.level_num: int = 4  # dbg, remember to reset to 1
         self.data = self.main.levels
 
         # Player objects
@@ -127,16 +130,9 @@ class Game:
                         (400, 400),
                         'Down',
                     )
-                    # self.enemies -= 1
 
     def update(self) -> None:
         self.hud.update()
-
-        # if self.is_player_1_active:
-        #     self.player_1.update()
-
-        # if self.is_player_2_active:
-        #     self.player_2.update()
 
         for k in self.groups.keys():
             if k == 'player_tanks':
@@ -152,13 +148,9 @@ class Game:
         """
         self.hud.draw(window)
 
-        # if self.is_player_1_active:
-        #     self.player_1.draw(window)
-
-        # if self.is_player_2_active:
-        #     self.player_2.draw(window)
-
         for k in self.groups.keys():
+            if k == 'impassable_tiles':
+                continue  # lets bullets be drawn above water!
             for item in self.groups[k]:
                 item.draw(window)
 
@@ -214,10 +206,26 @@ class Game:
                     self.groups['impassable_tiles'].add(map_tile)
                 elif tile_id == gc.ID_FOREST:
                     line.append(f'{tile}')
+                    map_tile = ForestTile(
+                        position,
+                        self.groups['forest_tiles'],
+                        self.assets.forest_tiles
+                    )
                 elif tile_id == gc.ID_ICE:
                     line.append(f'{tile}')
+                    map_tile = IceTile(
+                        position,
+                        self.groups['ice_tiles'],
+                        self.assets.ice_tiles
+                    )
                 elif tile_id == gc.ID_WATER:
                     line.append(f'{tile}')
+                    map_tile = WaterTile(
+                        position,
+                        self.groups['water_tiles'],
+                        self.assets.water_tiles
+                    )
+                    self.groups['impassable_tiles'].add(map_tile)
                 elif tile_id == gc.ID_FLAG:
                     line.append(f'{tile}')
 

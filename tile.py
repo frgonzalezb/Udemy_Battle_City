@@ -1,4 +1,4 @@
-# import pygame
+import pygame
 from pygame import Surface
 from pygame.sprite import Sprite, Group
 
@@ -108,3 +108,35 @@ class ForestTile(TileType):
 
         self.image: Surface = self.images['small']
         self._get_rect_and_size(position=(self.pos_x, self.pos_y))
+
+
+class IceTile(ForestTile):
+
+    def __init__(self, pos, group, map_tiles) -> None:
+        super().__init__(pos, group, map_tiles)
+
+        self.name: str = 'Ice'
+
+        self.image: Surface = self.images['small']
+        self._get_rect_and_size(position=(self.pos_x, self.pos_y))
+
+
+class WaterTile(TileType):
+
+    def __init__(self, pos, group, map_tiles) -> None:
+        super().__init__(pos, group, map_tiles)
+
+        self.name: str = 'Water'
+
+        self.image: Surface = self.images['small_1']
+        self._get_rect_and_size(position=(self.pos_x, self.pos_y))
+
+        # For water animation
+        self.frame_index: int = 0
+        self.timer: int = pygame.time.get_ticks()
+
+    def update(self):
+        if pygame.time.get_ticks() - self.timer >= 500:
+            self.frame_index = 1 if self.frame_index == 0 else 0
+            self.timer: int = pygame.time.get_ticks()  # reset timer
+            self.image = self.images[f'small_{self.frame_index + 1}']
