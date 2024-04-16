@@ -149,7 +149,7 @@ class Bullet(pygame.sprite.Sprite):
             False
         )
         for obstacle in obstacle_collision:
-            obstacle.hit_by_bullet(self)
+            obstacle.handle_bullet_hit(self)
         self.kill()
 
     def update_owner(self) -> None:
