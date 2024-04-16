@@ -82,3 +82,24 @@ class BrickTile(TileType):
             self._get_rect_and_size(
                 (self.pos_x, self.pos_y + self.height // 2)
             )
+
+
+class SteelTile(TileType):
+
+    def __init__(self, pos, group, map_tiles) -> None:
+        super().__init__(pos, group, map_tiles)
+
+        self.name: str = 'Steel'
+        self.health: int = 2
+
+        self.image: Surface = self.images['small']
+        self._get_rect_and_size(position=(self.pos_x, self.pos_y))
+
+    def handle_bullet_hit(self, bullet):
+        bullet.update_owner()
+        bullet.kill()
+
+        self.health -= 1
+        if self.health <= 0:
+            self.kill()
+        self._reshape_tile(bullet)
