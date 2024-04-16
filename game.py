@@ -7,7 +7,7 @@ from pygame.sprite import Group
 import game_config as gc
 from game_hud import GameHUD
 from characters import Tank, PlayerTank
-from tile import BrickTile
+from tile import BrickTile, SteelTile
 
 
 class Game:
@@ -184,19 +184,11 @@ class Game:
         """
         Decodes the level data found in its CSV file.
         """
-        # tile_mapping = [
-        #     gc.ID_BRICK,
-        #     gc.ID_STEEL,
-        #     gc.ID_FOREST,
-        #     gc.ID_ICE,
-        #     gc.ID_WATER,
-        #     gc.ID_FLAG
-        # ]
         self.grid = []
         for i, row in enumerate(level):
             line = []
             for j, tile in enumerate(row):
-                pos = (
+                position = (
                     gc.SCREEN_BORDER_LEFT + (j * gc.IMAGE_SIZE // 2),
                     gc.SCREEN_BORDER_TOP + (i * gc.IMAGE_SIZE // 2)
                 )
@@ -204,19 +196,22 @@ class Game:
 
                 if tile_id < 0:
                     line.append(' ')
-                # elif tile_id in tile_mapping:
-                #     line.append(tile_id)
-
                 elif tile_id == gc.ID_BRICK:
                     line.append(f'{tile}')
                     map_tile = BrickTile(
-                        pos,
+                        position,
                         self.groups['destructable_tiles'],
                         self.assets.brick_tiles
                     )
                     self.groups['impassable_tiles'].add(map_tile)
                 elif tile_id == gc.ID_STEEL:
                     line.append(f'{tile}')
+                    map_tile = SteelTile(
+                        position,
+                        self.groups['destructable_tiles'],
+                        self.assets.steel_tiles
+                    )
+                    self.groups['impassable_tiles'].add(map_tile)
                 elif tile_id == gc.ID_FOREST:
                     line.append(f'{tile}')
                 elif tile_id == gc.ID_ICE:
