@@ -31,7 +31,8 @@ class Game:
         # Object groups
         self.groups = {
             'All_Tanks': pygame.sprite.Group(),
-            'Bullets': pygame.sprite.Group()
+            'Bullets': pygame.sprite.Group(),
+            'Player_Tanks': pygame.sprite.Group()
         }
 
         # Player attributes
@@ -69,6 +70,10 @@ class Game:
 
         # Number of enemy tanks
         self.enemies: int = 20
+        self.enemy_tank_spawn_timer: int = gc.TANK_SPAWNING_TIME
+        self.enemy_spawn_positions: list[tuple[int, int]] = [
+            gc.ENEMY_POS_1, gc.ENEMY_POS_2, gc.ENEMY_POS_3
+        ]
 
         # Load the stage
         self.create_new_stage()
@@ -128,9 +133,13 @@ class Game:
         # if self.is_player_2_active:
         #     self.player_2.update()
 
-        for dict_key in self.groups.keys():
-            for item in self.groups[dict_key]:
+        for k in self.groups.keys():
+            if k == 'Player_Tanks':
+                continue
+            for item in self.groups[k]:
                 item.update()
+
+        self.spawn_enemy_tanks()
 
     def draw(self, window: pygame.Surface) -> None:
         """
@@ -150,9 +159,8 @@ class Game:
                 item.draw(window)
 
     def create_new_stage(self):
-        """
-        Retrieves the specific level data.
-        """
+        self._reset_sprite_groups()
+
         self.current_level_data = self.data.level_data[self.level_num - 1]
         # self.enemies = random.choice([16, 17, 18, 19, 20])
         self.enemies = 5
@@ -161,9 +169,12 @@ class Game:
         self.generate_spawn_queue()
         self.spawn_pos_index = 0
         self.spawn_queue_index = 0
+        print(self.spawn_queue)  # dbg
 
         if self.is_player_1_active:
             self.player_1.spawn_on_new_stage(gc.PLAYER_1_POS)
+        if self.is_player_2_active:
+            self.player_2.spawn_on_new_stage(gc.PLAYER_2_POS)
 
     def load_level_data(self, level):
         """
@@ -173,10 +184,10 @@ class Game:
         for i, row in enumerate(level):
             line = []
             for j, tile in enumerate(row):
-                pos = (
-                    gc.SCREEN_BORDER_LEFT + (j * gc.IMAGE_SIZE // 2),
-                    gc.SCREEN_BORDER_TOP + (i * gc.IMAGE_SIZE // 2)
-                )
+                # pos = (
+                #     gc.SCREEN_BORDER_LEFT + (j * gc.IMAGE_SIZE // 2),
+                #     gc.SCREEN_BORDER_TOP + (i * gc.IMAGE_SIZE // 2)
+                # )
                 if int(tile) < 0:
                     line.append(' ')
                 elif int(tile) == gc.ID_BRICK:
@@ -194,8 +205,8 @@ class Game:
 
             self.grid.append(line)
 
-        for row in self.grid:
-            print(row)  # dbg
+        # for row in self.grid:
+        #     print(row)  # dbg
 
     def generate_spawn_queue(self):
         """
@@ -209,3 +220,47 @@ class Game:
             for i in range(int(round(self.enemies * (ratio / 100)))):
                 self.spawn_queue.append(f'level_{lvl}')
         random.shuffle(self.spawn_queue)
+
+    def spawn_enemy_tanks(self):
+        if self.enemies == 0:
+            return
+
+        spawn_time = pygame.time.get_ticks() - self.enemy_tank_spawn_timer
+        if spawn_time >= gc.TANK_SPAWNING_TIME:
+            position = self.enemy_spawn_positions[self.spawn_pos_index % 3]
+            tank_level = gc.TANK_SPAWN_CRITERIA[
+                self.spawn_queue[
+                    self.spawn_queue_index % len(self.spawn_queue)
+                ]
+            ]['image']
+            Tank(
+                self,
+                self.assets,
+                self.groups,
+                position,
+                'Down',
+                'Silver',
+                tank_level,
+                True
+            )
+            self._reset_enemy_tank_spawn_timer()
+
+    def _reset_enemy_tank_spawn_timer(self):
+        """
+        Utility method for cleaning the spawn_enemy_tanks() original
+        code. It just do what the function name says. :P
+        """
+        self.enemy_tank_spawn_timer = pygame.time.get_ticks()
+        self.spawn_pos_index += 1
+        self.spawn_queue_index += 1
+        self.enemies -= 1
+
+    def _reset_sprite_groups(self):
+        """
+        Utility method for cleaning the create_new_stage() original
+        code. It just resets the various sprite groups back to zero.
+        """
+        for k, v in self.groups.items():
+            if k == 'Player_Tanks':
+                continue
+            v.empty()

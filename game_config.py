@@ -57,6 +57,8 @@ PLAYER_TANK_SPAWNS = [
     (16, 24), (16, 25), (17, 24), (17, 25)  # player 2 spawn
 ]
 
+TANK_SPAWNING_TIME = 3000  # milliseconds
+
 # Player 1 and 2 initial positions
 PLAYER_1_POS = (
     SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 8,
@@ -66,6 +68,20 @@ PLAYER_1_POS = (
 PLAYER_2_POS = (
     SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 16,
     SCREEN_BORDER_TOP + IMAGE_SIZE // 2 * 24
+)
+
+# Enemy tank spawning positions
+ENEMY_POS_1 = (
+    SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 12,
+    SCREEN_BORDER_TOP + IMAGE_SIZE // 2 * 0
+)
+ENEMY_POS_2 = (
+    SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 24,
+    SCREEN_BORDER_TOP + IMAGE_SIZE // 2 * 0
+)
+ENEMY_POS_3 = (
+    SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 0,
+    SCREEN_BORDER_TOP + IMAGE_SIZE // 2 * 0
 )
 
 BASE = [(12, 24), (12, 25), (13, 24), (13, 25)]
@@ -80,14 +96,40 @@ FORT = [
     (14, 25)
 ]
 
-# Tile numeric identificators (defined by Harry, not me!) for encoding
-# and decoding CSV files for levels
-ID_BRICK = 432
-ID_STEEL = 482
-ID_FOREST = 483
-ID_ICE = 484
-ID_WATER = 533
-ID_FLAG = 999
+TANK_SPAWN_CRITERIA = {
+    'level_0': {
+        'image': 4,
+        'health': 1,
+        'speed': 0.5,
+        'cooldown': 1,
+        'power': 1,
+        'score': 100
+    },
+    'level_1': {
+        'image': 5,
+        'health': 1,
+        'speed': 1,
+        'cooldown': 1,
+        'power': 1,
+        'score': 200
+    },
+    'level_2': {
+        'image': 6,
+        'health': 1,
+        'speed': 0.5,
+        'cooldown': 1,
+        'power': 2,
+        'score': 300
+    },
+    'level_3': {
+        'image': 7,
+        'health': 4,
+        'speed': 0.5,
+        'cooldown': 1,
+        'power': 2,
+        'score': 400
+    }
+}
 
 # Tank spawn queue ratios (calculated by Harry)
 TANK_SPAWN_QUEUE = {
@@ -433,3 +475,12 @@ CONTEXT = {
         height=SPRITE_SIZE
     )
 }
+
+# Tile numeric identificators (defined by Harry, not me!) for encoding
+# and decoding CSV files for levels
+ID_BRICK = 432
+ID_STEEL = 482
+ID_FOREST = 483
+ID_ICE = 484
+ID_WATER = 533
+ID_FLAG = 999
