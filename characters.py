@@ -275,12 +275,12 @@ class Tank(pygame.sprite.Sprite):
             self._handle_tank_collisions(tank)
 
     def check_tank_on_obstacle_collision(self) -> None:
-        wall_collision = pygame.sprite.spritecollide(
+        obstacle_collision = pygame.sprite.spritecollide(
             self,
             self.groups['impassable_tiles'],
             False
         )
-        for obstacle in wall_collision:
+        for obstacle in obstacle_collision:
             self._handle_tank_collisions(obstacle)
 
     def _handle_tank_collisions(self, obj) -> None:
