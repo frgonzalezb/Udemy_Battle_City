@@ -19,7 +19,7 @@ class Bullet(pygame.sprite.Sprite):
         self.group = groups
 
         # Groups for collision detection
-        self.tanks = self.group['all_tanks']
+        self.tank_group = self.group['all_tanks']
         self.bullet_group = self.group['bullets']
 
         # Bullet position and direction
@@ -90,7 +90,7 @@ class Bullet(pygame.sprite.Sprite):
         """
         Checks if the bullet collides with a tank.
         """
-        tank_collisions = pygame.sprite.spritecollide(self, self.tanks, False)
+        tank_collisions = pygame.sprite.spritecollide(self, self.tank_group, False)
 
         for tank in tank_collisions:
             if self.owner == tank or tank.spawning:
