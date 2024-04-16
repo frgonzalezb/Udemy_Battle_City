@@ -19,8 +19,8 @@ class Bullet(pygame.sprite.Sprite):
         self.group = groups
 
         # Groups for collision detection
-        self.tanks = self.group['All_Tanks']
-        self.bullet_group = self.group['Bullets']
+        self.tanks = self.group['all_tanks']
+        self.bullet_group = self.group['bullets']
 
         # Bullet position and direction
         self.pos_x, self.pos_y = position

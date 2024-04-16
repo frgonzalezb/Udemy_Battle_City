@@ -31,10 +31,10 @@ class Game:
 
         # Object groups
         self.groups = {
-            'All_Tanks': pygame.sprite.Group(),
-            'Player_Tanks': pygame.sprite.Group(),
-            'Bullets': pygame.sprite.Group(),
-            'Destructable_Tiles': pygame.sprite.Group()
+            'all_tanks': pygame.sprite.Group(),
+            'player_tanks': pygame.sprite.Group(),
+            'bullets': pygame.sprite.Group(),
+            'destructable_tiles': pygame.sprite.Group()
         }
 
         # Player attributes
@@ -136,7 +136,7 @@ class Game:
         #     self.player_2.update()
 
         for k in self.groups.keys():
-            if k == 'Player_Tanks':
+            if k == 'player_tanks':
                 continue
             for item in self.groups[k]:
                 item.update()
@@ -181,14 +181,14 @@ class Game:
         """
         Decodes the level data found in its CSV file.
         """
-        tile_mapping = [
-            gc.ID_BRICK,
-            gc.ID_STEEL,
-            gc.ID_FOREST,
-            gc.ID_ICE,
-            gc.ID_WATER,
-            gc.ID_FLAG
-        ]
+        # tile_mapping = [
+        #     gc.ID_BRICK,
+        #     gc.ID_STEEL,
+        #     gc.ID_FOREST,
+        #     gc.ID_ICE,
+        #     gc.ID_WATER,
+        #     gc.ID_FLAG
+        # ]
         self.grid = []
         for i, row in enumerate(level):
             line = []
@@ -206,9 +206,9 @@ class Game:
 
                 elif tile_id == gc.ID_BRICK:
                     line.append(f'{tile}')
-                    map_tile = BrickTile(
+                    BrickTile(
                         pos,
-                        self.groups['Destructable_Tiles'],
+                        self.groups['destructable_tiles'],
                         self.assets.brick_tiles
                     )
                 elif tile_id == gc.ID_STEEL:
@@ -280,6 +280,6 @@ class Game:
         code. It just resets the various sprite groups back to zero.
         """
         for k, v in self.groups.items():
-            if k == 'Player_Tanks':
+            if k == 'player_tanks':
                 continue
             v.empty()

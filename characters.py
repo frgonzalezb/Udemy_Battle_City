@@ -29,8 +29,8 @@ class Tank(pygame.sprite.Sprite):
         self.groups = groups
 
         # Sprite groups that may interact with tank
-        self.tank_group = self.groups['All_Tanks']
-        self.player_group = self.groups['Player_Tanks']
+        self.tank_group = self.groups['all_tanks']
+        self.player_group = self.groups['player_tanks']
 
         # Add tank object to the sprite group
         self.tank_group.add(self)
