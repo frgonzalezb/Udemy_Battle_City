@@ -55,9 +55,9 @@ class BrickTile(TileType):
         self.health -= 1
         if self.health <= 0:
             self.kill()
-        self._reshape_tile(bullet)
+        self._reshape_brick_tile(bullet)
 
-    def _reshape_tile(self, bullet):
+    def _reshape_brick_tile(self, bullet):
         """
         Utility method for the handle_bullet_hit() one, in order to
         make the code a little more readable.
@@ -90,7 +90,6 @@ class SteelTile(TileType):
         super().__init__(pos, group, map_tiles)
 
         self.name: str = 'Steel'
-        self.health: int = 2
 
         self.image: Surface = self.images['small']
         self._get_rect_and_size(position=(self.pos_x, self.pos_y))
@@ -99,7 +98,13 @@ class SteelTile(TileType):
         bullet.update_owner()
         bullet.kill()
 
-        self.health -= 1
-        if self.health <= 0:
-            self.kill()
-        self._reshape_tile(bullet)
+
+class ForestTile(TileType):
+
+    def __init__(self, pos, group, map_tiles) -> None:
+        super().__init__(pos, group, map_tiles)
+
+        self.name: str = 'Forest'
+
+        self.image: Surface = self.images['small']
+        self._get_rect_and_size(position=(self.pos_x, self.pos_y))
