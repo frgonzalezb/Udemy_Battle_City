@@ -16,6 +16,7 @@ class Fade:
 
         self.is_fade_active: bool = False
         self.is_fade_in: bool = True
+        self.is_fade_out: bool = True
 
         self.top_rect: Rect = Rect(
             0,
@@ -66,27 +67,27 @@ class Fade:
                 self.transition = True
                 self.timer = pygame.time.get_ticks()
 
-            elif self.transition:
-                if pygame.time.get_ticks() - self.timer >= 1000:
-                    self.is_fade_in = False
-                    self.is_fade_out = True
-                    self.transition = False
+        elif self.transition:
+            if pygame.time.get_ticks() - self.timer >= 1000:
+                self.is_fade_in = False
+                self.is_fade_out = True
+                self.transition = False
 
-            elif self.is_fade_out:
-                self.top_y = self.make_y_coord_fade(
-                    self.top_y,
-                    self.top_rect_end_y,
-                    self.top_rect_start_y,
-                    self.speed
-                )
-                self.top_rect.bottom = self.top_y
-                self.bottom_y = self.make_y_coord_fade(
-                    self.bottom_y,
-                    self.bottom_rect_end_y,
-                    self.bottom_rect_start_y,
-                    self.speed
-                )
-                self.bottom_rect.top = self.bottom_y
+        elif self.is_fade_out:
+            self.top_y = self.make_y_coord_fade(
+                self.top_y,
+                self.top_rect_end_y,
+                self.top_rect_start_y,
+                self.speed
+            )
+            self.top_rect.bottom = self.top_y
+            self.bottom_y = self.make_y_coord_fade(
+                self.bottom_y,
+                self.bottom_rect_end_y,
+                self.bottom_rect_start_y,
+                self.speed
+            )
+            self.bottom_rect.top = self.bottom_y
 
     def draw(self, window: Surface) -> None:
         pygame.draw.rect(window, gc.RGB_GREY, self.top_rect)
