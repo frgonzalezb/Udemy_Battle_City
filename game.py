@@ -8,6 +8,7 @@ import game_config as gc
 from game_hud import GameHUD
 from characters import Tank, PlayerTank
 from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
+from fade_animation import Fade
 
 
 class Game:
@@ -53,6 +54,9 @@ class Game:
         # Level information
         self.level_num: int = 1
         self.data = self.main.levels
+
+        # Level fade
+        self.fade = Fade(self, self.assets, 10)
 
         # Player objects
         if self.is_player_1_active:
@@ -134,6 +138,9 @@ class Game:
     def update(self) -> None:
         self.hud.update()
 
+        if self.fade.is_fade_active:
+            self.fade.update()
+
         for k in self.groups.keys():
             if k == 'player_tanks':
                 continue
@@ -151,8 +158,14 @@ class Game:
         for k in self.groups.keys():
             if k == 'impassable_tiles':
                 continue  # lets bullets be drawn above water!
+            are_there_tanks: bool = k == 'all_tanks' or k == 'player_tanks'
+            if self.fade.is_fade_active and are_there_tanks:
+                continue
             for item in self.groups[k]:
                 item.draw(window)
+
+        if self.fade.is_fade_active:
+            self.fade.draw(window)
 
     def create_new_stage(self) -> None:
         self._reset_sprite_groups()
@@ -162,6 +175,10 @@ class Game:
         self.enemies = 5
         self.enemies_killed = self.enemies
         self.load_level_data(self.current_level_data)
+
+        self.fade.level = self.level_num
+        self.fade.is_fade_active = True
+
         self.generate_spawn_queue()
         self.spawn_pos_index = 0
         self.spawn_queue_index = 0
