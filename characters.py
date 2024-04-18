@@ -153,6 +153,7 @@ class Tank(pygame.sprite.Sprite):
 
         # Update the tank rectangle position
         self.rect.topleft = (self.pos_x, self.pos_y)
+        print(self.rect.topleft)  # dbg
 
         # Update the tank animation
         self.update_tank_movement_animation()
@@ -334,6 +335,7 @@ class Tank(pygame.sprite.Sprite):
 
         if self.tank_health <= 0:
             self.kill()
+            self.game.enemies_killed -= 1
 
     def get_tank_masks(self) -> dict[str, pygame.Mask]:
         """
@@ -450,7 +452,21 @@ class PlayerTank(Tank):
     def spawn_on_new_stage(self, position: tuple[int, int]):
         """
         Spawns the player tank on the new stage screen, according to the
-        position values passed in.
+        position values passed in. It also forces the tank to be in
+        "Up" direction.
+
+        NOTE: Although it seems weirdly at first glance, the "position"
+        argument must need to be unpacked to reset the player tank at
+        the start position and then repacked in the self.rect.topleft
+        statement.
         """
         self.tank_group.add(self)
-        self.rect.topleft = position
+        self.spawning = True
+        self.active = False
+        self.direction = 'Up'
+        self.pos_x, self.pos_y = position
+        self.image = (
+            self.tank_images[f'Tank_{self.tank_level}']
+            [self.color][self.direction][self.frame_index]
+        )
+        self.rect.topleft = (self.pos_x, self.pos_y)

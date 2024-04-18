@@ -52,6 +52,8 @@ class Game:
 
         # Level information
         self.level_num: int = 15
+        self.is_level_complete = False
+        self.level_transition_timer = None  # mehtod to be dev soon!
         self.data = self.main.levels
 
         # Level fade
@@ -153,6 +155,24 @@ class Game:
 
         self.spawn_enemy_tanks()
 
+        if self.enemies_killed <= 0 and not self.level_complete:
+            self.level_complete = True
+            self.level_transition_timer = pygame.time.get_ticks()
+
+        if self.level_complete:
+            """
+            NOTE: time_buffer is the time between the last enemy tank
+            being killed and the true end of the level. That's usually
+            about 2 or 3 seconds in the original game. If the last tank
+            had a power up and it was nearby, the buffer allows the
+            player to catch that power up before the level truly ends!
+            """
+            time_buffer = pygame.time.get_ticks() - self.level_transition_timer
+            if time_buffer >= gc.TRANSITION_TIMER:
+                # self.stage_transition()
+                self.level_num += 1
+                self.create_new_stage()
+
     def draw(self, window: Surface) -> None:
         """
         Draws the given window object on the screen.
@@ -176,9 +196,11 @@ class Game:
 
         self.current_level_data = self.data.level_data[self.level_num - 1]
         # self.enemies = random.choice([16, 17, 18, 19, 20])
-        self.enemies = 5
+        self.enemies = 3
         self.enemies_killed = self.enemies
+
         self.load_level_data(self.current_level_data)
+        self.level_complete = False
 
         self.fade.level = self.level_num
         self.fade.stage_image = self.fade.create_stage_image()

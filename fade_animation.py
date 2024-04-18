@@ -26,7 +26,7 @@ class Fade:
             gc.SCREEN_WIDTH,
             gc.SCREEN_HEIGHT // 2
         )
-        self.top_rect_start_y = 0 - gc.SCREEN_HEIGHT // 2
+        self.top_rect_start_y = self.top_rect.bottom
         self.top_rect_end_y = gc.SCREEN_HEIGHT // 2
         self.top_y = self.top_rect.bottom
 
@@ -53,6 +53,12 @@ class Fade:
         )
 
     def update(self) -> None:
+        """
+        NOTE: In the original game, during the fade intro, the player
+        can actually see a glimpse of the stage when the fade "closes".
+        Although it could be treated as a glitch, it was kept here for
+        the sake of the clonation.
+        """
         if not self.is_fade_active:
             return
 
