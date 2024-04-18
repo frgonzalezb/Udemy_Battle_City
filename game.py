@@ -2,7 +2,6 @@ import random
 
 import pygame
 from pygame import Surface
-from pygame.sprite import Group
 
 import game_config as gc
 from game_hud import GameHUD
@@ -34,14 +33,14 @@ class Game:
 
         # Object groups
         self.groups = {
-            'ice_tiles': Group(),
-            'water_tiles': Group(),
-            'all_tanks': Group(),
-            'player_tanks': Group(),
-            'bullets': Group(),
-            'destructable_tiles': Group(),
-            'impassable_tiles': Group(),
-            'forest_tiles': Group()
+            'ice_tiles': pygame.sprite.Group(),
+            'water_tiles': pygame.sprite.Group(),
+            'all_tanks': pygame.sprite.Group(),
+            'player_tanks': pygame.sprite.Group(),
+            'bullets': pygame.sprite.Group(),
+            'destructable_tiles': pygame.sprite.Group(),
+            'impassable_tiles': pygame.sprite.Group(),
+            'forest_tiles': pygame.sprite.Group()
         }
 
         # Player attributes
