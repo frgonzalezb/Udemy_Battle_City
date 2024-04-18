@@ -51,7 +51,7 @@ class Game:
         self.hud = GameHUD(self, self.assets)
 
         # Level information
-        self.level_num: int = 1
+        self.level_num: int = 15
         self.data = self.main.levels
 
         # Level fade
@@ -91,6 +91,7 @@ class Game:
 
         # Game active or game over
         self.is_active: bool = True
+        self.game_on: bool = False
 
     def input(self) -> None:
         """
@@ -139,6 +140,10 @@ class Game:
 
         if self.fade.is_fade_active:
             self.fade.update()
+            if not self.fade.is_fade_active:
+                for tank in self.groups['all_tanks']:
+                    tank.spawn_timer = pygame.time.get_ticks()
+            return
 
         for k in self.groups.keys():
             if k == 'player_tanks':

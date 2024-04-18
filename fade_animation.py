@@ -103,6 +103,16 @@ class Fade:
             )
             self.bottom_rect.top = self.bottom_y
 
+            if (
+                self.top_rect.bottom == self.top_rect_start_y and
+                self.bottom_rect.top == self.bottom_rect_start_y
+            ):
+                self.is_fade_in = True
+                self.is_fade_out = False
+                self.transition = False
+                self.is_fade_active = False
+                self.game.is_game_on = True
+
     def draw(self, window: Surface) -> None:
         pygame.draw.rect(window, gc.RGB_GREY, self.top_rect)
         pygame.draw.rect(window, gc.RGB_GREY, self.bottom_rect)
