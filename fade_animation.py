@@ -16,7 +16,9 @@ class Fade:
 
         self.is_fade_active = False
         self.is_fade_in = True
-        self.is_fade_out = True
+        self.is_fade_out = False
+        self.transition = False
+        self.timer = pygame.time.get_ticks()
 
         self.top_rect = pygame.Rect(
             0,
@@ -45,7 +47,10 @@ class Fade:
             self.images['num_0'].get_size()
         )
 
-        self.stage_image = None  # method to be created soon!
+        self.stage_image = self.create_stage_image()
+        self.stage_image_rect = self.stage_image.get_rect(
+            center=(gc.SCREEN_WIDTH // 2, gc.SCREEN_HEIGHT // 2)
+        )
 
     def update(self) -> None:
         if not self.is_fade_active:
@@ -101,6 +106,8 @@ class Fade:
     def draw(self, window: Surface) -> None:
         pygame.draw.rect(window, gc.RGB_GREY, self.top_rect)
         pygame.draw.rect(window, gc.RGB_GREY, self.bottom_rect)
+        if self.transition:
+            window.blit(self.stage_image, self.stage_image_rect)
 
     def make_y_coord_fade(
             self,
@@ -108,7 +115,7 @@ class Fade:
             start_pos: int,
             end_pos: int,
             speed: int
-            ):
+            ) -> int:
         """
         Accepts the Y-coordinate of the fade rectangles, and updates
         their positions to the end position.
@@ -124,3 +131,33 @@ class Fade:
             if y_coord > end_pos:
                 y_coord = end_pos
         return y_coord
+
+    def create_stage_image(self) -> Surface:
+        """
+        Generates a stage number to display during the transition phase.
+        """
+        surface = pygame.Surface(
+            (
+                self.stage_pic_width + (self.num_pic_width * 3),
+                self.stage_pic_height
+            )
+        )
+        surface.fill(gc.RGB_GREY)
+        surface.blit(self.images['stage'], (0, 0))
+        # Adding one digit if stage number < 10
+        if self.level < 10:
+            surface.blit(
+                self.images['num_0'],
+                (self.stage_pic_width + self.num_pic_width, 0)
+            )
+        else:
+            surface.blit(
+                self.images[f'num_{str(self.level)[0]}'],
+                (self.stage_pic_width + self.num_pic_width, 0)
+            )
+        surface.blit(
+            self.images[f'num_{str(self.level)[-1]}'],
+            (self.stage_pic_width + (self.num_pic_width * 2), 0)
+        )
+
+        return surface
