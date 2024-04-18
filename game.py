@@ -176,6 +176,7 @@ class Game:
         self.load_level_data(self.current_level_data)
 
         self.fade.level = self.level_num
+        self.fade.stage_image = self.fade.create_stage_image()
         self.fade.is_fade_active = True
 
         self.generate_spawn_queue()
