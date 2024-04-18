@@ -1,5 +1,5 @@
 import pygame
-from pygame import Surface, Rect
+from pygame import Surface
 
 import game_config as gc
 
@@ -10,33 +10,42 @@ class Fade:
         self.game = game
         self.assets = assets
 
-        self.level: int = self.game.level_num - 1
-        self.images: dict[str, Surface] = self.assets.hud_images
-        self.speed: int = speed
+        self.level = self.game.level_num - 1
+        self.images = self.assets.hud_images
+        self.speed = speed
 
-        self.is_fade_active: bool = False
-        self.is_fade_in: bool = True
-        self.is_fade_out: bool = True
+        self.is_fade_active = False
+        self.is_fade_in = True
+        self.is_fade_out = True
 
-        self.top_rect: Rect = Rect(
+        self.top_rect = pygame.Rect(
             0,
             0 - gc.SCREEN_HEIGHT // 2,
             gc.SCREEN_WIDTH,
             gc.SCREEN_HEIGHT // 2
         )
-        self.top_rect_start_y: int = 0 - gc.SCREEN_HEIGHT // 2
-        self.top_rect_end_y: int = gc.SCREEN_HEIGHT // 2
-        self.top_y: int = self.top_rect.bottom
+        self.top_rect_start_y = 0 - gc.SCREEN_HEIGHT // 2
+        self.top_rect_end_y = gc.SCREEN_HEIGHT // 2
+        self.top_y = self.top_rect.bottom
 
-        self.bottom_rect: Rect = Rect(
+        self.bottom_rect = pygame.Rect(
             0,
             gc.SCREEN_HEIGHT,
             gc.SCREEN_WIDTH,
             gc.SCREEN_HEIGHT // 2
         )
-        self.bottom_rect_start_y: int = self.bottom_rect.top
-        self.bottom_rect_end_y: int = gc.SCREEN_HEIGHT // 2
-        self.bottom_y: int = self.bottom_rect.top
+        self.bottom_rect_start_y = self.bottom_rect.top
+        self.bottom_rect_end_y = gc.SCREEN_HEIGHT // 2
+        self.bottom_y = self.bottom_rect.top
+
+        self.stage_pic_width, self.stage_pic_height = (
+            self.images['stage'].get_size()
+        )
+        self.num_pic_width, self.num_pic_height = (
+            self.images['num_0'].get_size()
+        )
+
+        self.stage_image = None  # method to be created soon!
 
     def update(self) -> None:
         if not self.is_fade_active:
@@ -93,7 +102,13 @@ class Fade:
         pygame.draw.rect(window, gc.RGB_GREY, self.top_rect)
         pygame.draw.rect(window, gc.RGB_GREY, self.bottom_rect)
 
-    def make_y_coord_fade(self, y_coord, start_pos, end_pos, speed: int):
+    def make_y_coord_fade(
+            self,
+            y_coord: int,
+            start_pos: int,
+            end_pos: int,
+            speed: int
+            ):
         """
         Accepts the Y-coordinate of the fade rectangles, and updates
         their positions to the end position.
