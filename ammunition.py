@@ -102,7 +102,7 @@ class Bullet(pygame.sprite.Sprite):
             if self.owner == tank or tank.spawning:
                 continue
             if pygame.sprite.collide_mask(self, tank):
-                # Player tank bullet has collided with another player tank
+                # Player tank bullet collided with another player tank!
                 if not self.owner.enemy and not tank.enemy:
                     self.update_owner()
                     tank.paralyze_tank(gc.TANK_PARALYSIS)
@@ -114,6 +114,11 @@ class Bullet(pygame.sprite.Sprite):
                     (self.owner.enemy and not tank.enemy)
                 ):
                     self.update_owner()
+                    if not self.owner.enemy:
+                        self.owner.score_list.append(
+                            gc.TANK_SPAWN_CRITERIA[tank.level]['score']
+                        )
+                        print(self.owner.score_list)  # dbg
                     tank.destroy_tank()
                     self.kill()
                     break

@@ -35,6 +35,17 @@ class Tank(pygame.sprite.Sprite):
         # Add tank object to the sprite group
         self.tank_group.add(self)
 
+        # Enemy tank criteria
+        levels = {
+            0: None,
+            4: 'level_0',
+            5: 'level_1',
+            6: 'level_2',
+            7: 'level_3'
+        }
+        if enemy:
+            self.level = levels[tank_level]
+
         # Tank images
         self.tank_images = self.assets.tank_images
         self.spawn_images = self.assets.spawn_star_images
@@ -153,7 +164,6 @@ class Tank(pygame.sprite.Sprite):
 
         # Update the tank rectangle position
         self.rect.topleft = (self.pos_x, self.pos_y)
-        print(self.rect.topleft)  # dbg
 
         # Update the tank animation
         self.update_tank_movement_animation()
@@ -392,6 +402,9 @@ class PlayerTank(Tank):
         # Player lives
         self.lives = 3
 
+        # Level score tracking
+        self.score_list = []
+
     def input(
             self,
             key_pressed: pygame.key.ScancodeWrapper
@@ -470,3 +483,4 @@ class PlayerTank(Tank):
             [self.color][self.direction][self.frame_index]
         )
         self.rect.topleft = (self.pos_x, self.pos_y)
+        self.score_list.clear()

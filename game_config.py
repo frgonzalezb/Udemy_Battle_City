@@ -12,6 +12,18 @@ SPRITE_SCALE = 4
 
 IMAGE_SIZE = SPRITE_SIZE * SPRITE_SCALE  # 64 px
 
+'''
+NOTE: The IMAGE_SIZE constant is quite important, because it's used as
+base for all the graphical objects in the game and for generating a very
+useful grid layout of 64x64-pixels squares to manage them.
+
+According to Harry, the idea of using a grid of 64x64 squares is because
+of the ability to resize the entire game screen and then thsese images
+will then be resized accordingly or placed in the correct place
+according to the screen dimensions, whether the screen width and height
+does change, then these items would change along with it.
+'''
+
 SCREEN_WIDTH = 16 * IMAGE_SIZE   # px
 SCREEN_HEIGHT = 14 * IMAGE_SIZE  # px
 

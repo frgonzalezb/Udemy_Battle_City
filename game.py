@@ -8,6 +8,7 @@ from game_hud import GameHUD
 from characters import Tank, PlayerTank
 from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
 from fade_animation import Fade
+from score_screen import ScoreScreen
 
 
 class Game:
@@ -58,6 +59,9 @@ class Game:
 
         # Level fade
         self.fade = Fade(self, self.assets, 10)
+
+        # Stage score screen
+        self.score_screen = ScoreScreen(self, self.assets)
 
         # Player objects
         if self.is_player_1_active:
@@ -169,15 +173,19 @@ class Game:
             """
             time_buffer = pygame.time.get_ticks() - self.level_transition_timer
             if time_buffer >= gc.TRANSITION_TIMER:
-                # self.stage_transition()
-                self.level_num += 1
-                self.create_new_stage()
+                self.create_stage_transition()
+                # self.level_num += 1
+                # self.create_new_stage()
 
     def draw(self, window: Surface) -> None:
         """
         Draws the given window object on the screen.
         """
         self.hud.draw(window)
+
+        if self.score_screen.is_active:
+            self.score_screen.draw(window)
+            return
 
         for k in self.groups.keys():
             if k == 'impassable_tiles':
@@ -190,6 +198,18 @@ class Game:
 
         if self.fade.is_fade_active:
             self.fade.draw(window)
+
+    def create_stage_transition(self):
+        if not self.score_screen.is_active:
+            self.score_screen.timer = pygame.time.get_ticks()
+        self.score_screen.is_active = True
+        self.score_screen.update()
+
+    def change_level(self):
+        self.level_num += 1
+        # We don't want our number of stages to surpass the actual list!
+        self.level_num = self.level_num % len(self.data.level_data)
+        self.create_new_stage()
 
     def create_new_stage(self) -> None:
         self._reset_sprite_groups()
