@@ -58,7 +58,7 @@ class ScoreScreen:
         )
 
     def update(self) -> None:
-        if not pygame.time.get_ticks() - self.timer >= 10_000:
+        if not pygame.time.get_ticks() - self.timer >= 3_000:
             return
 
         # Player 1
@@ -79,7 +79,7 @@ class ScoreScreen:
             self.update_score(score, 'player_2')
             self.score_timer = pygame.time.get_ticks()
 
-        if pygame.time.get_ticks() - self.timer >= 10_000:
+        if pygame.time.get_ticks() - self.timer >= 3_000:
             self.is_active = False
             self.game.change_level(self.player_1_score, self.player_2_score)
 

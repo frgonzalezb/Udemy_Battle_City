@@ -207,12 +207,12 @@ class Game:
             self.score_screen.timer = pygame.time.get_ticks()
             if self.is_player_1_active:
                 self.score_screen.player_1_score = self.player_1_score
-                self.score_screen.player_1_kill_list = sorted(
+                self.score_screen.player_1_enemies_killed = sorted(
                     self.player_1.score_list
                 )
             if self.is_player_2_active:
                 self.score_screen.player_2_score = self.player_2_score
-                self.score_screen.player_2_kill_list = sorted(
+                self.score_screen.player_2_enemies_killed = sorted(
                     self.player_2.score_list
                 )
             self.score_screen.update_basic_info(self.top_score, self.level_num)
