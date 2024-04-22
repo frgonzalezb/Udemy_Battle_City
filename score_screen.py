@@ -13,17 +13,18 @@ class ScoreScreen:
         self.orange_nums: dict[str, Surface] = self.assets.numbers_black_orange
 
         self.is_active = False
-        self.timer = pygame.time.get_ticks()
+        self.timer: int = pygame.time.get_ticks()
+        self.score_timer: int = 100  # milliseconds
 
         self.images: dict[str, Surface] = self.assets.scoresheet_images
         self.y_coords_for_values: list[float] = [12.5, 15.0, 17.5, 20.0]
         self.score_size: int = gc.IMAGE_SIZE // 2
 
         # Player score totals and score list
-        self.player_1_score = 3000
-        self.player_1_kill_list = []
-        self.player_2_score = 2500
-        self.player_2_kill_list = []
+        self.player_1_score: int = 0
+        self.player_1_enemies_killed: list = []
+        self.player_2_score: int = 0
+        self.player_2_enemies_killed: list = []
 
         self.top_score: int = 0
         self.stage: int = 0
