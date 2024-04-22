@@ -1,5 +1,7 @@
+from typing import List
+
 import pygame
-from pygame import Surface
+from pygame.surface import Surface
 
 import game_config as gc
 from ammunition import Bullet
@@ -44,11 +46,10 @@ class Tank(pygame.sprite.Sprite):
             6: 'level_2',
             7: 'level_3'
         }
-        if is_enemy:
-            self.level: str | None = levels[tank_level]
+        self.level: str | None = levels[tank_level]
 
         # Tank images
-        self.tank_images: dict[str, dict] = self.assets.tank_images
+        self.tank_images: dict[str, dict[str, dict]] = self.assets.tank_images
         self.spawn_images: dict[str, Surface] = self.assets.spawn_star_images
 
         # Tank position and direction
@@ -63,13 +64,28 @@ class Tank(pygame.sprite.Sprite):
         # Common tank attributes
         self.tank_level: int = tank_level
         self.color: str = color
-        self.tank_speed: int = gc.TANK_SPEED
+        self.tank_speed: int | float = (
+            gc.TANK_SPEED if not self.level
+            else gc.TANK_SPEED * gc.TANK_SPAWN_CRITERIA[self.level]['speed']
+        )
+        self.power: int = (
+            1 if not self.level
+            else gc.TANK_SPEED * gc.TANK_SPAWN_CRITERIA[self.level]['power']
+        )
+        self.bullet_speed_modifier: int = 1
+        self.bullet_speed: int = (
+            gc.TANK_SPEED * (3 * self.bullet_speed_modifier)
+        )
+        self.score: int = (
+            100 if not self.level
+            else gc.TANK_SPAWN_CRITERIA[self.level]['score']
+        )
         self.is_enemy: bool = is_enemy
         self.tank_health: int = 1
 
         # Tank image, rectangle, and frame index
         self.frame_index: int = 0
-        self.image = (
+        self.image: Surface = (
             self.tank_images[f'Tank_{self.tank_level}']
             [self.color]
             [self.direction]
@@ -79,13 +95,15 @@ class Tank(pygame.sprite.Sprite):
         self.width, self.height = self.image.get_size()
 
         # Shoot cooldowns and bullet totals
-        self.bullet_limit = 1
-        self.bullet_sum = 0
+        self.bullet_limit: int = 1
+        self.bullet_sum: int = 0
+        self.shot_cooldown_time: int = 500  # milliseconds
+        self.shot_cooldown: int = pygame.time.get_ticks()
 
         # Tank paralysis
-        self.paralyzed = False
-        self.paralysis = gc.TANK_PARALYSIS
-        self.paralysis_timer = pygame.time.get_ticks()
+        self.paralyzed: bool = False
+        self.paralysis: int = gc.TANK_PARALYSIS
+        self.paralysis_timer: int = pygame.time.get_ticks()
 
         # Spawn images
         self.spawn_image = self.spawn_images[f'star_{self.frame_index}']
@@ -96,7 +114,7 @@ class Tank(pygame.sprite.Sprite):
         self.mask_dict = self.get_tank_masks()
         self.mask = self.mask_dict[self.direction]
         # self.mask_image = self.mask.to_surface()
-        self.mask_direction = self.direction
+        self.mask_direction: str = self.direction
 
     def input(self) -> None:
         pass
@@ -234,9 +252,18 @@ class Tank(pygame.sprite.Sprite):
         """
         spawn_time = pygame.time.get_ticks() - self.spawn_timer
         if spawn_time > gc.TOTAL_SPAWN_TIME:
-            self.frame_index = 0
-            self.is_spawning = False
-            self.is_active = True
+            colliding_sprites: List = pygame.sprite.spritecollide(
+                self,
+                self.tank_group,
+                False
+            )
+            is_our_current_tank: bool = len(colliding_sprites) == 1
+            if is_our_current_tank:
+                self.frame_index = 0
+                self.is_spawning = False
+                self.is_active = True
+            else:
+                self.check_tank_on_spawn_star_collision(colliding_sprites)
 
     def update_tank_movement_animation(self) -> None:
         """
@@ -280,7 +307,7 @@ class Tank(pygame.sprite.Sprite):
             return  # The current tank is just colliding with itself!
 
         for tank in tank_collision_list:
-            if tank == self:
+            if tank == self or tank.is_spawning:
                 continue  # Skip if it's the current tank
 
             self._handle_tank_collisions(tank)
@@ -314,6 +341,23 @@ class Tank(pygame.sprite.Sprite):
         elif self.direction == 'Down' and self.rect.bottom >= obj.rect.top:
             self.rect.bottom = obj.rect.top
             self.pos_y = self.rect.y
+
+    def check_tank_on_spawn_star_collision(
+            self,
+            colliding_sprites: List
+            ) -> None:
+        """
+        Fixes infinite spawn bug if two spawn stars are colliding.
+        """
+        for tank in colliding_sprites:
+            if tank.is_active:
+                return
+            if tank == self:
+                continue
+            if self.is_spawning and tank.is_spawning:
+                self.frame_index = 0
+                self.is_spawning = False
+                self.is_active = True
 
     def shoot(self) -> None:
         if self.bullet_sum >= self.bullet_limit:
