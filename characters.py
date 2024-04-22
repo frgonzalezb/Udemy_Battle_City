@@ -486,6 +486,8 @@ class PlayerTank(Tank):
             )
 
     def update(self) -> None:
+        # FIXME: Lots of boilerplate code in the following functions!
+        # No DRY at all
         if self.is_game_over:
             return
         super().update()
@@ -494,6 +496,11 @@ class PlayerTank(Tank):
         if self.is_game_over:
             return
         super().draw(window)
+
+    def shoot(self) -> None:
+        if self.is_game_over:
+            return
+        super().shoot()
 
     def set_control_keys(
             self,
