@@ -447,6 +447,10 @@ class PlayerTank(Tank):
         # Player lives
         self.lives = 3
 
+        # Player dead / Game over
+        self.is_dead: bool = False
+        self.is_game_over: bool = False
+
         # Level score tracking
         self.score_list = []
 
@@ -460,6 +464,9 @@ class PlayerTank(Tank):
 
         NOTE: Player 1 is Gold, and Player 2 is Green.
         """
+        if self.is_dead or self.is_game_over:
+            return
+
         if self.color == 'Gold':
             self.set_control_keys(
                 key_pressed,
@@ -477,6 +484,16 @@ class PlayerTank(Tank):
                 left_key=pygame.K_LEFT,
                 right_key=pygame.K_RIGHT
             )
+
+    def update(self) -> None:
+        if self.is_game_over:
+            return
+        super().update()
+
+    def draw(self, window: Surface) -> None:
+        if self.is_game_over:
+            return
+        super().draw(window)
 
     def set_control_keys(
             self,
@@ -506,6 +523,29 @@ class PlayerTank(Tank):
             self.move('Left')
         elif key_pressed[right_key]:
             self.move('Right')
+
+    def kill_tank(self) -> None:
+        if self.is_dead or self.is_game_over:
+            return
+        self.is_dead = True
+        self.lives -= 1
+        if self.lives <= 0:
+            self.is_game_over = True
+        self.respawn_tank()
+
+    def respawn_tank(self) -> None:
+        self.is_spawning = True
+        self.is_active = False
+        self.spawn_timer = pygame.time.get_ticks()
+        self.direction = 'Up'
+        self.pos_x, self.pos_y = self.spawn_pos
+        self.image = (
+            self.tank_images[f'Tank_{self.tank_level}']
+            [self.color][self.direction][self.frame_index]
+        )
+        self.rect.topleft = (self.pos_x, self.pos_y)
+        self.mask = self.mask_dict[self.direction]
+        self.is_dead = False
 
     def spawn_on_new_stage(self, position: tuple[int, int]):
         """
