@@ -17,6 +17,7 @@ class ScoreScreen:
         self.score_timer: int = 100  # milliseconds
 
         self.images: dict[str, Surface] = self.assets.scoresheet_images
+
         self.y_coords_for_values: list[float] = [12.5, 15.0, 17.5, 20.0]
         self.score_size: int = gc.IMAGE_SIZE // 2
 
@@ -58,7 +59,7 @@ class ScoreScreen:
         )
 
     def update(self) -> None:
-        if not pygame.time.get_ticks() - self.timer >= 3_000:
+        if not pygame.time.get_ticks() - self.timer >= 2_000:
             return
 
         # Player 1
@@ -67,8 +68,10 @@ class ScoreScreen:
             pygame.time.get_ticks() - self.timer >= 100
         ):
             score = self.player_1_enemies_killed.pop(0)
+            print(f'score = {score}')  # dbg
             self.update_score(score, 'player_1')
             self.score_timer = pygame.time.get_ticks()
+            return
 
         # Player 2
         if (
@@ -78,10 +81,12 @@ class ScoreScreen:
             score = self.player_2_enemies_killed.pop(0)
             self.update_score(score, 'player_2')
             self.score_timer = pygame.time.get_ticks()
+            return
 
-        if pygame.time.get_ticks() - self.timer >= 3_000:
+        if pygame.time.get_ticks() - self.timer >= 4_000:
             self.is_active = False
             self.game.change_level(self.player_1_score, self.player_2_score)
+            self.clear_score_for_new_stage()
 
     def update_score(self, score: int, player: str):
         score_dict: dict[int, str] = {
@@ -366,3 +371,28 @@ class ScoreScreen:
                 )
             )
         return tank_score_images
+
+    def clear_score_for_new_stage(self):
+        # FIXME: No DRY!
+        self.player_1_enemies_killed = []
+        self.player_2_enemies_killed = []
+        self.player_1_score_values: dict[str, list[int, int] | int] = {
+            'line_1': [0, 0],
+            'line_2': [0, 0],
+            'line_3': [0, 0],
+            'line_4': [0, 0],
+            'total': 0
+        }
+        self.player_2_score_values: dict[str, list[int, int] | int] = {
+            'line_1': [0, 0],
+            'line_2': [0, 0],
+            'line_3': [0, 0],
+            'line_4': [0, 0],
+            'total': 0
+        }
+        self.player_1_tank_num_images, self.player_1_tank_score_images = (
+            self.generate_tank_kill_images(14, 7, self.player_1_score_values)
+        )
+        self.player_2_tank_num_images, self.player_2_tank_score_images = (
+            self.generate_tank_kill_images(20, 25, self.player_2_score_values)
+        )
