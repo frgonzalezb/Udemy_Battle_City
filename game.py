@@ -126,12 +126,12 @@ class Game:
 
                 # dbg
                 if event.key == pygame.K_SPACE:
-                    if self.player_1.active:
+                    if self.player_1.is_active:
                         self.player_1.shoot()
 
                 # dbg
                 if event.key == pygame.K_RCTRL:
-                    if self.player_2.active:
+                    if self.player_2.is_active:
                         self.player_2.shoot()
 
                 # dbg

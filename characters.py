@@ -1,4 +1,5 @@
 import pygame
+from pygame import Surface
 
 import game_config as gc
 from ammunition import Bullet
@@ -18,7 +19,7 @@ class Tank(pygame.sprite.Sprite):
             direction: str,
             color: str = 'Silver',
             tank_level: int = 0,
-            enemy: bool = True
+            is_enemy: bool = True
             ) -> None:
 
         super().__init__()
@@ -36,39 +37,38 @@ class Tank(pygame.sprite.Sprite):
         self.tank_group.add(self)
 
         # Enemy tank criteria
-        levels = {
+        levels: dict[int, str | None] = {
             0: None,
             4: 'level_0',
             5: 'level_1',
             6: 'level_2',
             7: 'level_3'
         }
-        if enemy:
-            self.level = levels[tank_level]
+        if is_enemy:
+            self.level: str | None = levels[tank_level]
 
         # Tank images
-        self.tank_images = self.assets.tank_images
-        self.spawn_images = self.assets.spawn_star_images
+        self.tank_images: dict[str, dict] = self.assets.tank_images
+        self.spawn_images: dict[str, Surface] = self.assets.spawn_star_images
 
         # Tank position and direction
         self.spawn_pos: tuple[int, int] = position
         self.pos_x, self.pos_y = self.spawn_pos
-        self.direction = direction
+        self.direction: str = direction
 
         # Tank spawning / active
-        self.spawning = True
-        self.active = False
+        self.is_spawning: bool = True
+        self.is_active: bool = False
 
         # Common tank attributes
-        # self.active = True
-        self.tank_level = tank_level
-        self.color = color
-        self.tank_speed = gc.TANK_SPEED
-        self.enemy = enemy
-        self.tank_health = 1
+        self.tank_level: int = tank_level
+        self.color: str = color
+        self.tank_speed: int = gc.TANK_SPEED
+        self.is_enemy: bool = is_enemy
+        self.tank_health: int = 1
 
         # Tank image, rectangle, and frame index
-        self.frame_index = 0
+        self.frame_index: int = 0
         self.image = (
             self.tank_images[f'Tank_{self.tank_level}']
             [self.color]
@@ -102,7 +102,7 @@ class Tank(pygame.sprite.Sprite):
         pass
 
     def update(self) -> None:
-        if self.spawning:
+        if self.is_spawning:
             self.update_spawning_animation()
             self.stop_spawning_animation()
             return
@@ -124,7 +124,7 @@ class Tank(pygame.sprite.Sprite):
         """
         Moves the tank in the given direction.
         """
-        if not self.active:
+        if not self.is_active:
             return
 
         self.direction = direction
@@ -193,7 +193,7 @@ class Tank(pygame.sprite.Sprite):
         """
         Draws the spawn star on the screen.
         """
-        if not self.spawning:
+        if not self.is_spawning:
             return
 
         window.blit(self.spawn_image, self.rect)
@@ -202,7 +202,7 @@ class Tank(pygame.sprite.Sprite):
         """
         Draws the tank on the screen.
         """
-        if not self.active:
+        if not self.is_active:
             return
 
         window.blit(self.image, self.rect)
@@ -235,8 +235,8 @@ class Tank(pygame.sprite.Sprite):
         spawn_time = pygame.time.get_ticks() - self.spawn_timer
         if spawn_time > gc.TOTAL_SPAWN_TIME:
             self.frame_index = 0
-            self.spawning = False
-            self.active = True
+            self.is_spawning = False
+            self.is_active = True
 
     def update_tank_movement_animation(self) -> None:
         """
@@ -394,7 +394,7 @@ class PlayerTank(Tank):
             direction,
             color,
             tank_level,
-            enemy=False
+            is_enemy=False
         )
 
         self.player_group.add(self)
@@ -474,8 +474,8 @@ class PlayerTank(Tank):
         statement.
         """
         self.tank_group.add(self)
-        self.spawning = True
-        self.active = False
+        self.is_spawning = True
+        self.is_active = False
         self.direction = 'Up'
         self.pos_x, self.pos_y = position
         self.image = (
