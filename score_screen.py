@@ -34,7 +34,7 @@ class ScoreScreen:
         self._create_stage_number_images()
         self.update_player_score_images()
 
-        # Line 1: list[number of tanks, tank score number]
+        # line_n: list[number of tanks, tank score number]
         self.player_1_score_values: dict[str, list[int, int] | int] = {
             'line_1': [0, 0],
             'line_2': [0, 0],
@@ -60,8 +60,63 @@ class ScoreScreen:
     def update(self) -> None:
         if not pygame.time.get_ticks() - self.timer >= 10_000:
             return
-        self.is_active = False
-        self.game.change_level(self.player_1_score, self.player_2_score)
+
+        # Player 1
+        if (
+            len(self.player_1_enemies_killed) > 0 and
+            pygame.time.get_ticks() - self.timer >= 100
+        ):
+            score = self.player_1_enemies_killed.pop(0)
+            self.update_score(score, 'player_1')
+            self.score_timer = pygame.time.get_ticks()
+
+        # Player 2
+        if (
+            len(self.player_2_enemies_killed) > 0 and
+            pygame.time.get_ticks() - self.timer >= 100
+        ):
+            score = self.player_2_enemies_killed.pop(0)
+            self.update_score(score, 'player_2')
+            self.score_timer = pygame.time.get_ticks()
+
+        if pygame.time.get_ticks() - self.timer >= 10_000:
+            self.is_active = False
+            self.game.change_level(self.player_1_score, self.player_2_score)
+
+    def update_score(self, score: int, player: str):
+        score_dict: dict[int, str] = {
+            100: 'line_1',
+            200: 'line_2',
+            300: 'line_3',
+            400: 'line_4',
+        }
+        if player == 'player_1':
+            self.player_1_score_values[score_dict[score]][0] += 1
+            self.player_1_score_values[score_dict[score]][1] += score
+            self.player_1_score_values['total'] += 1
+            self.player_1_score += score
+            # FIXME: This may be refactored, 'cause of no DRY!
+            self.player_1_tank_num_images, self.player_1_tank_score_images = (
+                self.generate_tank_kill_images(
+                    14,
+                    7,
+                    self.player_1_score_values
+                )
+            )
+        else:
+            self.player_2_score_values[score_dict[score]][0] += 1
+            self.player_2_score_values[score_dict[score]][1] += score
+            self.player_2_score_values['total'] += 1
+            self.player_2_score += score
+            # FIXME: This may be refactored, 'cause of no DRY!
+            self.player_2_tank_num_images, self.player_2_tank_score_images = (
+                self.generate_tank_kill_images(
+                    20,
+                    25,
+                    self.player_2_score_values
+                )
+            )
+        self.update_player_score_images()
 
     def draw(self, window: Surface) -> None:
         window.fill(gc.RGB_BLACK)
