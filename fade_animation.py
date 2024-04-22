@@ -88,7 +88,7 @@ class Fade:
                 self.timer = pygame.time.get_ticks()
 
         elif self.transition:
-            if pygame.time.get_ticks() - self.timer >= 1000:
+            if pygame.time.get_ticks() - self.timer >= 1_000:
                 self.is_fade_in = False
                 self.is_fade_out = True
                 self.transition = False

@@ -49,6 +49,7 @@ class Game:
         self.player_1_score: int = 0
         self.is_player_2_active = is_player_2_active
         self.player_2_score: int = 0
+        self.top_score: int = 20_000
 
         # Game HUD
         self.hud = GameHUD(self, self.assets)
@@ -214,6 +215,7 @@ class Game:
                 self.score_screen.player_2_kill_list = sorted(
                     self.player_2.score_list
                 )
+            self.score_screen.update_basic_info(self.top_score, self.level_num)
         self.score_screen.is_active = True
         self.score_screen.update()
 
