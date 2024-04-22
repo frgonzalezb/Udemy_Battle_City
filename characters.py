@@ -556,11 +556,13 @@ class EnemyTank(Tank):
             is_enemy
         )
 
-        self.time_between_shots: int = random.choice([350, 500, 650])
+        self.time_between_shots: int = random.choice([300, 600, 900])
         self.shot_timer: int = pygame.time.get_ticks()
 
         def update(self) -> None:
             super().update()
+            if self.is_spawning:
+                return
             self.fire()
 
         def fire(self) -> None:
