@@ -68,7 +68,6 @@ class ScoreScreen:
             pygame.time.get_ticks() - self.timer >= 100
         ):
             score = self.player_1_enemies_killed.pop(0)
-            print(f'score = {score}')  # dbg
             self.update_score(score, 'player_1')
             self.score_timer = pygame.time.get_ticks()
             return
