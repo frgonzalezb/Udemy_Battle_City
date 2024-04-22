@@ -528,3 +528,29 @@ class PlayerTank(Tank):
         )
         self.rect.topleft = (self.pos_x, self.pos_y)
         self.score_list.clear()
+
+
+class EnemyTank(Tank):
+
+    def __init__(
+            self,
+            game,
+            assets,
+            groups,
+            position: tuple[int, int],
+            direction: str,
+            color: str = 'Silver',
+            tank_level: int = 0,
+            is_enemy: bool = True
+            ) -> None:
+
+        super().__init__(
+            game,
+            assets,
+            groups,
+            position,
+            direction,
+            color,
+            tank_level,
+            is_enemy
+        )
