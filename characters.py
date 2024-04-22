@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 import pygame
@@ -101,7 +102,7 @@ class Tank(pygame.sprite.Sprite):
         self.shot_cooldown: int = pygame.time.get_ticks()
 
         # Tank paralysis
-        self.paralyzed: bool = False
+        self.is_paralyzed: bool = False
         self.paralysis: int = gc.TANK_PARALYSIS
         self.paralysis_timer: int = pygame.time.get_ticks()
 
@@ -126,10 +127,10 @@ class Tank(pygame.sprite.Sprite):
             return
 
         if (
-            self.paralyzed and
+            self.is_paralyzed and
             pygame.time.get_ticks() - self.paralysis_timer >= self.paralysis
         ):
-            self.paralyzed = False
+            self.is_paralyzed = False
 
     def draw(self, window) -> None:
         """
@@ -147,7 +148,7 @@ class Tank(pygame.sprite.Sprite):
 
         self.direction = direction
 
-        if self.paralyzed:
+        if self.is_paralyzed:
             self.image = (
                 self.tank_images[f'Tank_{self.tank_level}']
                 [self.color]
@@ -378,7 +379,7 @@ class Tank(pygame.sprite.Sprite):
         is used.
         """
         self.paralysis = paralysis_time
-        self.paralyzed = True
+        self.is_paralyzed = True
         self.paralysis_timer = pygame.time.get_ticks()
 
     def destroy_tank(self) -> None:
@@ -554,3 +555,21 @@ class EnemyTank(Tank):
             tank_level,
             is_enemy
         )
+
+        self.time_between_shots: int = random.choice([350, 500, 650])
+        self.shot_timer: int = pygame.time.get_ticks()
+
+        def update(self) -> None:
+            super().update()
+            self.fire()
+
+        def fire(self) -> None:
+            if self.is_paralyzed:
+                return
+            current_time = pygame.time.get_ticks()
+            if (
+                self.bullet_sum < self.bullet_limit and
+                current_time - self.shot_timer >= self.time_between_shots
+            ):
+                self.shoot()
+                self.shot_timer = pygame.time.get_ticks()
