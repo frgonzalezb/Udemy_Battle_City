@@ -5,7 +5,7 @@ from pygame import Surface
 
 import game_config as gc
 from game_hud import GameHUD
-from characters import Tank, PlayerTank
+from characters import Tank, PlayerTank, EnemyTank
 from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
 from fade_animation import Fade
 from score_screen import ScoreScreen
@@ -335,7 +335,7 @@ class Game:
                     self.spawn_queue_index % len(self.spawn_queue)
                 ]
             ]['image']
-            Tank(
+            EnemyTank(
                 self,
                 self.assets,
                 self.groups,
