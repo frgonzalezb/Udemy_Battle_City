@@ -56,7 +56,7 @@ class Game:
         self.hud = GameHUD(self, self.assets)
 
         # Level information
-        self.level_num: int = 15
+        self.level_num: int = 1
         self.is_level_complete = False
         self.level_transition_timer = None  # mehtod to be dev soon!
         self.data = self.main.levels

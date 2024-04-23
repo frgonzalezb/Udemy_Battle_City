@@ -46,6 +46,8 @@ class PowerUp(pygame.sprite.Sprite):
             self.groups['player_tanks']
         )
         if player_tank:
+            if self.power_up == 'shield':
+                self.create_shield(player_tank)
             print(self.power_up)  # dbg
             self.collect_power_up()
 
@@ -58,3 +60,14 @@ class PowerUp(pygame.sprite.Sprite):
 
     def collect_power_up(self):
         self.kill()
+
+    def create_shield(self, player):
+        """
+        In the original game, the shield is a wavy animation drawn
+        around the player tank. This shield is used both as a power up
+        and as a automatic short-term protection after spawning into the
+        game screen (either at the stage start or after being killed by
+        an enemy tank). The protection time is longer on the power up,
+        of course.
+        """
+        player.has_shield_at_start = True
