@@ -18,6 +18,7 @@ class MyRect(pygame.sprite.Sprite):
             width: int,
             height: int
             ) -> None:
+
         super().__init__()
         self.image: None = None
         self.rect = pygame.Rect(x_coord, y_coord, width, height)
@@ -150,7 +151,7 @@ class Tank(pygame.sprite.Sprite):
         ):
             self.is_paralyzed = False
 
-    def draw(self, window) -> None:
+    def draw(self, window: Surface) -> None:
         """
         Draws the tank-related images on the screen.
         """
