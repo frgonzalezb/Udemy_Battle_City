@@ -8,6 +8,20 @@ import game_config as gc
 from ammunition import Bullet
 
 
+class MyRect(pygame.sprite.Sprite):
+
+    def __init__(
+            self,
+            x_coord: int,
+            y_coord: int,
+            width: int,
+            height: int
+            ) -> None:
+        super().__init__()
+        self.image: None = None
+        self.rect = pygame.Rect(x_coord, y_coord, width, height)
+
+
 class Tank(pygame.sprite.Sprite):
     """
     Blueprint for all the tank objects.
@@ -606,19 +620,80 @@ class EnemyTank(Tank):
         self.time_between_shots: int = random.choice([300, 600, 900])
         self.shot_timer: int = pygame.time.get_ticks()
 
-        def update(self) -> None:
-            super().update()
-            if self.is_spawning:
-                return
-            self.fire()
+        self.direction_rect: dict[str, MyRect] = {
+            'left': MyRect(
+                self.pos_x - (self.width // 2),
+                self.pos_y,
+                self.width // 2,
+                self.height
+            ),
+            'right': MyRect(
+                self.pos_x + self.width,
+                self.pos_y,
+                self.width // 2,
+                self.height
+            ),
+            'up': MyRect(
+                self.pos_x,
+                self.pos_y - (self.height // 2),
+                self.width,
+                self.height // 2
+            ),
+            'down': MyRect(
+                self.pos_x,
+                self.pos_y + self.height,
+                self.width,
+                self.height // 2
+            ),
+        }
 
-        def fire(self) -> None:
-            if self.is_paralyzed:
-                return
-            current_time = pygame.time.get_ticks()
-            if (
-                self.bullet_sum < self.bullet_limit and
-                current_time - self.shot_timer >= self.time_between_shots
-            ):
-                self.shoot()
-                self.shot_timer = pygame.time.get_ticks()
+    def update(self) -> None:
+        super().update()
+        if self.is_spawning:
+            return
+        self.move(self.direction)
+        self.fire()
+
+    def draw(self, window: Surface) -> None:
+        super().draw(window)
+        # To visualize and debug the available directions in runtime
+        for value in self.direction_rect.values():
+            pygame.draw.rect(window, gc.RGB_GREEN, value.rect, 2)
+
+    def fire(self) -> None:
+        if self.is_paralyzed:
+            return
+        current_time = pygame.time.get_ticks()
+        if (
+            self.bullet_sum < self.bullet_limit and
+            current_time - self.shot_timer >= self.time_between_shots
+        ):
+            self.shoot()
+            self.shot_timer = pygame.time.get_ticks()
+
+    def move(self, direction: str) -> None:
+        super().move(direction)
+        self.direction_rect['left'].rect.update(
+            self.pos_x - (self.width // 2),
+            self.pos_y,
+            self.width // 2,
+            self.height
+        )
+        self.direction_rect['right'].rect.update(
+            self.pos_x + self.width,
+            self.pos_y,
+            self.width // 2,
+            self.height
+        )
+        self.direction_rect['up'].rect.update(
+            self.pos_x,
+            self.pos_y - (self.height // 2),
+            self.width,
+            self.height // 2
+        )
+        self.direction_rect['down'].rect.update(
+            self.pos_x,
+            self.pos_y + self.height,
+            self.width,
+            self.height // 2
+        )
