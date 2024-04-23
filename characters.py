@@ -820,7 +820,7 @@ class SpecialTank(EnemyTank):
                 self.color_swap_timer = pygame.time.get_ticks()
 
     def destroy_tank(self) -> None:
-        # NOTE: If something goes wrong, change this function's name!
+        super().destroy_tank()
         if self.is_special:
             self.is_special = False
             # Generate the special power up
