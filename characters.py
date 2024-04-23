@@ -96,7 +96,10 @@ class Tank(pygame.sprite.Sprite):
             else gc.TANK_SPAWN_CRITERIA[self.level]['score']
         )
         self.is_enemy: bool = is_enemy
-        self.tank_health: int = 1
+        self.tank_health: int = (
+            1 if not self.level
+            else gc.TANK_SPAWN_CRITERIA[self.level]['health']
+        )
 
         # Tank image, rectangle, and frame index
         self.frame_index: int = 0
