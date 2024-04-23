@@ -767,3 +767,42 @@ class EnemyTank(Tank):
             if len(self.movement_directions) > 0:
                 self.direction = random.choice(self.movement_directions)
             self.change_direction_timer = pygame.time.get_ticks()
+
+
+class SpecialTank(EnemyTank):
+
+    def __init__(
+            self,
+            game,
+            assets,
+            groups,
+            position: tuple[int, int],
+            direction: str,
+            color: str = 'Silver',
+            tank_level: int = 0,
+            is_enemy: bool = True
+            ) -> None:
+
+        super().__init__(
+            game,
+            assets,
+            groups,
+            position,
+            direction,
+            color,
+            tank_level,
+            is_enemy
+        )
+
+        self.color_swap_timer: int = pygame.time.get_ticks()
+        self.is_special: bool = True
+
+    def update(self) -> None:
+        """
+        Causes the flashing style to represent a special tank.
+        """
+        super().update()
+        if self.is_special:
+            if pygame.time.get_ticks() - self.color_swap_timer >= 100:
+                self.color = 'Special' if self.color == 'Silver' else 'Silver'
+                self.color_swap_timer = pygame.time.get_ticks()
