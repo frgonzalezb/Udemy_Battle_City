@@ -158,6 +158,21 @@ class Tank(pygame.sprite.Sprite):
         self.draw_spawn_star(window)
         self.draw_tank(window)
 
+    def align_tank_movement_to_grid(self, pos: int) -> int:
+        """
+        Resolves that awkward imposibility to movement when some tank
+        rect pixel collides with the corner of an obstacle.
+        """
+        offset: int = pos % (gc.IMAGE_SIZE // 2)
+
+        if offset != 0:
+            if offset < gc.SPRITE_SIZE:
+                pos -= pos % gc.SPRITE_SIZE
+            elif offset > gc.SPRITE_SIZE:
+                pos += (gc.SPRITE_SIZE) - (pos % gc.SPRITE_SIZE)
+
+        return pos
+
     def move(self, direction: str) -> None:
         """
         Moves the tank in the given direction.
@@ -211,21 +226,6 @@ class Tank(pygame.sprite.Sprite):
 
         # Check for tank collisions with obstacles
         self.check_tank_on_obstacle_collision()
-
-    def align_tank_movement_to_grid(self, pos: int) -> int:
-        """
-        Resolves that awkward imposibility to movement when some tank
-        rect pixel collides with the corner of an obstacle.
-        """
-        offset: int = pos % (gc.IMAGE_SIZE // 2)
-
-        if offset != 0:
-            if offset < gc.SPRITE_SIZE:
-                pos -= pos % gc.SPRITE_SIZE
-            elif offset > gc.SPRITE_SIZE:
-                pos += (gc.SPRITE_SIZE) - (pos % gc.SPRITE_SIZE)
-
-        return pos
 
     def draw_spawn_star(self, window) -> None:
         """
