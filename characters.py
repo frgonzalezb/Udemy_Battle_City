@@ -408,6 +408,15 @@ class Tank(pygame.sprite.Sprite):
         if self.tank_health <= 0:
             self.kill()
             self.game.enemies_killed -= 1
+            return
+
+        # Destroying special-type tanks!
+        if self.tank_health == 3:
+            self.color = 'Green'
+        elif self.tank_health == 2:
+            self.color = 'Gold'
+        elif self.tank_health == 1:
+            self.color = 'Silver'
 
     def get_tank_masks(self) -> dict[str, pygame.Mask]:
         """
