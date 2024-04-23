@@ -759,4 +759,11 @@ class EnemyTank(Tank):
                 if key in movement_directions_copy:
                     movement_directions_copy.remove(key)
 
-        print(movement_directions_copy)  # dbg
+        if (
+            self.movement_directions != movement_directions_copy or
+            self.direction not in movement_directions_copy
+        ):
+            self.movement_directions = movement_directions_copy.copy()
+            if len(self.movement_directions) > 0:
+                self.direction = random.choice(self.movement_directions)
+            self.change_direction_timer = pygame.time.get_ticks()
