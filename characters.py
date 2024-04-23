@@ -821,7 +821,7 @@ class SpecialTank(EnemyTank):
 
     def destroy_tank(self) -> None:
         # NOTE: If something goes wrong, change this function's name!
-        if self.special:
-            self.special = False
+        if self.is_special:
+            self.is_special = False
             # Generate the special power up
             print('Power Up Activated!')  # dbg

@@ -5,7 +5,7 @@ from pygame import Surface
 
 import game_config as gc
 from game_hud import GameHUD
-from characters import Tank, PlayerTank, EnemyTank
+from characters import Tank, PlayerTank, EnemyTank, SpecialTank
 from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
 from fade_animation import Fade
 from score_screen import ScoreScreen
@@ -335,16 +335,29 @@ class Game:
                     self.spawn_queue_index % len(self.spawn_queue)
                 ]
             ]['image']
-            EnemyTank(
-                self,
-                self.assets,
-                self.groups,
-                position,
-                'Down',
-                'Silver',
-                tank_level,
-                True
-            )
+            special_tank: int = random.randint(1, len(self.spawn_queue))
+            if special_tank == self.spawn_queue_index:
+                SpecialTank(
+                    self,
+                    self.assets,
+                    self.groups,
+                    position,
+                    'Down',
+                    'Silver',
+                    tank_level,
+                    True
+                )
+            else:
+                EnemyTank(
+                    self,
+                    self.assets,
+                    self.groups,
+                    position,
+                    'Down',
+                    'Silver',
+                    tank_level,
+                    True
+                )
             self._reset_enemy_tank_spawn_timer()
 
     def _reset_enemy_tank_spawn_timer(self) -> None:
