@@ -1,7 +1,7 @@
 import random
 
 import pygame
-from pygame import Surface
+from pygame.surface import Surface
 
 import game_config as gc
 from game_hud import GameHUD
@@ -41,7 +41,8 @@ class Game:
             'bullets': pygame.sprite.Group(),
             'destructable_tiles': pygame.sprite.Group(),
             'impassable_tiles': pygame.sprite.Group(),
-            'forest_tiles': pygame.sprite.Group()
+            'forest_tiles': pygame.sprite.Group(),
+            'power_ups': pygame.sprite.Group()
         }
 
         # Player attributes
