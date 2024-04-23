@@ -593,6 +593,9 @@ class PlayerTank(Tank):
 
 
 class EnemyTank(Tank):
+    """
+    Blueprint specifically for AI-controlled enemy tanks.
+    """
 
     def __init__(
             self,
@@ -620,26 +623,26 @@ class EnemyTank(Tank):
         self.time_between_shots: int = random.choice([300, 600, 900])
         self.shot_timer: int = pygame.time.get_ticks()
 
-        self.direction_rect: dict[str, MyRect] = {
-            'left': MyRect(
+        self.directional_rects: dict[str, MyRect] = {
+            'Left': MyRect(
                 self.pos_x - (self.width // 2),
                 self.pos_y,
                 self.width // 2,
                 self.height
             ),
-            'right': MyRect(
+            'Right': MyRect(
                 self.pos_x + self.width,
                 self.pos_y,
                 self.width // 2,
                 self.height
             ),
-            'up': MyRect(
+            'Up': MyRect(
                 self.pos_x,
                 self.pos_y - (self.height // 2),
                 self.width,
                 self.height // 2
             ),
-            'down': MyRect(
+            'Down': MyRect(
                 self.pos_x,
                 self.pos_y + self.height,
                 self.width,
@@ -647,17 +650,27 @@ class EnemyTank(Tank):
             ),
         }
 
+        self.movement_directions: list = []
+        self.change_direction_timer: int = pygame.time.get_ticks()
+        self.game_screen_rect: MyRect = MyRect(
+            gc.GAME_SCREEN['pos_x'],
+            gc.GAME_SCREEN['pos_y'],
+            gc.GAME_SCREEN['width'],
+            gc.GAME_SCREEN['height'],
+        )
+
     def update(self) -> None:
         super().update()
         if self.is_spawning:
             return
         self.move(self.direction)
+        self.select_movement_direction()
         self.fire()
 
     def draw(self, window: Surface) -> None:
         super().draw(window)
         # To visualize and debug the available directions in runtime
-        for value in self.direction_rect.values():
+        for value in self.directional_rects.values():
             pygame.draw.rect(window, gc.RGB_GREEN, value.rect, 2)
 
     def fire(self) -> None:
@@ -673,27 +686,77 @@ class EnemyTank(Tank):
 
     def move(self, direction: str) -> None:
         super().move(direction)
-        self.direction_rect['left'].rect.update(
+        self.directional_rects['Left'].rect.update(
             self.pos_x - (self.width // 2),
             self.pos_y,
             self.width // 2,
             self.height
         )
-        self.direction_rect['right'].rect.update(
+        self.directional_rects['Right'].rect.update(
             self.pos_x + self.width,
             self.pos_y,
             self.width // 2,
             self.height
         )
-        self.direction_rect['up'].rect.update(
+        self.directional_rects['Up'].rect.update(
             self.pos_x,
             self.pos_y - (self.height // 2),
             self.width,
             self.height // 2
         )
-        self.direction_rect['down'].rect.update(
+        self.directional_rects['Down'].rect.update(
             self.pos_x,
             self.pos_y + self.height,
             self.width,
             self.height // 2
         )
+
+    def select_movement_direction(self) -> None:
+        """
+        Recreates the computer-controlled movement for enemy tanks.
+        """
+        movement_directions_copy: list = self.movement_directions.copy()
+        if pygame.time.get_ticks() - self.change_direction_timer <= 750:
+            return
+
+        # FIXME: Lots of boilerplate code and nested conditionals below!
+        # Check for collision detection
+        for key, value in self.directional_rects.items():
+            # Make sure the rect is within the game screen
+            if pygame.Rect.contains(self.game_screen_rect.rect, value):
+                # Check for any collision with impassable tiles
+                obstacle = pygame.sprite.spritecollideany(
+                    value,
+                    self.groups['impassable_tiles']
+                )
+                if not obstacle:
+                    # Check if direction is already in directions list
+                    if key not in movement_directions_copy:
+                        movement_directions_copy.append(key)
+                elif obstacle:
+                    # If there's collision, first check rect is fully
+                    # contained by obstacle
+                    if (
+                        value.rect.contains(obstacle.rect) and
+                        key in movement_directions_copy
+                    ):
+                        movement_directions_copy.remove(key)
+                    else:
+                        if (
+                            key in movement_directions_copy and
+                            key != self.direction
+                        ):
+                            movement_directions_copy.remove(key)
+                # Check if there's a tank-on-tank collision
+                tank = pygame.sprite.spritecollideany(
+                    value,
+                    self.groups['all_tanks']
+                )
+                if tank:
+                    if key in movement_directions_copy:
+                        movement_directions_copy.remove(key)
+            else:
+                if key in movement_directions_copy:
+                    movement_directions_copy.remove(key)
+
+        print(movement_directions_copy)  # dbg
