@@ -6,6 +6,7 @@ from pygame.surface import Surface
 
 import game_config as gc
 from ammunition import Bullet
+from power_ups import PowerUp
 
 
 class MyRect(pygame.sprite.Sprite):
@@ -820,8 +821,13 @@ class SpecialTank(EnemyTank):
                 self.color_swap_timer = pygame.time.get_ticks()
 
     def destroy_tank(self) -> None:
-        super().destroy_tank()
         if self.is_special:
             self.is_special = False
             # Generate the special power up
             print('Power Up Activated!')  # dbg
+            PowerUp(
+                self.game,
+                self.assets,
+                self.groups
+            )
+        super().destroy_tank()
