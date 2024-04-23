@@ -1,5 +1,5 @@
 import pygame
-from pygame import Surface
+from pygame.surface import Surface
 from pygame.time import Clock
 
 import game_config as gc
