@@ -480,7 +480,7 @@ class PlayerTank(Tank):
         self.is_game_over: bool = False
 
         # Level score tracking
-        self.score_list = []
+        self.scores: list = []
 
     def input(
             self,
@@ -514,8 +514,6 @@ class PlayerTank(Tank):
             )
 
     def update(self) -> None:
-        # FIXME: Lots of boilerplate code in the following functions!
-        # No DRY at all
         if self.is_game_over:
             return
         super().update()
@@ -559,7 +557,7 @@ class PlayerTank(Tank):
         elif key_pressed[right_key]:
             self.move('Right')
 
-    def kill_tank(self) -> None:
+    def destroy_tank(self) -> None:
         if self.is_dead or self.is_game_over:
             return
         self.is_dead = True
@@ -603,7 +601,7 @@ class PlayerTank(Tank):
             [self.color][self.direction][self.frame_index]
         )
         self.rect.topleft = (self.pos_x, self.pos_y)
-        self.score_list.clear()
+        self.scores.clear()
 
 
 class EnemyTank(Tank):

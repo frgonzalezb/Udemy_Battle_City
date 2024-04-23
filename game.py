@@ -209,12 +209,12 @@ class Game:
             if self.is_player_1_active:
                 self.score_screen.player_1_score = self.player_1_score
                 self.score_screen.player_1_enemies_killed = sorted(
-                    self.player_1.score_list
+                    self.player_1.scores
                 )
             if self.is_player_2_active:
                 self.score_screen.player_2_score = self.player_2_score
                 self.score_screen.player_2_enemies_killed = sorted(
-                    self.player_2.score_list
+                    self.player_2.scores
                 )
             self.score_screen.update_basic_info(self.top_score, self.level_num)
         self.score_screen.is_active = True
