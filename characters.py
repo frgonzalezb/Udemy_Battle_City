@@ -88,7 +88,7 @@ class Tank(pygame.sprite.Sprite):
         )
         self.power: int = (
             1 if not self.level
-            else gc.TANK_SPEED * gc.TANK_CRITERIA[self.level]['power']
+            else gc.TANK_CRITERIA[self.level]['power']
         )
         self.bullet_speed_modifier: int = 1
         self.bullet_speed: int = (
@@ -343,7 +343,11 @@ class Tank(pygame.sprite.Sprite):
             False
         )
         for obstacle in obstacle_collision:
-            if obstacle in self.groups['water_tiles'] and self.is_amphibious:
+            if (
+                obstacle in self.groups['water_tiles'] and
+                not self.is_enemy and
+                self.is_amphibious
+            ):
                 continue
             self._handle_tank_collisions(obstacle)
 
@@ -660,6 +664,7 @@ class PlayerTank(Tank):
         self.spawn_timer = pygame.time.get_ticks()
         self.direction = 'Up'
         self.tank_level = 0
+        self.power = 1
         self.is_amphibious = False
         self.bullet_speed_modifier = 1
         self.bullet_speed = (gc.TANK_SPEED * (3 * self.bullet_speed_modifier))

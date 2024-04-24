@@ -306,9 +306,10 @@ class Game:
         Generates a list of tanks that will be spawning during the game.
         """
         self.spawn_queue_ratios = gc.TANK_SPAWN_QUEUE[
-            f'queue_{str((self.level_num % 36) // 3)}'
+            f'queue_{str((self.level_num - 1 % 36) // 3)}'
         ]
         self.spawn_queue = []
+
         for lvl, ratio in enumerate(self.spawn_queue_ratios):
             for i in range(int(round(self.enemies * (ratio / 100)))):
                 self.spawn_queue.append(f'level_{lvl}')
@@ -327,28 +328,35 @@ class Game:
                 ]
             ]['image']
             special_tank: int = random.randint(1, len(self.spawn_queue))
-            if special_tank == self.spawn_queue_index:
-                SpecialTank(
-                    self,
-                    self.assets,
-                    self.groups,
-                    position,
-                    'Down',
-                    'Silver',
-                    tank_level,
-                    True
-                )
-            else:
-                EnemyTank(
-                    self,
-                    self.assets,
-                    self.groups,
-                    position,
-                    'Down',
-                    'Silver',
-                    tank_level,
-                    True
-                )
+            SpecialTank(
+                self,
+                self.assets,
+                self.groups,
+                position,
+                'Down',
+                'Silver',
+                tank_level
+            )
+            # if special_tank == self.spawn_queue_index:
+            #     SpecialTank(
+            #         self,
+            #         self.assets,
+            #         self.groups,
+            #         position,
+            #         'Down',
+            #         'Silver',
+            #         tank_level
+            #     )
+            # else:
+            #     EnemyTank(
+            #         self,
+            #         self.assets,
+            #         self.groups,
+            #         position,
+            #         'Down',
+            #         'Silver',
+            #         tank_level
+            #     )
             self._reset_enemy_tank_spawn_timer()
 
     def _reset_enemy_tank_spawn_timer(self) -> None:
