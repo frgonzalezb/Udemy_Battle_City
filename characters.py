@@ -637,6 +637,7 @@ class PlayerTank(Tank):
         self.spawn_timer = pygame.time.get_ticks()
         self.direction = 'Up'
         self.bullet_speed_modifier = 1
+        self.bullet_speed = (gc.TANK_SPEED * (3 * self.bullet_speed_modifier))
         self.bullet_limit = 1
         self.pos_x, self.pos_y = self.spawn_pos
         self.image = (
