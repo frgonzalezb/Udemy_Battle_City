@@ -59,6 +59,8 @@ class PowerUp(pygame.sprite.Sprite):
                 self.get_power(player_tank)
             elif self.power_up == 'special':
                 self.get_special_power_up(player_tank)
+            elif self.power_up == 'fortify':
+                self.fortify_base()
             print(self.power_up)  # dbg
             self.collect_power_up()
 
@@ -157,3 +159,9 @@ class PowerUp(pygame.sprite.Sprite):
         )
         player.mask_dict = player.get_tank_masks()
         player.mask = player.mask_dict[player.direction]
+
+    def fortify_base(self):
+        """
+        Fortify the Phoenix base against enemy tanks' attacks!
+        """
+        self.game.is_base_fortified = True
