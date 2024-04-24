@@ -99,6 +99,9 @@ class Game:
         # Load the stage
         self.create_new_stage()
 
+        # Fortify power up
+        self.is_base_fortified: bool = False
+
         # Game active or game over
         self.is_active: bool = True
         self.game_on: bool = False
