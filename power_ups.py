@@ -165,3 +165,4 @@ class PowerUp(pygame.sprite.Sprite):
         Fortify the Phoenix base against enemy tanks' attacks!
         """
         self.game.is_base_fortified = True
+        self.game.fortify_timer = pygame.time.get_ticks()
