@@ -57,6 +57,8 @@ class PowerUp(pygame.sprite.Sprite):
                 self.get_extra_life(player_tank)
             elif self.power_up == 'power':
                 self.get_power(player_tank)
+            elif self.power_up == 'special':
+                self.get_special_power_up(player_tank)
             print(self.power_up)  # dbg
             self.collect_power_up()
 
@@ -125,3 +127,18 @@ class PowerUp(pygame.sprite.Sprite):
         player.bullet_speed = (
             gc.TANK_SPEED * (3 * player.bullet_speed_modifier)
         )
+
+    def get_special_power_up(self, player):
+        """
+        Upgrades player tank level. Level 1 is the standard for the
+        player tank without special power up. The following levels:
+
+        Level 2: Shot power increased to 2, player tank can destroy a
+        block of brick in one shot!
+        Level 3: Shot power increased to 3, player tank can destroy a
+        block of steel in one shot!
+        Level 4: Tank health increased by 1.
+        Level 5: Tank becomes amphibious.
+        """
+        if player.power >= 4:
+            player.is_amphibious = True
