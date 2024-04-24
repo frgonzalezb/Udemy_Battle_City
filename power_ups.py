@@ -130,15 +130,30 @@ class PowerUp(pygame.sprite.Sprite):
 
     def get_special_power_up(self, player):
         """
-        Upgrades player tank level. Level 1 is the standard for the
+        Upgrades player tank level. Level 0 is the standard for the
         player tank without special power up. The following levels:
 
-        Level 2: Shot power increased to 2, player tank can destroy a
+        Level 1: Shot power increased to 2, player tank can destroy a
         block of brick in one shot!
-        Level 3: Shot power increased to 3, player tank can destroy a
+        Level 2: Shot power increased to 3, player tank can destroy a
         block of steel in one shot!
-        Level 4: Tank health increased by 1.
-        Level 5: Tank becomes amphibious.
+        Level 3: Player tank health increased by 1.
+        Level 4: Player tank becomes amphibious.
         """
         if player.power >= 4:
             player.is_amphibious = True
+            return
+
+        player.power += 1
+        player.tank_level += 1
+        if player.tank_level >= 3:
+            player.tank_level = 3
+            player.tank_health += 1
+        player.image = (
+            player.tank_images[f'Tank_{player.tank_level}']
+            [player.color]
+            [player.direction]
+            [player.frame_index]
+        )
+        player.mask_dict = player.get_tank_masks()
+        player.mask = player.mask_dict[player.direction]
