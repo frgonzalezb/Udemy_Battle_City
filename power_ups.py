@@ -166,3 +166,4 @@ class PowerUp(pygame.sprite.Sprite):
         """
         self.game.is_base_fortified = True
         self.game.fortify_timer = pygame.time.get_ticks()
+        self.game.apply_fortify()
