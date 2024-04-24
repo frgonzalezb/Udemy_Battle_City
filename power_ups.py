@@ -55,20 +55,22 @@ class PowerUp(pygame.sprite.Sprite):
                 self.destroy_tanks(player_tank)
             elif self.power_up == 'extra_life':
                 self.get_extra_life(player_tank)
+            elif self.power_up == 'power':
+                self.get_power(player_tank)
             print(self.power_up)  # dbg
             self.collect_power_up()
 
-    def draw(self, window: Surface):
+    def draw(self, window: Surface) -> None:
         window.blit(self.image, self.rect)
 
     def select_power_up_randomly(self) -> str:
         power_ups: list[str] = list(gc.POWER_UPS.keys())
         return random.choice(power_ups)
 
-    def collect_power_up(self):
+    def collect_power_up(self) -> None:
         self.kill()
 
-    def create_shield(self, player):
+    def create_shield(self, player) -> None:
         """
         Creates a shield around the player tank.
 
@@ -81,7 +83,7 @@ class PowerUp(pygame.sprite.Sprite):
         """
         player.has_shield_at_start = True
 
-    def freeze_tanks(self):
+    def freeze_tanks(self) -> None:
         """
         Freezes all of the currently spawned enemy tanks for a short
         amount of time.
@@ -90,7 +92,7 @@ class PowerUp(pygame.sprite.Sprite):
             if tank.is_enemy:
                 tank.paralyze_tank(5_000)
 
-    def destroy_tanks(self, player):
+    def destroy_tanks(self, player) -> None:
         """
         Destroys all of the currently spawned enemy tanks.
 
@@ -105,8 +107,18 @@ class PowerUp(pygame.sprite.Sprite):
                 player.scores.append(score)
                 tank.destroy_tank()
 
-    def get_extra_life(self, player):
+    def get_extra_life(self, player) -> None:
         """
         Gives the player an extra life.
         """
         player.lives += 1
+
+    def get_power(self, player):
+        """
+        Increases the bullet speed, and when speed reaches 1.5,
+        increases the bullet limit by 1.
+        """
+        player.bullet_speed_modifier += 0.1
+        if player.bullet_speed_modifier > 1.5:
+            player.bullet_speed_modifier = 1
+            player.bullet_mimit += 1
