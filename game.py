@@ -101,6 +101,7 @@ class Game:
 
         # Fortify power up
         self.is_base_fortified: bool = False
+        self.fortify_timer: int = pygame.time.get_ticks()
 
         # Game active or game over
         self.is_active: bool = True
