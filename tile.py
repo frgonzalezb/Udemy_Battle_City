@@ -97,6 +97,8 @@ class SteelTile(TileType):
     def handle_bullet_hit(self, bullet):
         bullet.update_owner()
         bullet.kill()
+        if bullet.power > 2:
+            self.kill()
 
 
 class ForestTile(TileType):
