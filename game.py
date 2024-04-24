@@ -135,16 +135,6 @@ class Game:
                     if self.player_2.is_active:
                         self.player_2.shoot()
 
-                # dbg
-                if event.key == pygame.K_RETURN:
-                    Tank(
-                        self,
-                        self.assets,
-                        self.groups,
-                        (400, 400),
-                        'Down',
-                    )
-
     def update(self) -> None:
         self.hud.update()
 
@@ -331,7 +321,7 @@ class Game:
         spawn_time = pygame.time.get_ticks() - self.enemy_tank_spawn_timer
         if spawn_time >= gc.TANK_SPAWNING_TIME:
             position = self.enemy_spawn_positions[self.spawn_pos_index % 3]
-            tank_level = gc.TANK_SPAWN_CRITERIA[
+            tank_level = gc.TANK_CRITERIA[
                 self.spawn_queue[
                     self.spawn_queue_index % len(self.spawn_queue)
                 ]

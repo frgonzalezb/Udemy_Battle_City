@@ -84,11 +84,11 @@ class Tank(pygame.sprite.Sprite):
         self.color: str = color
         self.tank_speed: int | float = (
             gc.TANK_SPEED if not self.level
-            else gc.TANK_SPEED * gc.TANK_SPAWN_CRITERIA[self.level]['speed']
+            else gc.TANK_SPEED * gc.TANK_CRITERIA[self.level]['speed']
         )
         self.power: int = (
             1 if not self.level
-            else gc.TANK_SPEED * gc.TANK_SPAWN_CRITERIA[self.level]['power']
+            else gc.TANK_SPEED * gc.TANK_CRITERIA[self.level]['power']
         )
         self.bullet_speed_modifier: int = 1
         self.bullet_speed: int = (
@@ -96,12 +96,12 @@ class Tank(pygame.sprite.Sprite):
         )
         self.score: int = (
             100 if not self.level
-            else gc.TANK_SPAWN_CRITERIA[self.level]['score']
+            else gc.TANK_CRITERIA[self.level]['score']
         )
         self.is_enemy: bool = is_enemy
         self.tank_health: int = (
             1 if not self.level
-            else gc.TANK_SPAWN_CRITERIA[self.level]['health']
+            else gc.TANK_CRITERIA[self.level]['health']
         )
 
         # Tank image, rectangle, and frame index
@@ -549,7 +549,8 @@ class PlayerTank(Tank):
                 ]
                 self.shield_rect.topleft = self.rect.topleft
                 # Check if the shield timer has run out
-                if pygame.time.get_ticks() - self.shield_time_limit >= self.shield_timer:
+                current_time = pygame.time.get_ticks() - self.shield_time_limit
+                if current_time >= self.shield_timer:
                     self.has_shield = False
         super().update()
 

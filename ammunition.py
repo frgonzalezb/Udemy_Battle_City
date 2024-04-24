@@ -116,7 +116,7 @@ class Bullet(pygame.sprite.Sprite):
                     self.update_owner()
                     if not self.owner.is_enemy:
                         self.owner.scores.append(
-                            gc.TANK_SPAWN_CRITERIA[tank.level]['score']
+                            gc.TANK_CRITERIA[tank.level]['score']
                         )
                         print(self.owner.scores)  # dbg
                     tank.destroy_tank()

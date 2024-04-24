@@ -110,7 +110,7 @@ FORT = [
     (14, 25)
 ]
 
-TANK_SPAWN_CRITERIA: dict[str, dict[str, int | float]] = {
+TANK_CRITERIA: dict[str, dict[str, int | float]] = {
     'level_0': {
         'image': 4,
         'health': 1,
