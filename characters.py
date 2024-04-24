@@ -636,6 +636,8 @@ class PlayerTank(Tank):
         self.has_shield_at_start = True
         self.spawn_timer = pygame.time.get_ticks()
         self.direction = 'Up'
+        self.bullet_speed_modifier = 1
+        self.bullet_limit = 1
         self.pos_x, self.pos_y = self.spawn_pos
         self.image = (
             self.tank_images[f'Tank_{self.tank_level}']
