@@ -123,5 +123,5 @@ class PowerUp(pygame.sprite.Sprite):
             player.bullet_speed_modifier = 1
             player.bullet_limit += 1
         player.bullet_speed = (
-            gc.TANK_SPEED * (3 * self.bullet_speed_modifier)
+            gc.TANK_SPEED * (3 * player.bullet_speed_modifier)
         )
