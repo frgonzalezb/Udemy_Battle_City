@@ -53,8 +53,9 @@ class BrickTile(TileType):
         bullet.kill()
 
         self.health -= 1
-        if self.health <= 0:
+        if bullet.power > 1 or self.health <= 0:
             self.kill()
+            return
         self._reshape_brick_tile(bullet)
 
     def _reshape_brick_tile(self, bullet):

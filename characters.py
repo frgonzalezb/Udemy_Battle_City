@@ -608,6 +608,21 @@ class PlayerTank(Tank):
             return
         if self.is_dead or self.is_game_over:
             return
+        if self.tank_health > 1:
+            self.tank_health = 1
+            self.tank_level = 0
+            self.power = 1
+            self.is_amphibious = False
+            self.image = (
+                self.tank_images[f'Tank_{self.tank_level}']
+                [self.color]
+                [self.direction]
+                [self.frame_index]
+            )
+            self.rect = self.image.get_rect(topleft=(self.pos_x, self.pos_y))
+            self.mask_dict = self.get_tank_masks()
+            self.mask = self.mask_dict[self.direction]
+            return
         self.is_dead = True
         self.lives -= 1
         if self.lives <= 0:
