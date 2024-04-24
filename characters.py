@@ -498,6 +498,8 @@ class PlayerTank(Tank):
             topleft=(self.rect.topleft)
         )
 
+        self.is_amphibious: bool = False
+
     def input(
             self,
             key_pressed: pygame.key.ScancodeWrapper
