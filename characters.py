@@ -137,6 +137,9 @@ class Tank(pygame.sprite.Sprite):
         # self.mask_image = self.mask.to_surface()
         self.mask_direction: str = self.direction
 
+        # Special power up?
+        # self.is_amphibious: bool = False
+
     def input(self) -> None:
         pass
 
@@ -340,6 +343,8 @@ class Tank(pygame.sprite.Sprite):
             False
         )
         for obstacle in obstacle_collision:
+            if obstacle in self.groups['water_tiles'] and self.is_amphibious:
+                continue
             self._handle_tank_collisions(obstacle)
 
     def _handle_tank_collisions(self, obj) -> None:
@@ -498,6 +503,7 @@ class PlayerTank(Tank):
             topleft=(self.rect.topleft)
         )
 
+        # Special power up?
         self.is_amphibious: bool = False
 
     def input(
@@ -638,6 +644,8 @@ class PlayerTank(Tank):
         self.has_shield_at_start = True
         self.spawn_timer = pygame.time.get_ticks()
         self.direction = 'Up'
+        self.tank_level = 0
+        self.is_amphibious = False
         self.bullet_speed_modifier = 1
         self.bullet_speed = (gc.TANK_SPEED * (3 * self.bullet_speed_modifier))
         self.bullet_limit = 1
@@ -647,6 +655,7 @@ class PlayerTank(Tank):
             [self.color][self.direction][self.frame_index]
         )
         self.rect.topleft = (self.pos_x, self.pos_y)
+        self.mask_dict = self.get_tank_masks()
         self.mask = self.mask_dict[self.direction]
         self.is_dead = False
 
