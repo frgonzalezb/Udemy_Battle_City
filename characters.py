@@ -636,7 +636,8 @@ class PlayerTank(Tank):
                 self.assets,
                 self.groups,
                 self.rect.center,
-                5
+                5,
+                0
             )
         self.is_dead = True
         self.lives -= 1
