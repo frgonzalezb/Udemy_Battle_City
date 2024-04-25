@@ -5,6 +5,7 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 
 import game_config as gc
+from scores import ScoreBanner
 
 
 class PowerUp(pygame.sprite.Sprite):
@@ -71,6 +72,7 @@ class PowerUp(pygame.sprite.Sprite):
         return random.choice(power_ups)
 
     def collect_power_up(self) -> None:
+        ScoreBanner(self.assets, self.groups, self.rect.center, '500')
         self.kill()
 
     def create_shield(self, player) -> None:
