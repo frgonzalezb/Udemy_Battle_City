@@ -1,5 +1,7 @@
 import pygame
+
 import game_config as gc
+from explosions import Explosion
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -87,6 +89,12 @@ class Bullet(pygame.sprite.Sprite):
             self.rect.left <= gc.SCREEN_BORDER_LEFT or
             self.rect.right >= gc.SCREEN_BORDER_RIGHT
         ):
+            Explosion(
+                self.assets,
+                self.group,
+                self.rect.center,
+                1
+            )
             self.update_owner()
             self.kill()
 
@@ -108,6 +116,12 @@ class Bullet(pygame.sprite.Sprite):
                 if not self.owner.is_enemy and not tank.is_enemy:
                     self.update_owner()
                     tank.paralyze_tank(gc.TANK_PARALYSIS)
+                    Explosion(
+                        self.assets,
+                        self.group,
+                        self.rect.center,
+                        1
+                    )
                     self.kill()
                     break
                 # Player bullet has collided with enemy tank
@@ -122,6 +136,12 @@ class Bullet(pygame.sprite.Sprite):
                         )
                         print(self.owner.scores)  # dbg
                     tank.destroy_tank()
+                    Explosion(
+                        self.assets,
+                        self.group,
+                        self.rect.center,
+                        1
+                    )
                     self.kill()
                     break
 
@@ -157,6 +177,12 @@ class Bullet(pygame.sprite.Sprite):
         )
         for obstacle in obstacle_collision:
             obstacle.handle_bullet_hit(self)
+            Explosion(
+                self.assets,
+                self.group,
+                self.rect.center,
+                1
+            )
 
     def update_owner(self) -> None:
         """

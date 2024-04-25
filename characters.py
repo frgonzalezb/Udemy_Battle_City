@@ -7,6 +7,7 @@ from pygame.surface import Surface
 
 import game_config as gc
 from ammunition import Bullet
+from explosions import Explosion
 from power_ups import PowerUp
 
 
@@ -419,6 +420,12 @@ class Tank(pygame.sprite.Sprite):
 
         if self.tank_health <= 0:
             self.kill()
+            Explosion(
+                self.assets,
+                self.groups,
+                self.rect.center,
+                5
+            )
             self.game.enemies_killed -= 1
             return
 
@@ -624,6 +631,12 @@ class PlayerTank(Tank):
             self.mask_dict = self.get_tank_masks()
             self.mask = self.mask_dict[self.direction]
             return
+        Explosion(
+                self.assets,
+                self.groups,
+                self.rect.center,
+                5
+            )
         self.is_dead = True
         self.lives -= 1
         if self.lives <= 0:

@@ -41,6 +41,7 @@ class Game:
             'bullets': pygame.sprite.Group(),
             'destructable_tiles': pygame.sprite.Group(),
             'impassable_tiles': pygame.sprite.Group(),
+            'explosion': pygame.sprite.Group(),
             'forest_tiles': pygame.sprite.Group(),
             'power_ups': pygame.sprite.Group()
         }
