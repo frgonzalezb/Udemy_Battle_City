@@ -16,9 +16,11 @@ class ScoreBanner(pygame.sprite.Sprite):
 
         self.assets = assets
         self.group = group
-        self.groups['scores'].add(self)
+        self.group['scores'].add(self)
 
         self.position: tuple[int, int] = position
+        self.score: str = str(score)
+
         self.images: dict[str, Surface] = self.assets.score_images
         self.image: Surface = self.images[self.direction]
         self.rect: Rect = self.image.get_rect(center=self.position)
@@ -26,9 +28,10 @@ class ScoreBanner(pygame.sprite.Sprite):
         self.timer: int = pygame.time.get_ticks()
 
     def update(self) -> None:
-        if pygame.time.get_ticks() - self.timer >= 0:
-            return
+        self.rect.y -= 1
+        if pygame.time.get_ticks() - self.timer >= 1_000:
+            self.kill()
         return super().update()
 
     def draw(self, window: Surface) -> None:
-        window.blit()
+        window.blit(self.image, self.rect)
