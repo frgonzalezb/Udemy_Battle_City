@@ -138,7 +138,7 @@ class Tank(pygame.sprite.Sprite):
         self.mask_direction: str = self.direction
 
         # Special power up?
-        # self.is_amphibious: bool = False
+        self.is_amphibious: bool = False
 
     def input(self) -> None:
         pass
@@ -506,9 +506,6 @@ class PlayerTank(Tank):
         self.shield_rect: Rect = self.shield_image.get_rect(
             topleft=(self.rect.topleft)
         )
-
-        # Special power up?
-        self.is_amphibious: bool = False
 
     def input(
             self,

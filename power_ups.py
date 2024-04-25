@@ -19,8 +19,7 @@ class PowerUp(pygame.sprite.Sprite):
 
         self.power_up_images: dict[str, Surface] = self.assets.power_up_images
 
-        # self.power_up: str = self.select_power_up_randomly()
-        self.power_up: str = 'special'
+        self.power_up: str = self.select_power_up_randomly()
         self.power_up_timer: int = pygame.time.get_ticks()
 
         self.x_coord: int = random.randint(
