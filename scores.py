@@ -22,7 +22,7 @@ class ScoreBanner(pygame.sprite.Sprite):
         self.score: str = str(score)
 
         self.images: dict[str, Surface] = self.assets.score_images
-        self.image: Surface = self.images[self.direction]
+        self.image: Surface = self.images[self.score]
         self.rect: Rect = self.image.get_rect(center=self.position)
 
         self.timer: int = pygame.time.get_ticks()
