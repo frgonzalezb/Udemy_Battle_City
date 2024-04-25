@@ -47,6 +47,8 @@ class PowerUp(pygame.sprite.Sprite):
             self.groups['player_tanks']
         )
         if player_tank:
+            self._assign_score_to_player_tank(player_tank)
+
             if self.power_up == 'shield':
                 self.create_shield(player_tank)
             elif self.power_up == 'freeze':
@@ -66,6 +68,16 @@ class PowerUp(pygame.sprite.Sprite):
 
     def draw(self, window: Surface) -> None:
         window.blit(self.image, self.rect)
+
+    def _assign_score_to_player_tank(self, player_tank) -> None:
+        """
+        Utility method for cleaning the scoring functionality to player
+        tanks when a power up is catched.
+        """
+        if player_tank.color == 'Gold':
+            self.game.player_1_score += 500
+        elif player_tank.color == 'Green':
+            self.game.player_2_score += 500
 
     def select_power_up_randomly(self) -> str:
         power_ups: list[str] = list(gc.POWER_UPS.keys())
