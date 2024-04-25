@@ -424,7 +424,8 @@ class Tank(pygame.sprite.Sprite):
                 self.assets,
                 self.groups,
                 self.rect.center,
-                5
+                5,
+                self.score
             )
             self.game.enemies_killed -= 1
             return
