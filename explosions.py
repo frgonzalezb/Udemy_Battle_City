@@ -2,6 +2,8 @@ import pygame
 from pygame.surface import Surface
 from pygame.rect import Rect
 
+from scores import ScoreBanner
+
 
 class Explosion(pygame.sprite.Sprite):
 
@@ -10,7 +12,8 @@ class Explosion(pygame.sprite.Sprite):
             assets,
             groups,
             position: tuple[int, int],
-            explode_type: int = 1
+            explode_type: int = 1,
+            score: int = 100
             ) -> None:
         super().__init__()
 
@@ -29,11 +32,21 @@ class Explosion(pygame.sprite.Sprite):
 
         self.animation_timer: int = pygame.time.get_ticks()
 
+        self.score: int = score
+
     def update(self) -> None:
         if pygame.time.get_ticks() - self.animation_timer >= 100:
             self.frame_index += 1
             if self.frame_index >= len(self.images):
                 self.kill()
+                if self.score == 0:
+                    return
+                ScoreBanner(
+                    self.assets,
+                    self.groups,
+                    self.position,
+                    self.score
+                )
             # Differentiating between a small and a large explosion
             if self.explode_type == 1 and self.frame_index > 3:
                 self.kill()
