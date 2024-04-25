@@ -5,7 +5,7 @@ from pygame.surface import Surface
 
 import game_config as gc
 from game_hud import GameHUD
-from characters import Tank, PlayerTank, EnemyTank, SpecialTank
+from characters import PlayerTank, EnemyTank, SpecialTank
 from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
 from fade_animation import Fade
 from score_screen import ScoreScreen
