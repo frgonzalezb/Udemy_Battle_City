@@ -232,6 +232,9 @@ class Tank(pygame.sprite.Sprite):
         # Check for tank collisions with obstacles
         self.check_tank_on_obstacle_collision()
 
+        # Check for tank collisions with Phoenix
+        self.check_tank_on_phoenix_collision()
+
     def draw_spawn_star(self, window) -> None:
         """
         Draws the spawn star on the screen.
@@ -389,6 +392,12 @@ class Tank(pygame.sprite.Sprite):
                 self.frame_index = 0
                 self.is_spawning = False
                 self.is_active = True
+
+    def check_tank_on_phoenix_collision(self) -> None:
+        if not self.groups['phoenix'].sprite.is_active:
+            return
+        if self.rect.colliderect(self.groups['phoenix'].sprite.rect):
+            self.groups['phoenix'].sprite.destroy_phoenix()
 
     def shoot(self) -> None:
         if self.bullet_sum >= self.bullet_limit:

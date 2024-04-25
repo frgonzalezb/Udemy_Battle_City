@@ -9,6 +9,7 @@ from characters import PlayerTank, EnemyTank, SpecialTank
 from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
 from fade_animation import Fade
 from score_screen import ScoreScreen
+from phoenix import Phoenix
 
 
 class Game:
@@ -41,6 +42,7 @@ class Game:
             'bullets': pygame.sprite.Group(),
             'destructable_tiles': pygame.sprite.Group(),
             'impassable_tiles': pygame.sprite.Group(),
+            'phoenix': pygame.sprite.GroupSingle(),
             'explosion': pygame.sprite.Group(),
             'forest_tiles': pygame.sprite.Group(),
             'power_ups': pygame.sprite.Group(),
@@ -238,6 +240,7 @@ class Game:
         self.enemies_killed = self.enemies
 
         self.load_level_data(self.current_level_data)
+        self.phoenix = Phoenix(self, self.assets, self.groups)
         self.level_complete = False
 
         self.fade.level = self.level_num

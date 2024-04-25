@@ -109,6 +109,10 @@ FORT = [
     (14, 24),
     (14, 25)
 ]
+PHOENIX_POSITION = (
+    SCREEN_BORDER_LEFT + IMAGE_SIZE // 2 * 12,
+    SCREEN_BORDER_TOP + IMAGE_SIZE // 2 * 24
+)
 
 TANK_CRITERIA: dict[str, dict[str, int | float]] = {
     'level_0': {

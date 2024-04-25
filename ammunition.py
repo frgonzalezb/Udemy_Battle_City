@@ -56,6 +56,8 @@ class Bullet(pygame.sprite.Sprite):
         self.check_bullet_on_bullet_collision()
         # Check for bullet collision with destructable tile
         self.check_bullet_on_obstacle_collision()
+        # Check for bullet collision with Phoenix
+        self.check_bullet_on_phoenix_collision()
 
     def draw(self, window) -> None:
         window.blit(self.image, self.rect)
@@ -169,7 +171,7 @@ class Bullet(pygame.sprite.Sprite):
                 self.kill()
                 break
 
-    def check_bullet_on_obstacle_collision(self):
+    def check_bullet_on_obstacle_collision(self) -> None:
         obstacle_collision = pygame.sprite.spritecollide(
             self,
             self.group['destructable_tiles'],
@@ -183,6 +185,26 @@ class Bullet(pygame.sprite.Sprite):
                 self.rect.center,
                 1
             )
+
+    def check_bullet_on_phoenix_collision(self) -> None:
+        """
+        Detects if a bullet collides with the Phoenix sprite enclosed in
+        the player's base.
+
+        NOTE: In the original game, the bullet's owner does not matter.
+        Namely, a player can destroy the Phoenix, either accidentally or
+        on purpose!
+        """
+        if self.rect.colliderect(self.group['phoenix'].sprite.rect):
+            Explosion(
+                self.assets,
+                self.group,
+                self.rect.center,
+                1
+            )
+            self.update_owner()
+            self.group['phoenix'].sprite.destroy_phoenix()
+            self.kill()
 
     def update_owner(self) -> None:
         """
