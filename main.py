@@ -5,9 +5,9 @@ from pygame.time import Clock
 import game_config as gc
 from game import Game
 from game_assets import GameAssets
-from level_editor import LevelEditor
+from screens.level_editor import LevelEditor
 from levels import LevelData
-from start_screen import StartScreen
+from screens.start_screen import StartScreen
 
 
 class Main:
