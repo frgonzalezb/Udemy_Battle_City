@@ -191,11 +191,16 @@ class LevelEditor:
             if self.index >= len(self.inserts):
                 self.index = self.index % len(self.inserts)
             self.insert_tile = self.inserts[self.index]
-        # Save level
+        # Save level (NOTE: dev mode! og levels may be overwritten!)
+        # if key == pygame.K_RETURN:
+        #     self.validate_level()
+        #     self.all_levels.append(self.matrix)
+        #     self.level_data.save(self.all_levels)
+        #     self.main.levels.level_data = self.all_levels
+        #     self.is_active = False
+        # Insert level immediately into level list and play new level
         if key == pygame.K_RETURN:
-            self.validate_level()
-            self.all_levels.append(self.matrix)
-            self.level_data.save(self.all_levels)
+            self.all_levels.insert(0, self.matrix)
             self.main.levels.level_data = self.all_levels
             self.is_active = False
 
