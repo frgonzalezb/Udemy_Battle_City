@@ -63,7 +63,6 @@ class PowerUp(pygame.sprite.Sprite):
                 self.get_special_power_up(player_tank)
             elif self.power_up == 'fortify':
                 self.fortify_base()
-            print(self.power_up)  # dbg
             self.collect_power_up()
 
     def draw(self, window: Surface) -> None:
