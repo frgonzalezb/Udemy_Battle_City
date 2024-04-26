@@ -69,7 +69,7 @@ class LevelEditor:
 
     def draw(self, window: pygame.Surface) -> None:
         window.blit(self.overlay_screen, (0, 0))
-        self.draw_grid_to_screen(window)
+        # self.draw_grid_to_screen(window)  # dbg
 
         for i, row in enumerate(self.matrix):
             for j, tile in enumerate(row):
@@ -85,7 +85,7 @@ class LevelEditor:
                     )
 
         window.blit(self.icon_image, self.icon_rect)
-        pygame.draw.rect(window, gc.RGB_GREEN, self.icon_rect, 1)
+        # pygame.draw.rect(window, gc.RGB_GREEN, self.icon_rect, 1)  # dbg
 
     def draw_screen(self) -> pygame.Surface:
         """
