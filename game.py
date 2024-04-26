@@ -162,9 +162,9 @@ class Game:
 
         if not self.is_game_over:
             """
-            NOTE: Harry's logic doesn't take into account when Player 1
-            has lost all its lives, but Player 2 remains just fine, but
-            the game declares Game Over, nevertheless.
+            NOTE: Harry's original logic doesn't take into account when
+            Player 1 has lost all its lives, but Player 2 remains just
+            fine, but still the game declares Game Over.
             """
             if self.is_player_1_active and self.is_player_2_active:
                 if (
