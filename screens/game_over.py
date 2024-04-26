@@ -27,7 +27,8 @@ class GameOver:
         self.timer: int = pygame.time.get_ticks()
 
     def update(self) -> None:
-        ...
+        if self.rect.y > gc.SCREEN_HEIGHT // 4 - self.height // 2:
+            self.rect.y -= 10
 
     def draw(self, window: Surface) -> None:
-        ...
+        window.blit(self.image, self.rect)
