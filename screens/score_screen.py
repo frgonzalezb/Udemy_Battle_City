@@ -69,6 +69,7 @@ class ScoreScreen:
         ):
             score = self.player_1_enemies_killed.pop(0)
             self.update_score(score, 'player_1')
+            self.assets.score_sound.play()
             self.score_timer = pygame.time.get_ticks()
             return
 
@@ -79,6 +80,7 @@ class ScoreScreen:
         ):
             score = self.player_2_enemies_killed.pop(0)
             self.update_score(score, 'player_2')
+            self.assets.score_sound.play()
             self.score_timer = pygame.time.get_ticks()
             return
 

@@ -51,5 +51,8 @@ class Phoenix(pygame.sprite.Sprite):
         """
         self.is_active = False
         Explosion(self.assets, self.group, self.rect.center, 5, 0)
+        self.assets.explosion_sound_channel.play(
+            self.assets.explosion_sound
+        )
         self.image: Surface = self.images['Phoenix_Destroyed']
         self.timer: int = pygame.time.get_ticks()

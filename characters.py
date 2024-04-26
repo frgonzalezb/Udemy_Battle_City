@@ -410,6 +410,7 @@ class Tank(pygame.sprite.Sprite):
             self.rect.center,
             self.direction,
         )
+        self.assets.fire_sound_channel.play(self.assets.fire_sound)
         self.bullet_sum += 1
 
     def paralyze_tank(self, paralysis_time) -> None:
@@ -435,6 +436,9 @@ class Tank(pygame.sprite.Sprite):
                 self.rect.center,
                 5,
                 self.score
+            )
+            self.assets.explosion_sound_channel.play(
+                self.assets.explosion_sound
             )
             self.game.enemies_killed -= 1
             return
@@ -524,6 +528,9 @@ class PlayerTank(Tank):
             topleft=(self.rect.topleft)
         )
 
+        # Sound
+        self.movement_sound = self.assets.movement_sound
+
     def input(
             self,
             key_pressed: pygame.key.ScancodeWrapper
@@ -587,6 +594,12 @@ class PlayerTank(Tank):
         if self.has_shield and not self.is_spawning:
             window.blit(self.shield_image, self.shield_rect)
 
+    def move(self, direction: str) -> None:
+        if self.is_spawning:
+            return
+        self.assets.movement_sound_channel.play(self.movement_sound)
+        super().move(direction)
+
     def shoot(self) -> None:
         if self.is_game_over:
             return
@@ -648,6 +661,9 @@ class PlayerTank(Tank):
                 5,
                 0
             )
+        self.assets.explosion_sound_channel.play(
+            self.assets.explosion_sound
+        )
         self.is_dead = True
         self.lives -= 1
         if self.lives <= 0:

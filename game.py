@@ -174,13 +174,20 @@ class Game:
                 ):
                     self.groups['all_tanks'].empty()
                     self.is_game_over = True
+                    self.assets.game_over_sound_channel.play(
+                        self.assets.game_over_sound
+                    )
                     self.game_over_screen.activate()
                     return
-            if self.player_1.is_game_over:
-                self.groups['all_tanks'].empty()
-                self.is_game_over = True
-                self.game_over_screen.activate()
-                return
+            elif self.is_player_1_active and not self.is_player_2_active:
+                if self.player_1.is_game_over:
+                    self.groups['all_tanks'].empty()
+                    self.is_game_over = True
+                    self.assets.game_over_sound_channel.play(
+                        self.assets.game_over_sound
+                    )
+                    self.game_over_screen.activate()
+                    return
         elif (
             self.is_game_over and
             self.is_active and
@@ -201,6 +208,20 @@ class Game:
                 item.update()
 
         self.spawn_enemy_tanks()
+
+        """
+        NOTE: If we include the enemy movement sfx within the EnemyTank
+        class, the sounds will constantly override themselves and make
+        a weird sound. So, instead, it's better to play the sound as
+        long as there is a single enemy tank alive, since they're
+        constantly moving.
+        """
+        for tank in self.groups['all_tanks']:
+            if tank.is_enemy and not tank.is_spawning:
+                self.assets.enemy_movement_sound_channel.play(
+                    self.assets.enemy_movement_sound
+                )
+                break
 
         if self.enemies_killed <= 0 and not self.level_complete:
             self.level_complete = True
@@ -281,6 +302,8 @@ class Game:
         self.load_level_data(self.current_level_data)
         self.phoenix = Phoenix(self, self.assets, self.groups)
         self.level_complete = False
+
+        self.assets.game_start_sound.play()
 
         self.fade.level = self.level_num
         self.fade.stage_image = self.fade.create_stage_image()

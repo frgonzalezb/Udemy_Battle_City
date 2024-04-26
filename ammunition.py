@@ -97,6 +97,9 @@ class Bullet(pygame.sprite.Sprite):
                 self.rect.center,
                 1
             )
+            self.assets.steel_sound_channel.play(
+                self.assets.steel_sound
+            )
             self.update_owner()
             self.kill()
 
@@ -178,12 +181,26 @@ class Bullet(pygame.sprite.Sprite):
             False
         )
         for obstacle in obstacle_collision:
+            self._call_bullet_on_obstacle_sounds(obstacle)
             obstacle.handle_bullet_hit(self)
             Explosion(
                 self.assets,
                 self.group,
                 self.rect.center,
                 1
+            )
+
+    def _call_bullet_on_obstacle_sounds(self, obstacle) -> None:
+        """
+        Utility method for calling the bullet-on-obstacle sounds.
+        """
+        if obstacle.name == 'Brick':
+            self.assets.brick_sound_channel.play(
+                self.assets.brick_sound
+            )
+        elif obstacle.name == 'Steel':
+            self.assets.steel_sound_channel.play(
+                self.assets.steel_sound
             )
 
     def check_bullet_on_phoenix_collision(self) -> None:
