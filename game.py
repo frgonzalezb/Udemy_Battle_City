@@ -235,6 +235,9 @@ class Game:
         if self.fade.is_fade_active:
             self.fade.draw(window)
 
+        if self.game_over_screen.is_active:
+            self.game_over_screen.draw(window)
+
     def create_stage_transition(self, is_game_over: bool) -> None:
         if not self.score_screen.is_active:
             self.score_screen.timer = pygame.time.get_ticks()
