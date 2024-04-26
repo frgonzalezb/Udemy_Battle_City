@@ -145,9 +145,73 @@ class GameAssets:
         }
 
         # Game sounds
+        # Start sound
         self.game_start_sound = pygame.mixer.Sound(
-            'assets/sounds/gamestart.ogg'
+            'assets/sounds/game_start.ogg'
         )
+
+        # Player movement sound
+        self.movement_sound = pygame.mixer.Sound(
+            'assets/sounds/background_player.ogg'
+        )
+        self.movement_sound.set_volume(0.7)
+        self.movement_sound_channel = pygame.mixer.Channel(0)
+
+        # Enemy movement sound
+        self.enemy_movement_sound = pygame.mixer.Sound(
+            'assets/sounds/background.ogg'
+        )
+        self.enemy_movement_sound.set_volume(0.4)
+        self.enemy_movement_sound_channel = pygame.mixer.Channel(1)
+
+        # Fire sound
+        self.fire_sound = pygame.mixer.Sound(
+            'assets/sounds/fire.ogg'
+        )
+        self.fire_sound.set_volume(1)
+        self.fire_sound_channel = pygame.mixer.Channel(2)
+
+        # Brick sound
+        self.brick_sound = pygame.mixer.Sound(
+            'assets/sounds/brick.ogg'
+        )
+        self.brick_sound.set_volume(0.67)
+        self.brick_sound_channel = pygame.mixer.Channel(3)
+
+        # Steel sound
+        self.steel_sound = pygame.mixer.Sound(
+            'assets/sounds/steel.ogg'
+        )
+        self.steel_sound.set_volume(0.67)
+        self.steel_sound_channel = pygame.mixer.Channel(4)
+
+        # Explosion sound
+        self.explosion_sound = pygame.mixer.Sound(
+            'assets/sounds/explosion.ogg'
+        )
+        self.explosion_sound.set_volume(0.67)
+        self.explosion_sound_channel = pygame.mixer.Channel(5)
+
+        # Bonus sound
+        self.bonus_sound = pygame.mixer.Sound(
+            'assets/sounds/bonus.ogg'
+        )
+        self.bonus_sound.set_volume(0.67)
+        self.bonus_sound_channel = pygame.mixer.Channel(6)
+
+        # Game over sound
+        self.game_over_sound = pygame.mixer.Sound(
+            'assets/sounds/game_over.ogg'
+        )
+        self.game_over_sound.set_volume(0.67)
+        self.game_over_sound_channel = pygame.mixer.Channel(7)
+
+        # Score sound
+        self.score_sound = pygame.mixer.Sound(
+            'assets/sounds/score.ogg'
+        )
+        self.score_sound.set_volume(0.67)
+        self.score_sound_channel = pygame.mixer.Channel(8)
 
     def _load_all_tank_sprites(self) -> dict[str, dict[str, dict[str, list]]]:
         """
