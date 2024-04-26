@@ -253,7 +253,7 @@ class Tank(pygame.sprite.Sprite):
 
         window.blit(self.image, self.rect)
         # window.blit(self.mask_image, self.rect)
-        pygame.draw.rect(window, gc.RGB_RED, self.rect, 1)  # dbg
+        # pygame.draw.rect(window, gc.RGB_RED, self.rect, 1)  # dbg
 
     def update_spawning_animation(self) -> None:
         """
@@ -795,8 +795,8 @@ class EnemyTank(Tank):
     def draw(self, window: Surface) -> None:
         super().draw(window)
         # To visualize and debug the available directions in runtime
-        for value in self.directional_rects.values():
-            pygame.draw.rect(window, gc.RGB_GREEN, value.rect, 2)
+        # for value in self.directional_rects.values():
+        #     pygame.draw.rect(window, gc.RGB_GREEN, value.rect, 2)
 
     def fire(self) -> None:
         if self.is_paralyzed:
