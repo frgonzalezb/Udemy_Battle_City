@@ -211,7 +211,7 @@ class Game:
         if self.fade.is_fade_active:
             self.fade.draw(window)
 
-    def create_stage_transition(self, game_over: bool) -> None:
+    def create_stage_transition(self, is_game_over: bool) -> None:
         if not self.score_screen.is_active:
             self.score_screen.timer = pygame.time.get_ticks()
             if self.is_player_1_active:
@@ -226,7 +226,7 @@ class Game:
                 )
             self.score_screen.update_basic_info(self.top_score, self.level_num)
         self.score_screen.is_active = True
-        self.score_screen.update(game_over)
+        self.score_screen.update(is_game_over)
 
     def change_level(self, player_1_score, player_2_score) -> None:
         self.level_num += 1
