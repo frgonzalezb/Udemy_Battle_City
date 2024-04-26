@@ -8,7 +8,7 @@ from game_hud import GameHUD
 from characters import PlayerTank, EnemyTank, SpecialTank
 from tile import BrickTile, SteelTile, ForestTile, IceTile, WaterTile
 from fade_animation import Fade
-from score_screen import ScoreScreen
+from screens.score_screen import ScoreScreen
 from phoenix import Phoenix
 
 
