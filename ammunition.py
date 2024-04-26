@@ -139,7 +139,6 @@ class Bullet(pygame.sprite.Sprite):
                         self.owner.scores.append(
                             gc.TANK_CRITERIA[tank.level]['score']
                         )
-                        print(self.owner.scores)  # dbg
                     tank.destroy_tank()
                     Explosion(
                         self.assets,
