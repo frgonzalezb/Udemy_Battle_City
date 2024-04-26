@@ -62,7 +62,7 @@ class Bullet(pygame.sprite.Sprite):
     def draw(self, window) -> None:
         window.blit(self.image, self.rect)
         # window.blit(self.mask_image, self.rect)
-        pygame.draw.rect(window, gc.RGB_GREEN, self.rect, 1)
+        # pygame.draw.rect(window, gc.RGB_GREEN, self.rect, 1)  # dbg
 
     def move(self) -> None:
         """
