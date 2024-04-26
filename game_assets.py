@@ -144,6 +144,11 @@ class GameAssets:
             for image in scoresheet_filenames
         }
 
+        # Game sounds
+        self.game_start_sound = pygame.mixer.Sound(
+            'assets/sounds/gamestart.ogg'
+        )
+
     def _load_all_tank_sprites(self) -> dict[str, dict[str, dict[str, list]]]:
         """
         Loads all the tank sprites from the spritesheet and
