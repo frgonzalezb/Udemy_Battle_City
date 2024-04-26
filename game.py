@@ -112,8 +112,8 @@ class Game:
 
         # Game active or game over
         self.is_active: bool = True
-        self.game_on: bool = False
-        self.game_over: bool = False
+        self.is_game_on: bool = False
+        self.is_game_over: bool = False
 
     def input(self) -> None:
         """
@@ -160,7 +160,12 @@ class Game:
                     tank.spawn_timer = pygame.time.get_ticks()
             return
 
-        if not self.game_over:
+        if not self.is_game_over:
+            """
+            NOTE: Harry's logic doesn't take into account when Player 1
+            has lost all its lives, but Player 2 remains just fine, but
+            the game declares Game Over, nevertheless.
+            """
             if self.is_player_1_active and self.is_player_2_active:
                 if (
                     self.player_1.is_game_over and
@@ -168,16 +173,19 @@ class Game:
                     self.game_over_screen.is_active
                 ):
                     self.groups['all_tanks'].empty()
-                    self.game_over = True
+                    self.is_game_over = True
                     self.game_over_screen.activate()
                     return
             if self.player_1.is_game_over:
                 self.groups['all_tanks'].empty()
-                self.game_over = True
+                self.is_game_over = True
                 self.game_over_screen.activate()
                 return
-        elif self.game_over and self.is_active and not self.game_over_screen:
-            # NOTE: Change is_active for end_game if something's wrong!
+        elif (
+            self.is_game_over and
+            self.is_active and
+            not self.game_over_screen.is_active
+        ):
             self.create_stage_transition(True)
             return
 
@@ -208,7 +216,7 @@ class Game:
             """
             time_buffer = pygame.time.get_ticks() - self.level_transition_timer
             if time_buffer >= gc.TRANSITION_TIMER:
-                self.create_stage_transition()
+                self.create_stage_transition(is_game_over=False)
                 # self.level_num += 1
                 # self.create_new_stage()
 
