@@ -17,6 +17,7 @@ class Main:
 
     def __init__(self) -> None:
         pygame.init()
+        pygame.mixer.init()
 
         # A good game starts with some display settings
         self.screen: Surface = pygame.display.set_mode(
