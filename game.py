@@ -83,7 +83,7 @@ class Game:
                 self.groups,
                 position=gc.PLAYER_1_POS,
                 direction='Up',
-                color='Gold',
+                color='Gold'
             )
 
         if self.is_player_2_active:
@@ -93,8 +93,7 @@ class Game:
                 self.groups,
                 position=gc.PLAYER_2_POS,
                 direction='Up',
-                color='Green',
-                tank_level=1
+                color='Green'
             )
 
         # Number of enemy tanks
