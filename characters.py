@@ -936,7 +936,6 @@ class SpecialTank(EnemyTank):
         if self.is_special:
             self.is_special = False
             # Generate the special power up
-            print('Power Up Activated!')  # dbg
             PowerUp(
                 self.game,
                 self.assets,
