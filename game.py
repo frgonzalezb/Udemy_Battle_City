@@ -151,11 +151,35 @@ class Game:
     def update(self) -> None:
         self.hud.update()
 
+        if self.game_over_screen.is_active:
+            self.game_over_screen.update()
+
         if self.fade.is_fade_active:
             self.fade.update()
             if not self.fade.is_fade_active:
                 for tank in self.groups['all_tanks']:
                     tank.spawn_timer = pygame.time.get_ticks()
+            return
+
+        if not self.game_over:
+            if self.is_player_1_active and self.is_player_2_active:
+                if (
+                    self.player_1.is_game_over and
+                    self.player_2.is_game_over and
+                    self.game_over_screen.is_active
+                ):
+                    self.groups['all_tanks'].empty()
+                    self.game_over = True
+                    self.game_over_screen.activate()
+                    return
+            if self.player_1.is_game_over:
+                self.groups['all_tanks'].empty()
+                self.game_over = True
+                self.game_over_screen.activate()
+                return
+        elif self.game_over and self.is_active and not self.game_over_screen:
+            # NOTE: Change is_active for end_game if something's wrong!
+            self.create_stage_transition(True)
             return
 
         if self.is_base_fortified:
