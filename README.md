@@ -10,10 +10,11 @@ Python 3.10 o superior.
 ## Instrucciones
 
 1. Clonar este repositorio en su entorno local.
-2. En el entorno local, generar un entorno virtual. Puede usar `venv` ingresando en la terminal:
+2. Abrir una terminal y dirigirse a la carpeta del repositorio.
+3. En dicha carpeta, generar un entorno virtual. Puede usar `venv` ingresando en la terminal:
 ```pythom -m venv .venv```
-3. Activar el entorno virtual. Con `venv`, ingresar en la terminal:
+4. Activar el entorno virtual. Con `venv`, ingresar en la terminal:
 ```.venv/scripts/activate```
-4. Instalar las librerías necesarias en el entorno virtual, ingresando en la terminal:
+5. Instalar las librerías necesarias en el entorno virtual, ingresando en la terminal:
 ```pip install -r requirements.txt```
-5. Correr el archivo `main.py`.
+6. Correr el archivo `main.py`.
